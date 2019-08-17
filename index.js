@@ -1,7 +1,6 @@
 const app = require("express")();
 const mongoose = require("mongoose");
 const config = require("config");
-const seed = require("./seeders/seed");
 const Joi = require("joi");
 
 Joi.objectId = require("joi-objectid")(Joi);
