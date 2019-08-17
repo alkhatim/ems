@@ -40,7 +40,7 @@ const schema = new mongoose.Schema({
         type: String,
         required: true
       },
-      type: {
+      category: {
         type: String,
         required: true
       },
@@ -49,7 +49,7 @@ const schema = new mongoose.Schema({
         required: true
       },
       value: {
-        type: String,
+        type: mongoose.SchemaTypes.Mixed,
         required: false
       }
     })
