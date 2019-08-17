@@ -1,4 +1,4 @@
-const { User, validate } = require("../models/user");
+const { User, validate } = require("../models/User");
 
 const seed = async function() {
   const user = new User({
