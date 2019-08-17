@@ -19,7 +19,7 @@ const schema = new mongoose.Schema({
 
 const User = mongoose.model("User", schema);
 
-const validate = function(movie) {
+const validate = function(user) {
   const schema = {
     username: Joi.string()
       .required()
@@ -35,7 +35,7 @@ const validate = function(movie) {
       .unique()
   };
 
-  return Joi.validate(movie, schema);
+  return Joi.validate(user, schema);
 };
 
 exports.User = User;
