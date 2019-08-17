@@ -1,7 +1,6 @@
 const app = require("express")();
 const mongoose = require("mongoose");
 const config = require("config");
-const seedUsers = require("./seeders/seedUsers");
 
 db = config.get("db");
 mongoose
