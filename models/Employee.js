@@ -33,7 +33,27 @@ const schema = new mongoose.Schema({
   contract: {
     type: contractSchema,
     required: true
-  }
+  },
+  properties: [
+    new mongoose.Schema({
+      name: {
+        type: String,
+        required: true
+      },
+      type: {
+        type: String,
+        required: true
+      },
+      dataType: {
+        type: String,
+        required: true
+      },
+      value: {
+        type: String,
+        required: false
+      }
+    })
+  ]
 });
 
 const Employee = mongoose.model("Employee", schema);
