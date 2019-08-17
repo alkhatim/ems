@@ -4,7 +4,7 @@ const seed = async function() {
   const user = new User({
     username: "alkhatim",
     password: "mohammed66mk",
-    roles: [admin]
+    roles: ["admin"]
   });
 
   await user.save();

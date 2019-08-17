@@ -1,7 +1,7 @@
 const { Contract } = require("../models/Contract");
 
 const seed = async function() {
-  const contract = new X({
+  const contract = new Contract({
     name: "Normal"
   });
 
