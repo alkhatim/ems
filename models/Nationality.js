@@ -9,7 +9,7 @@ const schema = new mongoose.Schema({
   }
 });
 
-const Nationality = mongoose.model("Nationality", schema, "Nationalities");
+const Nationality = mongoose.model("Nationality", schema);
 
 exports.Nationality = Nationality;
 exports.schema = schema;
