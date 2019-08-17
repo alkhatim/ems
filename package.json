@@ -1,0 +1,30 @@
+{
+  "name": "ems",
+  "version": "1.0.0",
+  "description": "An HR System",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alkhatim/ems.git"
+  },
+  "keywords": [
+    "HR",
+    "ERP",
+    "Human_resources"
+  ],
+  "author": "alkhatim",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alkhatim/ems/issues"
+  },
+  "homepage": "https://github.com/alkhatim/ems#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "joi": "^14.3.1",
+    "mongoose": "^5.6.9",
+    "nodemon": "^1.19.1"
+  }
+}
