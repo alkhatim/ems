@@ -1,3 +1,10 @@
+const { Contract } = require("../models/Contract");
+const { Job } = require("../models/Job");
+const { Nationality } = require("../models/Nationality");
+const { Property } = require("../models/Property");
+const { User } = require("../models/User");
+const { Employee } = require("../models/Employee");
+
 async function seed() {
   await new Contract({ name: "Normal" }).save();
   await new Job({ name: "Developer" }).save();
