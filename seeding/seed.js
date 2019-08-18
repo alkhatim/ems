@@ -14,4 +14,4 @@ async function seed() {
   }).save();
 }
 
-seed();
+module.exports = seed;
