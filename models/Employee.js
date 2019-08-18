@@ -9,6 +9,7 @@ const { schema: employeeStatusSchema } = require("../models/EmployeeStatus");
 const schema = new mongoose.Schema({
   name: {
     type: String,
+    trim: true,
     required: true
   },
   address: {
