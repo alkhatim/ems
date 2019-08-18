@@ -3,6 +3,7 @@ const config = require("config");
 
 module.exports = function() {
   db = config.get("db");
+  mongoose.set("useCreateIndex", true);
   mongoose
     .connect(db, { useNewUrlParser: true })
     .then(() => console.log("connected to", db))
