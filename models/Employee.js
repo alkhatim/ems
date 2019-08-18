@@ -4,6 +4,7 @@ const moment = require("moment");
 const { schema: nationalitySchema } = require("../models/Nationality");
 const { schema: jobSchema } = require("../models/Job");
 const { schema: contractSchema } = require("../models/Contract");
+const { schema: employeeStatusSchema } = require("../models/EmployeeStatus");
 
 const schema = new mongoose.Schema({
   name: {
@@ -53,7 +54,11 @@ const schema = new mongoose.Schema({
         required: false
       }
     })
-  ]
+  ],
+  status: {
+    type: employeeStatusSchema,
+    required: true
+  }
 });
 
 const Employee = mongoose.model("Employee", schema);
