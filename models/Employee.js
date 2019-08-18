@@ -10,6 +10,8 @@ const schema = new mongoose.Schema({
   name: {
     type: String,
     trim: true,
+    minlength: 10,
+    maxlength: 50,
     required: true
   },
   address: {
@@ -67,10 +69,12 @@ const Employee = mongoose.model("Employee", schema);
 
 const validate = function(employee) {
   const schema = {
-    name: Joi.string().required(),
+    name: Joi.string()
+      .min(10)
+      .max(50)
+      .required(),
     address: Joi.string().required(),
     birthday: Joi.date().required(),
-    age: Joi.number().required(),
     nationalityId: Joi.objectId().required(),
     jobId: Joi.objectId().required(),
     contractId: Joi.objectId().required()
