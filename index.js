@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const usersRouter = require("./routers/users");
+const usersRouter = require("./routes/users");
 const Joi = require("joi");
 Joi.objectId = require("joi-objectid")(Joi);
 
