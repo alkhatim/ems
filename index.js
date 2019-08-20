@@ -1,8 +1,8 @@
 const express = require("express");
 const app = express();
-const usersRouter = require("./routes/users");
 const Joi = require("joi");
 Joi.objectId = require("joi-objectid")(Joi);
+const usersRouter = require("./routes/users");
 
 require("./startup/db")();
 
