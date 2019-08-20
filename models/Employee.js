@@ -4,7 +4,7 @@ const { schema: nationalitySchema } = require("../models/Nationality");
 const { schema: jobSchema } = require("../models/Job");
 const { schema: contractSchema } = require("../models/Contract");
 const { schema: employeeStatusSchema } = require("../models/EmployeeStatus");
-const { schema: genderSchema } = require("../models/gender");
+const { schema: genderSchema } = require("../models/Gender");
 const { schema: departmentSchema } = require("../models/Department");
 const { schema: endOfServiceSchema } = require("../models/EndOfServiceReason");
 
