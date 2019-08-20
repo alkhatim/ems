@@ -35,8 +35,8 @@ const schema = new mongoose.Schema({
   },
   phone: {
     type: Number,
-    min: 9,
-    max: 12
+    minlength: 9,
+    maxlength: 12
   },
   email: {
     type: String,
@@ -122,6 +122,12 @@ const schema = new mongoose.Schema({
     },
     schedule: [Number]
   }
+});
+
+schema.pre("validate", function(next) {
+  this.salaryInfo.totalSalary =
+    this.salaryInfo.basicSalary + this.salaryInfo.housingAllowance;
+  next();
 });
 
 const Employee = mongoose.model("Employee", schema);
