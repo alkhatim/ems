@@ -20,9 +20,6 @@ async function seed() {
     roles: ["admin"]
   }).save();
 
-  console.log(await Gender.findOne());
-  console.log(await Nationality.findOne());
-
   await new Employee({
     name: "mohammed alkhatim",
     gender: await Gender.findOne(),
