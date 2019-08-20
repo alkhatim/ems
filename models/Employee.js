@@ -26,19 +26,27 @@ const schema = new mongoose.Schema({
   },
   birthday: {
     type: Date,
+    max: Date.now(),
     required: true
   },
   address: {
     type: String,
-    trim: true,
-    required: true
+    trim: true
   },
-  phone: Number,
+  phone: {
+    type: Number,
+    min: 9,
+    max: 12
+  },
   email: {
     type: String,
     trim: true
   },
-  bankAccount: Number,
+  bankAccount: {
+    type: Number,
+    min: 5,
+    max: 20
+  },
   contract: {
     type: contractSchema,
     required: true
@@ -56,36 +64,62 @@ const schema = new mongoose.Schema({
       type: departmentSchema,
       required: true
     },
-    dateOfEmployment: Date,
+    dateOfEmployment: {
+      type: Date,
+      max: Date.now()
+    },
     contractExpiryDate: Date
   },
   salaryInfo: {
     basicSalary: {
       type: Number,
+      min: 0,
       required: true
     },
-    livingExpenseAllowance: Number,
-    housingAllowance: Number,
-    transportAllowance: Number,
-    foodAllowance: Number,
+    livingExpenseAllowance: {
+      type: Number,
+      min: 0
+    },
+    housingAllowance: {
+      type: Number,
+      min: 0
+    },
+    transportAllowance: {
+      type: Number,
+      min: 0
+    },
+    foodAllowance: {
+      type: Number,
+      min: 0
+    },
     totalSalary: {
       type: Number,
+      min: 0,
       required: true
     }
   },
-  socialInsurance: {
+  socialInsuranceInfo: {
     registered: Boolean,
     number: Number,
-    socialInsuranceSalary: Number
+    socialInsuranceSalary: {
+      type: Number,
+      min: 0
+    }
   },
   serviceInfo: {
     endOfServiceDate: Date,
     endOfServiceReason: endOfServiceSchema,
     suspensionDate: Date,
-    suspensionReason: String
+    suspensionReason: {
+      type: String,
+      trim: true
+    }
   },
   vacationInfo: {
-    total: Number,
+    total: {
+      type: Number,
+      min: 0
+    },
     schedule: [Number]
   }
 });
@@ -100,18 +134,51 @@ const validate = function(employee) {
       .required(),
     genderId: Joi.objectId(),
     nationalityId: Joi.objectId().required(),
-    birthday: Joi.date().required(),
-    address: Joi.string().required(),
-    phone: Joi.number().required(),
+    birthday: Joi.date()
+      .max(Date.now())
+      .required(),
+    address: Joi.string(),
+    phone: Joi.number()
+      .min(9)
+      .max(12)
+      .required(),
     email: Joi.email().required(),
-    jobId: Joi.objectId().required(),
-    bankAccount: Joi.number(),
+    bankAccount: Joi.number()
+      .min(5)
+      .max(20),
     contractId: Joi.objectId().required(),
-    salaryInfo: Joi.object().keys({
-      basicSalary: Joi.Number.min(0)
+    statusId: Joi.objectId().required(),
+    jobInfo: Joi.object().keys({
+      jobId: Joi.objectId().required(),
+      departmentId: Joi.objectId().required(),
+      dateOfEmployment: Joi.date().max(Date.now()),
+      contractExpiryDate: Joi.date()
     }),
     salaryInfo: Joi.object().keys({
-      basicSalary: Joi.Number.min(0).required()
+      basicSalary: Joi.number()
+        .min(0)
+        .required(),
+      livingExpenseAllowance: Joi.number().min(0),
+      housingAllowance: Joi.number().min(0),
+      transportAllowance: Joi.number().min(0),
+      foodAllowance: Joi.number()
+        .min(0)
+        .required()
+    }),
+    socialInsuranceInfo: Joi.object().keys({
+      registered: Joi.boolean(),
+      number: Joi.number(),
+      socialInsuranceSalary: Joi.number().min(0)
+    }),
+    serviceInfo: Joi.object().keys({
+      endOfServiceDate: Joi.date(),
+      endOfServiceReasonId: Joi.objectId(),
+      suspensionDate: Joi.date(),
+      suspensionReason: Joi.string()
+    }),
+    vacationInfo: Joi.object().keys({
+      total: Joi.number().min(0),
+      schedule: Joi.array().items(Joi.number())
     })
   };
 
