@@ -12,7 +12,7 @@ const schema = new mongoose.Schema({
   name: {
     type: String,
     trim: true,
-    minlength: 10,
+    minlength: 3,
     maxlength: 50,
     required: true
   },
@@ -139,7 +139,7 @@ const Employee = mongoose.model("Employee", schema);
 const validate = function(employee) {
   const schema = {
     name: Joi.string()
-      .min(10)
+      .min(3)
       .max(50)
       .required(),
     genderId: Joi.objectId(),
@@ -152,7 +152,9 @@ const validate = function(employee) {
       .min(9)
       .max(12)
       .required(),
-    email: Joi.email().required(),
+    email: Joi.string()
+      .email()
+      .required(),
     bankAccount: Joi.number()
       .min(5)
       .max(20),
