@@ -100,7 +100,7 @@ const schema = new mongoose.Schema({
   },
   socialInsuranceInfo: {
     registered: Boolean,
-    number: Number,
+    socialInsuranceNumber: Number,
     socialInsuranceSalary: {
       type: Number,
       min: 0
@@ -116,11 +116,11 @@ const schema = new mongoose.Schema({
     }
   },
   vacationInfo: {
-    total: {
+    vacationDays: {
       type: Number,
       min: 0
     },
-    schedule: [Number]
+    vacationSchedule: [Number]
   }
 });
 
@@ -177,7 +177,7 @@ const validate = function(employee) {
     }),
     socialInsuranceInfo: Joi.object().keys({
       registered: Joi.boolean(),
-      number: Joi.number(),
+      socialInsuranceNumber: Joi.number(),
       socialInsuranceSalary: Joi.number().min(0)
     }),
     serviceInfo: Joi.object().keys({
@@ -187,8 +187,8 @@ const validate = function(employee) {
       suspensionReason: Joi.string()
     }),
     vacationInfo: Joi.object().keys({
-      total: Joi.number().min(0),
-      schedule: Joi.array().items(Joi.number())
+      vacationDays: Joi.number().min(0),
+      vacationSchedule: Joi.array().items(Joi.number())
     })
   };
 
