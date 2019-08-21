@@ -186,7 +186,7 @@ const validate = function(employee) {
     }),
     serviceInfo: Joi.object().keys({
       endOfServiceDate: Joi.date(),
-      endOfServiceReasonId: Joi.string(),
+      endOfServiceReason: Joi.string(),
       suspensionDate: Joi.date(),
       suspensionReason: Joi.string()
     }),
