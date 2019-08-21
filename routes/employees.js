@@ -8,7 +8,6 @@ const { Contract } = require("../models/Contract");
 const { EmployeeStatus } = require("../models/EmployeeStatus");
 const { Job } = require("../models/Job");
 const { Department } = require("../models/Department");
-const { EndOfServiceReason } = require("../models/EndOfServiceReason");
 
 router.post("/", async (req, res) => {
   const { error } = validate(req.body);
@@ -25,10 +24,6 @@ router.post("/", async (req, res) => {
   if (req.body.jobId) req.body.job = await Job.findById(req.body.jobId);
   if (req.body.departmentID)
     req.body.department = await Department.findById(req.body.departmentId);
-  if (req.body.endOfserviceId)
-    req.body.endOfServiceReason = await EndOfServiceReason.findById(
-      req.body.endOfServiceReasonId
-    );
 
   const employee = new Employee({
     name: req.body.name,

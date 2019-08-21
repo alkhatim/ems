@@ -6,7 +6,6 @@ const { schema: contractSchema } = require("../models/Contract");
 const { schema: employeeStatusSchema } = require("../models/EmployeeStatus");
 const { schema: genderSchema } = require("../models/Gender");
 const { schema: departmentSchema } = require("../models/Department");
-const { schema: endOfServiceSchema } = require("../models/EndOfServiceReason");
 
 const schema = new mongoose.Schema({
   name: {
@@ -108,7 +107,10 @@ const schema = new mongoose.Schema({
   },
   serviceInfo: {
     endOfServiceDate: Date,
-    endOfServiceReason: endOfServiceSchema,
+    endOfServiceReason: {
+      type: String,
+      trim: true
+    },
     suspensionDate: Date,
     suspensionReason: {
       type: String,
@@ -184,7 +186,7 @@ const validate = function(employee) {
     }),
     serviceInfo: Joi.object().keys({
       endOfServiceDate: Joi.date(),
-      endOfServiceReasonId: Joi.objectId(),
+      endOfServiceReasonId: Joi.string(),
       suspensionDate: Joi.date(),
       suspensionReason: Joi.string()
     }),
