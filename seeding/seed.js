@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const { Contract } = require("../models/Contract");
 const { Job } = require("../models/Job");
 const { Nationality } = require("../models/Nationality");
@@ -8,6 +9,10 @@ const { User } = require("../models/User");
 const { Employee } = require("../models/Employee");
 
 async function seed() {
+  for (key in mongoose.connection.collections) {
+    mongoose.connection.dropCollection(key);
+  }
+
   await new Contract({ name: "Normal" }).save();
   await new Job({ name: "Developer" }).save();
   await new Nationality({ name: "Sudanese" }).save();
