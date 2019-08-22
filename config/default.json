@@ -1,3 +1,4 @@
 {
-  "db": "mongodb://uvqnmqhjoxr63zbxddtd:jcLheqj9d3HbkHq6oFpP@bsarwlniw7uxw3u-mongodb.services.clever-cloud.com:27017/bsarwlniw7uxw3u"
+  "db": "mongodb://uvqnmqhjoxr63zbxddtd:jcLheqj9d3HbkHq6oFpP@bsarwlniw7uxw3u-mongodb.services.clever-cloud.com:27017/bsarwlniw7uxw3u",
+  "jwtSecret": "wabbalabbadubdub"
 }
