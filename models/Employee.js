@@ -129,10 +129,10 @@ const schema = new mongoose.Schema({
 schema.pre("validate", function(next) {
   this.salaryInfo.totalSalary =
     this.salaryInfo.basicSalary +
-    this.salaryInfo.housingAllowance +
-    this.salaryInfo.livingExpenseAllowance +
-    this.salaryInfo.transportAllowance +
-    this.salaryInfo.foodAllowance;
+    (this.salaryInfo.housingAllowance || 0) +
+    (this.salaryInfo.livingExpenseAllowance || 0) +
+    (this.salaryInfo.transportAllowance || 0) +
+    (this.salaryInfo.foodAllowance || 0);
   next();
 });
 
