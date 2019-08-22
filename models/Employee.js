@@ -33,9 +33,10 @@ const schema = new mongoose.Schema({
     trim: true
   },
   phone: {
-    type: Number,
+    type: String,
     minlength: 9,
-    maxlength: 12
+    maxlength: 12,
+    trim: true
   },
   email: {
     type: String,
@@ -43,12 +44,8 @@ const schema = new mongoose.Schema({
   },
   bankAccount: {
     type: Number,
-    min: 5,
-    max: 20
-  },
-  contract: {
-    type: contractSchema,
-    required: true
+    minlength: 5,
+    maxlength: 20
   },
   status: {
     type: employeeStatusSchema,
@@ -57,6 +54,10 @@ const schema = new mongoose.Schema({
   jobInfo: {
     job: {
       type: jobSchema,
+      required: true
+    },
+    contract: {
+      type: contractSchema,
       required: true
     },
     department: {
@@ -144,56 +145,40 @@ const validate = function(employee) {
       .min(3)
       .max(50)
       .required(),
-    genderId: Joi.objectId(),
+    genderId: Joi.objectId().required(),
     nationalityId: Joi.objectId().required(),
     birthday: Joi.date()
       .max(Date.now())
       .required(),
     address: Joi.string(),
-    phone: Joi.number()
+    phone: Joi.string()
       .min(9)
       .max(12)
       .required(),
-    email: Joi.string()
-      .email()
-      .required(),
-    bankAccount: Joi.number()
-      .min(5)
-      .max(20),
-    contractId: Joi.objectId().required(),
+    email: Joi.string().email(),
+    bankAccount: Joi.number(),
     statusId: Joi.objectId().required(),
-    jobInfo: Joi.object().keys({
-      jobId: Joi.objectId().required(),
-      departmentId: Joi.objectId().required(),
-      dateOfEmployment: Joi.date().max(Date.now()),
-      contractExpiryDate: Joi.date()
-    }),
-    salaryInfo: Joi.object().keys({
-      basicSalary: Joi.number()
-        .min(0)
-        .required(),
-      livingExpenseAllowance: Joi.number().min(0),
-      housingAllowance: Joi.number().min(0),
-      transportAllowance: Joi.number().min(0),
-      foodAllowance: Joi.number()
-        .min(0)
-        .required()
-    }),
-    socialInsuranceInfo: Joi.object().keys({
-      registered: Joi.boolean(),
-      socialInsuranceNumber: Joi.number(),
-      socialInsuranceSalary: Joi.number().min(0)
-    }),
-    serviceInfo: Joi.object().keys({
-      endOfServiceDate: Joi.date(),
-      endOfServiceReason: Joi.string(),
-      suspensionDate: Joi.date(),
-      suspensionReason: Joi.string()
-    }),
-    vacationInfo: Joi.object().keys({
-      vacationDays: Joi.number().min(0),
-      vacationSchedule: Joi.array().items(Joi.number())
-    })
+    jobId: Joi.objectId().required(),
+    contractId: Joi.objectId().required(),
+    departmentId: Joi.objectId().required(),
+    dateOfEmployment: Joi.date().max(Date.now()),
+    contractExpiryDate: Joi.date(),
+    basicSalary: Joi.number()
+      .min(0)
+      .required(),
+    livingExpenseAllowance: Joi.number().min(0),
+    housingAllowance: Joi.number().min(0),
+    transportAllowance: Joi.number().min(0),
+    foodAllowance: Joi.number().min(0),
+    registered: Joi.boolean(),
+    socialInsuranceNumber: Joi.number(),
+    socialInsuranceSalary: Joi.number().min(0),
+    endOfServiceDate: Joi.date(),
+    endOfServiceReason: Joi.string(),
+    suspensionDate: Joi.date(),
+    suspensionReason: Joi.string(),
+    vacationDays: Joi.number().min(0),
+    vacationSchedule: Joi.array().items(Joi.number())
   };
 
   return Joi.validate(employee, schema);
