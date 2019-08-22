@@ -35,7 +35,7 @@ const schema = new mongoose.Schema({
   phone: {
     type: String,
     minlength: 9,
-    maxlength: 12,
+    maxlength: 13,
     trim: true
   },
   email: {
@@ -153,7 +153,7 @@ const validate = function(employee) {
     address: Joi.string(),
     phone: Joi.string()
       .min(9)
-      .max(12)
+      .max(13)
       .required(),
     email: Joi.string().email(),
     bankAccount: Joi.number(),
