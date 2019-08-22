@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const _ = require("lodash");
+const bcrypt = require("bcrypt");
 const { User, validate } = require("../models/User");
 
 router.post("/", async (req, res) => {
@@ -9,6 +10,11 @@ router.post("/", async (req, res) => {
 
   if (User.findOne({ username: req.body.username }))
     return res.status(400).send("Username alreay registered");
+
+  req.body.password = await bcrypt.hash(
+    req.body.password,
+    await bcrypt.genSalt(10)
+  );
 
   const user = new User({
     username: req.body.username,
@@ -21,8 +27,12 @@ router.post("/", async (req, res) => {
   } catch (e) {
     console.log(e);
   }
-
-  return res.status(201).send(_.pick(user, ["_id", "username"]));
+  const token = user.genJwt();
+  return res
+    .status(201)
+    .header("x-jwt", token)
+    .header("access-control-expose-headers", "x-jwt")
+    .send(_.pick(user, ["_id", "username"]));
 });
 
 module.exports = router;
