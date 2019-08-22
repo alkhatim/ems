@@ -27,6 +27,7 @@ router.post("/", async (req, res) => {
   } catch (e) {
     console.log(e);
   }
+
   const token = user.genJwt();
   return res
     .status(201)
