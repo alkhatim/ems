@@ -46,10 +46,10 @@ router.post("/", async (req, res) => {
     phone: req.body.phone,
     email: req.body.email,
     bankAccount: req.body.bankAccount,
-    contract,
-    status,
+    status: req.body.status,
     jobInfo: {
       job: req.body.job,
+      contract: req.body.contract,
       department: req.body.department,
       dateOfEmployment: req.body.dateOfEmployment,
       contractExpiryDate: req.body.contractExpiryDate
