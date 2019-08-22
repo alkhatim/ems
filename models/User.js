@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const jwt = require("jsonwebtoken");
+const config = require("config");
 const Joi = require("joi");
 
 const schema = new mongoose.Schema({
@@ -18,6 +20,16 @@ const schema = new mongoose.Schema({
   roles: [String]
 });
 
+schema.methods.genJwt = function() {
+  return jwt.sign(
+    {
+      _id: this._id,
+      username: this.username,
+      roles: this.roles
+    },
+    config.get("jwtSecret")
+  );
+};
 const User = mongoose.model("User", schema);
 
 const validate = function(user) {
