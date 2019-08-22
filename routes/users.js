@@ -8,7 +8,7 @@ router.post("/", async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  if (User.findOne({ username: req.body.username }))
+  if (await User.findOne({ username: req.body.username }))
     return res.status(400).send("Username alreay registered");
 
   req.body.password = await bcrypt.hash(
