@@ -38,6 +38,7 @@ router.post("/", async (req, res) => {
     .send(_.pick(user, ["_id", "username"]));
 });
 
+// for changing a user's password
 router.patch("/:id", async (req, res) => {
   const schema = {
     password: new PasswordComplexity({
@@ -58,9 +59,9 @@ router.patch("/:id", async (req, res) => {
     await bcrypt.genSalt(10)
   );
 
-  await User.findByIdAndUpdate(req.params.id, req.body);
+  const user = await User.findByIdAndUpdate(req.params.id, req.body);
 
-  res.status(200).send();
+  res.status(200).send(_.pick(user, ["_id", "username"]));
 });
 
 module.exports = router;
