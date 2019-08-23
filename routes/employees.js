@@ -9,6 +9,7 @@ const { Contract } = require("../models/Contract");
 const { EmployeeStatus } = require("../models/EmployeeStatus");
 const { Job } = require("../models/Job");
 const { Department } = require("../models/Department");
+const validateObjectId = require("../middleware/validateObjectId");
 
 router.post("/", async (req, res) => {
   const { error } = validate(req.body);
@@ -93,20 +94,14 @@ router.get("/", async (req, res) => {
   res.status(200).send(employees);
 });
 
-router.get("/:id", async (req, res) => {
-  if (!mongoose.Types.ObjectId.isValid(req.params.id))
-    return res.status(404).send("There is no employee with the given ID");
-
+router.get("/:id", validateObjectId, async (req, res) => {
   const employee = await Employee.findById({ _id: req.params.id });
   if (!employee)
     return res.status(404).send("There is no employee with the given ID");
   res.status(200).send(employee);
 });
 
-router.delete("/:id", async (req, res) => {
-  if (!mongoose.Types.ObjectId.isValid(req.params.id))
-    return res.status(404).send("There is no employee with the given ID");
-
+router.delete("/:id", validateObjectId, async (req, res) => {
   try {
     const employee = await Employee.findByIdAndDelete({ _id: req.params.id });
     if (!employee)
@@ -117,7 +112,7 @@ router.delete("/:id", async (req, res) => {
   res.status(200).send(employee);
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", validateObjectId, async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -185,9 +180,6 @@ router.put("/:id", async (req, res) => {
       vacationSchedule: req.body.vacationSchedule
     }
   };
-
-  if (!mongoose.Types.ObjectId.isValid(req.params.id))
-    return res.status(404).send("There is no employee with the given ID");
 
   try {
     await Employee.findByIdAndUpdate(req.params.id, employee);
