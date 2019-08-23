@@ -196,4 +196,13 @@ router.put("/:id", validateObjectId, async (req, res) => {
   }
 });
 
+// for changing an employee's status
+router.patch("/:id", validateObjectId, async (req, res) => {
+  const status = await EmployeeStatus.findById(req.body.statusId);
+  if (!status)
+    return res.status(404).send("There is no status with the given ID");
+  const employee = await Employee.findByIdAndUpdate(req.params.id, { status });
+  res.status(200).send(employee);
+});
+
 module.exports = router;
