@@ -61,7 +61,13 @@ router.post("/", async (req, res) => {
       livingExpenseAllowance: req.body.livingExpenseAllowance,
       housingAllowance: req.body.housingAllowance,
       transportAllowance: req.body.transportAllowance,
-      foodAllowance: req.body.foodAllowance
+      foodAllowance: req.body.foodAllowance,
+      totalSalary:
+        req.body.basicSalary +
+        (req.body.housingAllowance || 0) +
+        (req.body.livingExpenseAllowance || 0) +
+        (req.body.transportAllowance || 0) +
+        (req.body.foodAllowance || 0)
     },
     socialInsuranceInfo: {
       registered: req.body.registered,
@@ -82,11 +88,10 @@ router.post("/", async (req, res) => {
 
   try {
     await employee.save();
+    return res.status(201).send(employee);
   } catch (e) {
     console.log(e);
   }
-
-  return res.status(201).send(employee);
 });
 
 router.get("/", async (req, res) => {
@@ -102,13 +107,9 @@ router.get("/:id", validateObjectId, async (req, res) => {
 });
 
 router.delete("/:id", validateObjectId, async (req, res) => {
-  try {
-    const employee = await Employee.findByIdAndDelete({ _id: req.params.id });
-    if (!employee)
-      return res.status(404).send("There is no employee with the given ID");
-  } catch (e) {
-    console.log(e);
-  }
+  const employee = await Employee.findByIdAndDelete({ _id: req.params.id });
+  if (!employee)
+    return res.status(404).send("There is no employee with the given ID");
   res.status(200).send(employee);
 });
 
@@ -162,7 +163,13 @@ router.put("/:id", validateObjectId, async (req, res) => {
       livingExpenseAllowance: req.body.livingExpenseAllowance,
       housingAllowance: req.body.housingAllowance,
       transportAllowance: req.body.transportAllowance,
-      foodAllowance: req.body.foodAllowance
+      foodAllowance: req.body.foodAllowance,
+      totalSalary:
+        req.body.basicSalary +
+        (req.body.housingAllowance || 0) +
+        (req.body.livingExpenseAllowance || 0) +
+        (req.body.transportAllowance || 0) +
+        (req.body.foodAllowance || 0)
     },
     socialInsuranceInfo: {
       registered: req.body.registered,
@@ -183,11 +190,10 @@ router.put("/:id", validateObjectId, async (req, res) => {
 
   try {
     await Employee.findByIdAndUpdate(req.params.id, employee);
+    return res.status(200).send(employee);
   } catch (e) {
     console.log(e);
   }
-
-  return res.status(200).send(employee);
 });
 
 module.exports = router;
