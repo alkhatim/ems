@@ -8,6 +8,7 @@ const employeesRouter = require("./routes/employees");
 const errors = require("./middleware/errors");
 
 require("./startup/db")();
+require("./startup/logger")();
 
 app.use(express.json());
 app.use("/api/users", usersRouter);
