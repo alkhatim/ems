@@ -54,4 +54,61 @@ router.get("/:id", validateObjectId, async (req, res) => {
   res.status(200).send(overtime);
 });
 
+router.put("/:id", (req,res)=>{
+   const state = await Overtime.findById(req.params.id).select("state");
+  if (state.name == "Posted")
+    return res
+      .status(400)
+      .send("You can't modify an overtime that has been posted");
+
+  const { error } = validate(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+
+  req.body.employee = await Employee.findById(req.body.employeeId).select("_id name");
+  if (!req.body.employee)
+    return res.status(400).send("There is no employee with the given ID");
+
+  req.body.state = await State.findById(req.body.stateId);
+  if (!req.body.state)
+    return res
+      .status(500)
+      .send("There is no state with the given ID");
+
+  req.body.type = await OvertimeType.findById(req.body.typeId);
+  if (!req.body.type)
+    return res.status(400).send("There is no type with the given ID");
+
+  const overtime = {
+    employee: req.body.employee,
+    date: req.body.date,
+    notes: req.body.notes,
+    state: req.body.state,
+    type: req.body.type,
+    amount: req.body.amount,
+    total: req.body.amount
+  };
+
+  await Overtime.findByIdAndUpdate(req.params.id, overtime);
+
+  return res.status(200).send(overtime);
+});
+
+router.delete("/:id", validateObjectId, async (req, res) => {
+  const overtime = await Overtime.findByIdAndDelete({ _id: req.params.id });
+  if (!overtime)
+    return res.status(404).send("There is no overtime with the given ID");
+
+  res.status(200).send(overtime);
+});
+
+// for changing an overtime's state
+router.patch("/:id", validateObjectId, async (req, res) => {
+  const state = await State.findById(req.body.stateId);
+  if (!state)
+    return res.status(404).send("There is no state with the given ID");
+
+  const overtime = await Overtime.findByIdAndUpdate(req.params.id, { state });
+  res.status(200).send(overtime);
+});
+
 module.exports = router;
