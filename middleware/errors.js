@@ -1,6 +1,4 @@
-const logger = require("winston");
-
 module.exports = function(err, req, res, next) {
-  logger.error(err);
+  console.log(err);
   res.status(500).send("Something failed on the server, try again later!");
 };
