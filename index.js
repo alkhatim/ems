@@ -9,7 +9,7 @@ const overtimeRouter = require("./routes/overtime");
 const errors = require("./middleware/errors");
 
 require("./startup/db")();
-require("./startup/logger")();
+require("./startup/winston")();
 
 app.use(express.json());
 app.use("/api/users", usersRouter);
