@@ -111,6 +111,12 @@ router.delete("/:id", validateObjectId, async (req, res) => {
 });
 
 router.put("/:id", validateObjectId, async (req, res) => {
+  const status = await Employee.findById(req.params.id).select("status");
+  if (status.name == "Terminated")
+    return res
+      .status(400)
+      .send("You can't modify an employee that's not working here anymore");
+
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -194,6 +200,7 @@ router.patch("/:id", validateObjectId, async (req, res) => {
   const status = await EmployeeStatus.findById(req.body.statusId);
   if (!status)
     return res.status(404).send("There is no status with the given ID");
+
   const employee = await Employee.findByIdAndUpdate(req.params.id, { status });
   res.status(200).send(employee);
 });
