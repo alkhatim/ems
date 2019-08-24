@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const _ = require("lodash");
-const mongoose = require("mongoose");
 const { Employee, validate } = require("../models/Employee");
 const { Gender } = require("../models/Gender");
 const { Nationality } = require("../models/Nationality");
@@ -27,9 +26,11 @@ router.post("/", async (req, res) => {
   if (!req.body.contract)
     return res.status(404).send("The specified contract was not found");
 
-  req.body.status = await EmployeeStatus.findById(req.body.statusId);
+  req.body.status = await EmployeeStatus.findOne({ name: "Normal" });
   if (!req.body.status)
-    return res.status(404).send("The specified status was not found");
+    return res
+      .status(500)
+      .send("The default employee state is missing from the database!");
 
   req.body.job = await Job.findById(req.body.jobId);
   if (!req.body.job)

@@ -147,7 +147,6 @@ const validate = function(employee) {
       .required(),
     email: Joi.string().email(),
     bankAccount: Joi.number(),
-    statusId: Joi.objectId().required(),
     jobId: Joi.objectId().required(),
     contractId: Joi.objectId().required(),
     departmentId: Joi.objectId().required(),
