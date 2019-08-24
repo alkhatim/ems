@@ -1,9 +1,10 @@
-const winston = require("winston");
+const { createLogger, format, transports } = require("winston");
 
-module.exports = winston.createLogger({
+module.exports = createLogger({
+  format: format.combine(format.simple()),
   transports: [
-    new winston.transports.Console({ level: "info" }),
-    new winston.transports.File({
+    new transports.Console({ level: "info" }),
+    new transports.File({
       filename: "logs/logfile.log",
       level: "warn"
     })

@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const config = require("config");
+const logger = require("../logs/logger");
 
 module.exports = function() {
   db = config.get("db");
@@ -7,5 +8,5 @@ module.exports = function() {
   mongoose
     .connect(db, { useNewUrlParser: true, useFindAndModify: false })
     .then(() => console.log("connected to", db))
-    .catch(e => console.log(e));
+    .catch(e => logger.error(e));
 };
