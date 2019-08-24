@@ -47,7 +47,6 @@ const validate = function(overtime) {
     employeeId: Joi.objectId().required(),
     date: Joi.date().required(),
     notes: Joi.string().required(),
-    stateId: Joi.objectId().required(),
     typeId: Joi.objectId().required(),
     amount: Joi.number().required()
   };
