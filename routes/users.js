@@ -24,11 +24,7 @@ router.post("/", async (req, res) => {
     roles: req.body.roles
   });
 
-  try {
-    await user.save();
-  } catch (e) {
-    console.log(e);
-  }
+  await user.save();
 
   const token = user.genJwt();
   return res

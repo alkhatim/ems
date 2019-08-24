@@ -86,12 +86,8 @@ router.post("/", async (req, res) => {
     }
   });
 
-  try {
-    await employee.save();
-    return res.status(201).send(employee);
-  } catch (e) {
-    console.log(e);
-  }
+  await employee.save();
+  return res.status(201).send(employee);
 });
 
 router.get("/", async (req, res) => {
@@ -188,12 +184,8 @@ router.put("/:id", validateObjectId, async (req, res) => {
     }
   };
 
-  try {
-    await Employee.findByIdAndUpdate(req.params.id, employee);
-    return res.status(200).send(employee);
-  } catch (e) {
-    console.log(e);
-  }
+  await Employee.findByIdAndUpdate(req.params.id, employee);
+  return res.status(200).send(employee);
 });
 
 // for changing an employee's status

@@ -5,12 +5,14 @@ const Joi = require("joi");
 Joi.objectId = require("joi-objectid")(Joi);
 const usersRouter = require("./routes/users");
 const employeesRouter = require("./routes/employees");
+const errors = require("./middleware/errors");
 
 require("./startup/db")();
 
 app.use(express.json());
 app.use("/api/users", usersRouter);
 app.use("/api/employees", employeesRouter);
+app.use(errors);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log("listening on port", port));
