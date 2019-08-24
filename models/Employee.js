@@ -123,7 +123,7 @@ const schema = new mongoose.Schema({
       type: Number,
       min: 0
     },
-    vacationSchedule: [Number]
+    vacationSchedule: [Date]
   }
 });
 
@@ -153,21 +153,21 @@ const validate = function(employee) {
     dateOfEmployment: Joi.date().max(Date.now()),
     contractExpiryDate: Joi.date(),
     basicSalary: Joi.number()
-      .min(0)
+      .positive()
       .required(),
-    livingExpenseAllowance: Joi.number().min(0),
-    housingAllowance: Joi.number().min(0),
-    transportAllowance: Joi.number().min(0),
-    foodAllowance: Joi.number().min(0),
+    livingExpenseAllowance: Joi.number().positive(),
+    housingAllowance: Joi.number().positive(),
+    transportAllowance: Joi.number().positive(),
+    foodAllowance: Joi.number().positive(),
     registered: Joi.boolean(),
     socialInsuranceNumber: Joi.number(),
-    socialInsuranceSalary: Joi.number().min(0),
+    socialInsuranceSalary: Joi.number().positive(),
     endOfServiceDate: Joi.date(),
     endOfServiceReason: Joi.string(),
     suspensionDate: Joi.date(),
     suspensionReason: Joi.string(),
-    vacationDays: Joi.number().min(0),
-    vacationSchedule: Joi.array().items(Joi.number())
+    vacationDays: Joi.number().positive(),
+    vacationSchedule: Joi.array().items(Joi.date())
   };
 
   return Joi.validate(employee, schema);
