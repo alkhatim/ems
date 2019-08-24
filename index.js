@@ -7,6 +7,7 @@ const usersRouter = require("./routes/users");
 const employeesRouter = require("./routes/employees");
 const overtimeRouter = require("./routes/overtime");
 const errors = require("./middleware/errors");
+const logger = require("./logs/logger");
 
 require("./startup/db")();
 require("./startup/winston")();
