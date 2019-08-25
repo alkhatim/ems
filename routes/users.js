@@ -2,9 +2,9 @@ const express = require("express");
 const router = express.Router();
 const _ = require("lodash");
 const bcrypt = require("bcrypt");
-const { User, validate } = require("../models/User");
 const Joi = require("joi");
 const PasswordComplexity = require("joi-password-complexity");
+const { User, validate } = require("../models/User");
 
 router.post("/", async (req, res) => {
   const { error } = validate(req.body);

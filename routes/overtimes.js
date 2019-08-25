@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
 const _ = require("lodash");
+const config = require("config");
 const { Overtime, validate } = require("../models/Overtime");
-const { Employee } = require("../models/Employee");
 const { OvertimeType } = require("../models/OvertimeType");
+const { Employee } = require("../models/Employee");
 const { State } = require("../models/State");
 const validateObjectId = require("../middleware/validateObjectId");
-const config = require("config");
 
 router.post("/", async (req, res) => {
   const { error } = validate(req.body);
@@ -23,7 +23,7 @@ router.post("/", async (req, res) => {
   if (!state)
     return res
       .status(500)
-      .send("The default overtime state is missing from the server!");
+      .send("The default overtimes state is missing from the server!");
 
   const type = await OvertimeType.findById(req.body.typeId);
   if (!type) return res.status(400).send("There is no type with the given ID");
