@@ -27,8 +27,16 @@ router.post("/", async (req, res) => {
   const type = await OvertimeType.findById(req.body.typeId);
   if (!type) return res.status(400).send("There is no type with the given ID");
 
-  const total =
-    req.body.amount * (employee.salaryInfo.basicSalary / (30 * 8)) * 1.5;
+  switch (type.name) {
+    case "Hours":
+      req.body.total =
+        req.body.amount * (employee.salaryInfo.basicSalary / (30 * 8)) * 1.5;
+      break;
+    case "Days":
+      req.body.total =
+        req.body.amount * (employee.salaryInfo.basicSalary / 30) * 1.5;
+      break;
+  }
 
   const overtime = new Overtime({
     employee: _.pick(employee, ["_id", "name"]),
@@ -37,7 +45,7 @@ router.post("/", async (req, res) => {
     state,
     type,
     amount: req.body.amount,
-    total: total
+    total: req.body.total
   });
 
   await overtime.save();
@@ -81,8 +89,16 @@ router.put("/:id", async (req, res) => {
   const type = await OvertimeType.findById(req.body.typeId);
   if (!type) return res.status(400).send("There is no type with the given ID");
 
-  const total =
-    req.req.body.amount * (employee.salaryInfo.basicSalary / (30 * 8)) * 1.5;
+  switch (type.name) {
+    case "Hours":
+      req.body.total =
+        req.body.amount * (employee.salaryInfo.basicSalary / (30 * 8)) * 1.5;
+      break;
+    case "Days":
+      req.body.total =
+        req.body.amount * (employee.salaryInfo.basicSalary / 30) * 1.5;
+      break;
+  }
 
   const overtime = {
     employee: _.pick(employee, ["_id", "name"]),
@@ -91,7 +107,7 @@ router.put("/:id", async (req, res) => {
     state,
     type,
     amount: req.body.amount,
-    total: total
+    total: req.body.total
   };
 
   await Overtime.findByIdAndUpdate(req.params.id, overtime);
