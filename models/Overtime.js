@@ -16,6 +16,7 @@ const schema = new mongoose.Schema({
   date: {
     type: Date,
     required: true,
+    max: Date.now(),
     default: Date.now()
   },
   notes: {
@@ -45,7 +46,9 @@ const Overtime = mongoose.model("Overtime", schema);
 const validate = function(overtime) {
   const schema = {
     employeeId: Joi.objectId().required(),
-    date: Joi.date().required(),
+    date: Joi.date()
+      .max(Date.now())
+      .required(),
     notes: Joi.string().required(),
     typeId: Joi.objectId().required(),
     amount: Joi.number().required()
