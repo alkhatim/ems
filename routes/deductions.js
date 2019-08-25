@@ -34,7 +34,7 @@ router.post("/", async (req, res) => {
         req.body.amount *
         (employee.salaryInfo.basicSalary / (30 * config.get("dailyHours")));
       break;
-    case "Abscense":
+    case "Absense":
       req.body.total = req.body.amount * (employee.salaryInfo.basicSalary / 30);
       break;
   }
@@ -96,7 +96,7 @@ router.put("/:id", async (req, res) => {
         req.body.amount *
         (employee.salaryInfo.basicSalary / (30 * config.get("dailyHours")));
       break;
-    case "Days":
+    case "Absence":
       req.body.total = req.body.amount * (employee.salaryInfo.basicSalary / 30);
       break;
   }
