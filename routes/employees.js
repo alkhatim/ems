@@ -14,46 +14,45 @@ router.post("/", async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  req.body.gender = await Gender.findById(req.body.genderId);
-  if (!req.body.gender)
+  const gender = await Gender.findById(req.body.genderId);
+  if (!gender)
     return res.status(404).send("The specified gender was not found");
 
-  req.body.nationality = await Nationality.findById(req.body.nationalityId);
-  if (!req.body.nationality)
+  const nationality = await Nationality.findById(req.body.nationalityId);
+  if (!nationality)
     return res.status(404).send("The specified nationality was not found");
 
-  req.body.contract = await Contract.findById(req.body.contractId);
-  if (!req.body.contract)
+  const contract = await Contract.findById(req.body.contractId);
+  if (!contract)
     return res.status(404).send("The specified contract was not found");
 
-  req.body.status = await EmployeeStatus.findOne({ name: "Normal" });
-  if (!req.body.status)
+  const status = await EmployeeStatus.findOne({ name: "Normal" });
+  if (!status)
     return res
       .status(500)
       .send("The default employee state is missing from the database!");
 
-  req.body.job = await Job.findById(req.body.jobId);
-  if (!req.body.job)
-    return res.status(404).send("The specified job was not found");
+  const job = await Job.findById(req.body.jobId);
+  if (!job) return res.status(404).send("The specified job was not found");
 
-  req.body.department = await Department.findById(req.body.departmentId);
-  if (!req.body.department)
+  const department = await Department.findById(req.body.departmentId);
+  if (!department)
     return res.status(404).send("The specified department was not found");
 
   const employee = new Employee({
     name: req.body.name,
-    gender: req.body.gender,
-    nationality: req.body.nationality,
+    gender,
+    nationality,
     birthday: req.body.birthday,
     address: req.body.address,
     phone: req.body.phone,
     email: req.body.email,
     bankAccount: req.body.bankAccount,
-    status: req.body.status,
+    status,
     jobInfo: {
-      job: req.body.job,
-      contract: req.body.contract,
-      department: req.body.department,
+      job,
+      contract,
+      department,
       dateOfEmployment: req.body.dateOfEmployment,
       contractExpiryDate: req.body.contractExpiryDate
     },
@@ -111,8 +110,8 @@ router.delete("/:id", validateObjectId, async (req, res) => {
 });
 
 router.put("/:id", validateObjectId, async (req, res) => {
-  const status = await Employee.findById(req.params.id).select("status");
-  if (status.name == "Terminated")
+  const currentStatus = await Employee.findById(req.params.id).select("status");
+  if (currentStatus.name == "Terminated")
     return res
       .status(400)
       .send("You can't modify an employee that's not working here anymore");
@@ -120,44 +119,43 @@ router.put("/:id", validateObjectId, async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  req.body.gender = await Gender.findById(req.body.genderId);
-  if (!req.body.gender)
+  const gender = await Gender.findById(req.body.genderId);
+  if (!gender)
     return res.status(404).send("The specified gender was not found");
 
-  req.body.nationality = await Nationality.findById(req.body.nationalityId);
-  if (!req.body.nationality)
+  const nationality = await Nationality.findById(req.body.nationalityId);
+  if (!nationality)
     return res.status(404).send("The specified nationality was not found");
 
-  req.body.contract = await Contract.findById(req.body.contractId);
-  if (!req.body.contract)
+  const contract = await Contract.findById(req.body.contractId);
+  if (!contract)
     return res.status(404).send("The specified contract was not found");
 
-  req.body.status = await EmployeeStatus.findById(req.body.statusId);
-  if (!req.body.status)
+  const status = await EmployeeStatus.findById(req.body.statusId);
+  if (!status)
     return res.status(404).send("The specified status was not found");
 
-  req.body.job = await Job.findById(req.body.jobId);
-  if (!req.body.job)
-    return res.status(404).send("The specified job was not found");
+  const job = await Job.findById(req.body.jobId);
+  if (!job) return res.status(404).send("The specified job was not found");
 
-  req.body.department = await Department.findById(req.body.departmentId);
-  if (!req.body.department)
+  const department = await Department.findById(req.body.departmentId);
+  if (!department)
     return res.status(404).send("The specified department was not found");
 
   const employee = {
     name: req.body.name,
-    gender: req.body.gender,
-    nationality: req.body.nationality,
+    gender,
+    nationality,
     birthday: req.body.birthday,
     address: req.body.address,
     phone: req.body.phone,
     email: req.body.email,
     bankAccount: req.body.bankAccount,
-    status: req.body.status,
+    status,
     jobInfo: {
-      job: req.body.job,
-      contract: req.body.contract,
-      department: req.body.department,
+      job,
+      contract,
+      department,
       dateOfEmployment: req.body.dateOfEmployment,
       contractExpiryDate: req.body.contractExpiryDate
     },

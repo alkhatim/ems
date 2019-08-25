@@ -11,30 +11,33 @@ router.post("/", async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  req.body.employee = await Employee.findById(req.body.employeeId).select(
-    "_id name"
+  const employee = await Employee.findById(req.body.employeeId).select(
+    "_id name salaryInfo"
   );
-  if (!req.body.employee)
+
+  if (!employee)
     return res.status(400).send("There is no employee with the given ID");
 
-  req.body.state = await State.findOne({ name: "New" });
-  if (!req.body.state)
+  const state = await State.findOne({ name: "New" });
+  if (!state)
     return res
       .status(500)
       .send("The default overtime state is missing from the server!");
 
-  req.body.type = await OvertimeType.findById(req.body.typeId);
-  if (!req.body.type)
-    return res.status(400).send("There is no type with the given ID");
+  const type = await OvertimeType.findById(req.body.typeId);
+  if (!type) return res.status(400).send("There is no type with the given ID");
+
+  const total =
+    req.body.amount * (employee.salaryInfo.basicSalary / (30 * 8)) * 1.5;
 
   const overtime = new Overtime({
-    employee: req.body.employee,
+    employee: _.pick(employee, ["_id", "name"]),
     date: req.body.date,
     notes: req.body.notes,
-    state: req.body.state,
-    type: req.body.type,
+    state,
+    type,
     amount: req.body.amount,
-    total: req.body.amount
+    total: total
   });
 
   await overtime.save();
@@ -55,8 +58,8 @@ router.get("/:id", validateObjectId, async (req, res) => {
 });
 
 router.put("/:id", async (req, res) => {
-  const state = await Overtime.findById(req.params.id).select("state");
-  if (state.name == "Posted")
+  const currentState = await Overtime.findById(req.params.id).select("state");
+  if (currentState.name == "Posted")
     return res
       .status(400)
       .send("You can't modify an overtime that has been posted");
@@ -64,28 +67,31 @@ router.put("/:id", async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  req.body.employee = await Employee.findById(req.body.employeeId).select(
-    "_id name"
+  const employee = await Employee.findById(req.body.employeeId).select(
+    "_id name salaryInfo"
   );
-  if (!req.body.employee)
+
+  if (!employee)
     return res.status(400).send("There is no employee with the given ID");
 
-  req.body.state = await State.findById(req.body.stateId);
-  if (!req.body.state)
+  const state = await State.findById(req.body.stateId);
+  if (!state)
     return res.status(500).send("There is no state with the given ID");
 
-  req.body.type = await OvertimeType.findById(req.body.typeId);
-  if (!req.body.type)
-    return res.status(400).send("There is no type with the given ID");
+  const type = await OvertimeType.findById(req.body.typeId);
+  if (!type) return res.status(400).send("There is no type with the given ID");
+
+  const total =
+    req.req.body.amount * (employee.salaryInfo.basicSalary / (30 * 8)) * 1.5;
 
   const overtime = {
-    employee: req.body.employee,
+    employee: _.pick(employee, ["_id", "name"]),
     date: req.body.date,
     notes: req.body.notes,
-    state: req.body.state,
-    type: req.body.type,
+    state,
+    type,
     amount: req.body.amount,
-    total: req.body.amount
+    total: total
   };
 
   await Overtime.findByIdAndUpdate(req.params.id, overtime);
