@@ -49,7 +49,7 @@ const validate = function(deduction) {
     date: Joi.date()
       .max(Date.now())
       .required(),
-    notes: Joi.string().required(),
+    notes: Joi.string(),
     stateId: Joi.objectId().required(),
     typeId: Joi.objectId().required(),
     amount: Joi.number().required()
