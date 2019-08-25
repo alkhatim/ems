@@ -6,6 +6,7 @@ const { Employee } = require("../models/Employee");
 const { OvertimeType } = require("../models/OvertimeType");
 const { State } = require("../models/State");
 const validateObjectId = require("../middleware/validateObjectId");
+const config = require("config");
 
 router.post("/", async (req, res) => {
   const { error } = validate(req.body);
@@ -30,11 +31,15 @@ router.post("/", async (req, res) => {
   switch (type.name) {
     case "Hours":
       req.body.total =
-        req.body.amount * (employee.salaryInfo.basicSalary / (30 * 8)) * 1.5;
+        req.body.amount *
+        (employee.salaryInfo.basicSalary / (30 * 8)) *
+        config.get("overtimeFactor");
       break;
     case "Days":
       req.body.total =
-        req.body.amount * (employee.salaryInfo.basicSalary / 30) * 1.5;
+        req.body.amount *
+        (employee.salaryInfo.basicSalary / 30) *
+        config.get("overtimeFactor");
       break;
   }
 
@@ -92,11 +97,15 @@ router.put("/:id", async (req, res) => {
   switch (type.name) {
     case "Hours":
       req.body.total =
-        req.body.amount * (employee.salaryInfo.basicSalary / (30 * 8)) * 1.5;
+        req.body.amount *
+        (employee.salaryInfo.basicSalary / (30 * 8)) *
+        config.get("overtimeFactor");
       break;
     case "Days":
       req.body.total =
-        req.body.amount * (employee.salaryInfo.basicSalary / 30) * 1.5;
+        req.body.amount *
+        (employee.salaryInfo.basicSalary / 30) *
+        config.get("overtimeFactor");
       break;
   }
 
