@@ -7,6 +7,7 @@ const usersRouter = require("./routes/users");
 const employeesRouter = require("./routes/employees");
 const overtimesRouter = require("./routes/overtimes");
 const deductionsRouter = require("./routes/deductions");
+const absencePermissionsRouter = require("./routes/absencePermissions");
 const errors = require("./middleware/errors");
 
 require("./startup/db")();
@@ -17,6 +18,7 @@ app.use("/api/users", usersRouter);
 app.use("/api/employees", employeesRouter);
 app.use("/api/overtimes", overtimesRouter);
 app.use("/api/deductions", deductionsRouter);
+app.use("/api/absencePermissions", absencePermissionsRouter);
 app.use(errors);
 
 const port = process.env.PORT || 3000;

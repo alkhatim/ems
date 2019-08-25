@@ -1,0 +1,70 @@
+const express = require("express");
+const router = express.Router();
+const { AbsencePermission, validate } = require("../models/AbsencePermission");
+const { Employee } = require("../models/Employee");
+const validateObjectId = require("../middleware/validateObjectId");
+
+router.post("/", async (req, res) => {
+  const { error } = validate(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+
+  const employee = await Employee.findById(req.body.employeeId).select(
+    "_id name"
+  );
+  if (!employee)
+    return res.status(400).send("There is no employee with the given ID");
+
+  const absencePermission = new AbsencePermission({
+    employee,
+    date: req.body.date,
+    notes: req.body.notes
+  });
+
+  await absencePermission.save();
+
+  res.status(201).send(absencePermission);
+});
+
+router.get("/", async (req, res) => {
+  const absencePermissions = await AbsencePermission.find();
+  res.status(200).send(absencePermissions);
+});
+
+router.get("/:id", validateObjectId, async (req, res) => {
+  const absencePermission = await AbsencePermission.findById(req.params.id);
+  if (!absencePermission)
+    return res.status(404).send("There is no permission with the given ID");
+  res.status(200).send(absencePermission);
+});
+
+router.put("/:id", async (req, res) => {
+  const { error } = validate(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+
+  const employee = await Employee.findById(req.body.employeeId).select(
+    "_id name"
+  );
+  if (!employee)
+    return res.status(400).send("There is no employee with the given ID");
+
+  const absencePermission = {
+    employee,
+    date: req.body.date,
+    notes: req.body.notes
+  };
+
+  await AbsencePermission.findByIdAndUpdate(req.params.id, absencePermission);
+
+  res.status(200).send(absencePermission);
+});
+
+router.delete("/:id", async (req, res) => {
+  const absencePermission = await AbsencePermission.findByIdAndDelete(
+    req.params.id
+  );
+  if (!absencePermission)
+    return res.status(404).send("There is no permission with the given ID");
+  res.status(200).send(absencePermission);
+});
+
+module.exports = router;
