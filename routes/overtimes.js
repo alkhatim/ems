@@ -32,7 +32,7 @@ router.post("/", async (req, res) => {
     case "Hours":
       req.body.total =
         req.body.amount *
-        (employee.salaryInfo.basicSalary / (30 * 8)) *
+        (employee.salaryInfo.basicSalary / (30 * config.get("dailyHours"))) *
         config.get("overtimeFactor");
       break;
     case "Days":
@@ -98,7 +98,7 @@ router.put("/:id", async (req, res) => {
     case "Hours":
       req.body.total =
         req.body.amount *
-        (employee.salaryInfo.basicSalary / (30 * 8)) *
+        (employee.salaryInfo.basicSalary / (30 * config.get("dailyHours"))) *
         config.get("overtimeFactor");
       break;
     case "Days":
