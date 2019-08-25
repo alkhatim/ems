@@ -5,8 +5,8 @@ const Joi = require("joi");
 Joi.objectId = require("joi-objectid")(Joi);
 const usersRouter = require("./routes/users");
 const employeesRouter = require("./routes/employees");
-const deductionsRouter = require("./routes/overtimes");
-const overtimesRouter = require("./routes/deductions");
+const overtimesRouter = require("./routes/overtimes");
+const deductionsRouter = require("./routes/deductions");
 const errors = require("./middleware/errors");
 
 require("./startup/db")();
