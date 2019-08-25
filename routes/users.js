@@ -55,9 +55,9 @@ router.patch("/:id", async (req, res) => {
     await bcrypt.genSalt(10)
   );
 
-  const user = await User.findByIdAndUpdate(req.params.id, req.body);
+  await User.findByIdAndUpdate(req.params.id, req.body);
 
-  res.status(200).send(_.pick(user, ["_id", "username"]));
+  res.status(200).send();
 });
 
 module.exports = router;

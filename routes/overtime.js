@@ -54,8 +54,8 @@ router.get("/:id", validateObjectId, async (req, res) => {
   res.status(200).send(overtime);
 });
 
-router.put("/:id", (req,res)=>{
-   const state = await Overtime.findById(req.params.id).select("state");
+router.put("/:id", async (req, res) => {
+  const state = await Overtime.findById(req.params.id).select("state");
   if (state.name == "Posted")
     return res
       .status(400)
@@ -64,15 +64,15 @@ router.put("/:id", (req,res)=>{
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  req.body.employee = await Employee.findById(req.body.employeeId).select("_id name");
+  req.body.employee = await Employee.findById(req.body.employeeId).select(
+    "_id name"
+  );
   if (!req.body.employee)
     return res.status(400).send("There is no employee with the given ID");
 
   req.body.state = await State.findById(req.body.stateId);
   if (!req.body.state)
-    return res
-      .status(500)
-      .send("There is no state with the given ID");
+    return res.status(500).send("There is no state with the given ID");
 
   req.body.type = await OvertimeType.findById(req.body.typeId);
   if (!req.body.type)
@@ -107,7 +107,11 @@ router.patch("/:id", validateObjectId, async (req, res) => {
   if (!state)
     return res.status(404).send("There is no state with the given ID");
 
-  const overtime = await Overtime.findByIdAndUpdate(req.params.id, { state });
+  const overtime = await Overtime.findByIdAndUpdate(
+    req.params.id,
+    { state },
+    { new: true }
+  );
   res.status(200).send(overtime);
 });
 

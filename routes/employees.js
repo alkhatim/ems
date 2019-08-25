@@ -191,7 +191,7 @@ router.put("/:id", validateObjectId, async (req, res) => {
     }
   };
 
-  await Employee.findByIdAndUpdate(req.params.id, employee);
+  await Employee.findByIdAndUpdate(req.params.id, employee, { new: true });
   return res.status(200).send(employee);
 });
 
@@ -201,7 +201,11 @@ router.patch("/:id", validateObjectId, async (req, res) => {
   if (!status)
     return res.status(404).send("There is no status with the given ID");
 
-  const employee = await Employee.findByIdAndUpdate(req.params.id, { status });
+  const employee = await Employee.findByIdAndUpdate(
+    req.params.id,
+    { status },
+    { new: true }
+  );
   res.status(200).send(employee);
 });
 
