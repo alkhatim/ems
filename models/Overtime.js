@@ -50,6 +50,7 @@ const validate = function(overtime) {
       .max(Date.now())
       .required(),
     notes: Joi.string(),
+    stateId: Joi.objectId(),
     typeId: Joi.objectId().required(),
     amount: Joi.number().required()
   };
