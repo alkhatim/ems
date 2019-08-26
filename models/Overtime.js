@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
 const { schema: stateSchema } = require("./State");
-const { schema: overtimeTypeSchema } = require("./OvertimeType");
+const { schema: typeSchema } = require("./OvertimeType");
 
 const schema = new mongoose.Schema({
   employee: {
@@ -16,8 +16,8 @@ const schema = new mongoose.Schema({
   date: {
     type: Date,
     required: true,
-    max: Date.now(),
-    default: Date.now()
+    max: new Date(),
+    default: new Date()
   },
   notes: {
     type: String,
@@ -28,7 +28,7 @@ const schema = new mongoose.Schema({
     required: true
   },
   type: {
-    type: overtimeTypeSchema,
+    type: typeSchema,
     required: true
   },
   amount: {
@@ -46,11 +46,9 @@ const Overtime = mongoose.model("Overtime", schema);
 const validate = function(overtime) {
   const schema = {
     employeeId: Joi.objectId().required(),
-    date: Joi.date()
-      .max(Date.now())
-      .required(),
     notes: Joi.string(),
     stateId: Joi.objectId(),
+    date: Joi.date().max(new Date()),
     typeId: Joi.objectId().required(),
     amount: Joi.number().required()
   };

@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
-const { schema: employeeStatusSchema } = require("../models/EmployeeStatus");
 const { schema: nationalitySchema } = require("../models/Nationality");
-const { schema: genderSchema } = require("../models/Gender");
 const { schema: jobSchema } = require("../models/Job");
 const { schema: contractSchema } = require("../models/Contract");
+const { schema: statusSchema } = require("../models/EmployeeStatus");
+const { schema: genderSchema } = require("../models/Gender");
 const { schema: departmentSchema } = require("../models/Department");
 
 const schema = new mongoose.Schema({
@@ -25,7 +25,7 @@ const schema = new mongoose.Schema({
   },
   birthday: {
     type: Date,
-    max: Date.now(),
+    max: new Date(),
     required: true
   },
   address: {
@@ -48,7 +48,7 @@ const schema = new mongoose.Schema({
     maxlength: 20
   },
   status: {
-    type: employeeStatusSchema,
+    type: statusSchema,
     required: true
   },
   jobInfo: {
@@ -66,7 +66,7 @@ const schema = new mongoose.Schema({
     },
     dateOfEmployment: {
       type: Date,
-      max: Date.now()
+      max: new Date()
     },
     contractExpiryDate: Date
   },
@@ -138,7 +138,7 @@ const validate = function(employee) {
     genderId: Joi.objectId().required(),
     nationalityId: Joi.objectId().required(),
     birthday: Joi.date()
-      .max(Date.now())
+      .max(new Date())
       .required(),
     address: Joi.string(),
     phone: Joi.string()
@@ -150,7 +150,7 @@ const validate = function(employee) {
     jobId: Joi.objectId().required(),
     contractId: Joi.objectId().required(),
     departmentId: Joi.objectId().required(),
-    dateOfEmployment: Joi.date().max(Date.now()),
+    dateOfEmployment: Joi.date().max(new Date()),
     contractExpiryDate: Joi.date(),
     basicSalary: Joi.number()
       .positive()

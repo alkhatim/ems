@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
 const { schema: stateSchema } = require("./State");
-const { schema: deductionTypeSchema } = require("./DeductionType");
+const { schema: typeSchema } = require("./DeductionType");
 
 const schema = new mongoose.Schema({
   employee: {
@@ -16,8 +16,8 @@ const schema = new mongoose.Schema({
   date: {
     type: Date,
     required: true,
-    max: Date.now(),
-    default: Date.now()
+    default: new Date(),
+    max: new Date()
   },
   notes: {
     type: String,
@@ -28,7 +28,7 @@ const schema = new mongoose.Schema({
     required: true
   },
   type: {
-    type: deductionTypeSchema,
+    type: typeSchema,
     required: true
   },
   amount: {
@@ -46,11 +46,9 @@ const Deduction = mongoose.model("Deduction", schema);
 const validate = function(deduction) {
   const schema = {
     employeeId: Joi.objectId().required(),
-    date: Joi.date()
-      .max(Date.now())
-      .required(),
     notes: Joi.string(),
     stateId: Joi.objectId(),
+    date: Joi.date().max(new Date()),
     typeId: Joi.objectId().required(),
     amount: Joi.number().required()
   };
