@@ -12,7 +12,7 @@ router.post("/", async (req, res) => {
     "_id name"
   );
   if (!employee)
-    return res.status(400).send("There is no employee with the given ID");
+    return res.status(404).send("There is no employee with the given ID");
 
   const absencePermission = new AbsencePermission({
     employee,
@@ -45,7 +45,7 @@ router.put("/:id", async (req, res) => {
     "_id name"
   );
   if (!employee)
-    return res.status(400).send("There is no employee with the given ID");
+    return res.status(404).send("There is no employee with the given ID");
 
   const absencePermission = {
     employee,

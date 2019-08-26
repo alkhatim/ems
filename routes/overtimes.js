@@ -17,7 +17,7 @@ router.post("/", async (req, res) => {
   );
 
   if (!employee)
-    return res.status(400).send("There is no employee with the given ID");
+    return res.status(404).send("There is no employee with the given ID");
 
   const state = await State.findOne({ name: "New" });
   if (!state)
@@ -85,7 +85,7 @@ router.put("/:id", async (req, res) => {
   );
 
   if (!employee)
-    return res.status(400).send("There is no employee with the given ID");
+    return res.status(404).send("There is no employee with the given ID");
 
   const state = await State.findById(req.body.stateId);
   if (!state)
