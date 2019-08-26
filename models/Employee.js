@@ -3,7 +3,7 @@ const Joi = require("joi");
 const { schema: nationalitySchema } = require("../models/Nationality");
 const { schema: jobSchema } = require("../models/Job");
 const { schema: contractSchema } = require("../models/Contract");
-const { schema: employeeStatusSchema } = require("../models/EmployeeStatus");
+const { schema: statusSchema } = require("../models/EmployeeStatus");
 const { schema: genderSchema } = require("../models/Gender");
 const { schema: departmentSchema } = require("../models/Department");
 
@@ -48,7 +48,7 @@ const schema = new mongoose.Schema({
     maxlength: 20
   },
   status: {
-    type: employeeStatusSchema,
+    type: statusSchema,
     required: true
   },
   jobInfo: {

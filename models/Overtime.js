@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
 const { schema: stateSchema } = require("./State");
-const { schema: overtimeTypeSchema } = require("./OvertimeType");
+const { schema: typeSchema } = require("./OvertimeType");
 
 const schema = new mongoose.Schema({
   employee: {
@@ -28,7 +28,7 @@ const schema = new mongoose.Schema({
     required: true
   },
   type: {
-    type: overtimeTypeSchema,
+    type: typeSchema,
     required: true
   },
   amount: {

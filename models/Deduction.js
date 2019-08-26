@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
 const { schema: stateSchema } = require("./State");
-const { schema: deductionTypeSchema } = require("./DeductionType");
+const { schema: typeSchema } = require("./DeductionType");
 
 const schema = new mongoose.Schema({
   employee: {
@@ -27,7 +27,7 @@ const schema = new mongoose.Schema({
     required: true
   },
   type: {
-    type: deductionTypeSchema,
+    type: typeSchema,
     required: true
   },
   amount: {
