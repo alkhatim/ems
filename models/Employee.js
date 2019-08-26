@@ -25,7 +25,7 @@ const schema = new mongoose.Schema({
   },
   birthday: {
     type: Date,
-    max: Date.now(),
+    max: new Date(),
     required: true
   },
   address: {
@@ -66,7 +66,7 @@ const schema = new mongoose.Schema({
     },
     dateOfEmployment: {
       type: Date,
-      max: Date.now()
+      max: new Date()
     },
     contractExpiryDate: Date
   },
@@ -138,7 +138,7 @@ const validate = function(employee) {
     genderId: Joi.objectId().required(),
     nationalityId: Joi.objectId().required(),
     birthday: Joi.date()
-      .max(Date.now())
+      .max(new Date())
       .required(),
     address: Joi.string(),
     phone: Joi.string()
@@ -150,7 +150,7 @@ const validate = function(employee) {
     jobId: Joi.objectId().required(),
     contractId: Joi.objectId().required(),
     departmentId: Joi.objectId().required(),
-    dateOfEmployment: Joi.date().max(Date.now()),
+    dateOfEmployment: Joi.date().max(new Date()),
     contractExpiryDate: Joi.date(),
     basicSalary: Joi.number()
       .positive()

@@ -16,7 +16,8 @@ const schema = new mongoose.Schema({
   date: {
     type: Date,
     required: true,
-    default: Date.now()
+    max: new Date(),
+    default: new Date()
   },
   notes: {
     type: String,
@@ -45,7 +46,7 @@ const Deduction = mongoose.model("Deduction", schema);
 const validate = function(deduction) {
   const schema = {
     employeeId: Joi.objectId().required(),
-    date: Joi.date().required(),
+    date: Joi.date().max(new Date()),
     notes: Joi.string().required(),
     stateId: Joi.objectId().required(),
     typeId: Joi.objectId().required(),
