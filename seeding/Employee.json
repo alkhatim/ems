@@ -1,0 +1,48 @@
+{
+  "_id": "5d60474e63e5bc0e508e704c",
+  "name": "mohammed alkhatim",
+  "gender": { "_id": "5d5e6b21cf308e1e10668be2", "name": "Male", "__v": 0 },
+  "nationality": {
+    "_id": "5d5e6b20cf308e1e10668be0",
+    "name": "Sudanese",
+    "__v": 0
+  },
+  "birthday": "1996-03-26T00:00:00.000Z",
+  "address": "Arkaweet",
+  "phone": "0920012880",
+  "bankAccount": 1796861,
+  "status": { "_id": "5d5e6b21cf308e1e10668be3", "name": "Normal", "__v": 0 },
+  "jobInfo": {
+    "job": { "_id": "5d5e6b20cf308e1e10668bdf", "name": "Developer", "__v": 0 },
+    "contract": {
+      "_id": "5d5e6b1bcf308e1e10668bde",
+      "name": "Normal",
+      "__v": 0
+    },
+    "department": { "_id": "5d5e6b21cf308e1e10668be1", "name": "IT", "__v": 0 },
+    "dateOfEmployment": null,
+    "contractExpiryDate": "2020-01-01T00:00:00.000Z"
+  },
+  "salaryInfo": {
+    "basicSalary": 1000,
+    "livingExpenseAllowance": 300,
+    "housingAllowance": 300,
+    "transportAllowance": null,
+    "foodAllowance": 100,
+    "totalSalary": 1700
+  },
+  "__v": 0,
+  "email": null,
+  "serviceInfo": {
+    "endOfServiceDate": null,
+    "endOfServiceReason": null,
+    "suspensionDate": null,
+    "suspensionReason": null
+  },
+  "socialInsuranceInfo": {
+    "registered": null,
+    "socialInsuranceNumber": null,
+    "socialInsuranceSalary": null
+  },
+  "vacationInfo": { "vacationDays": null, "vacationSchedule": null }
+}
