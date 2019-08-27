@@ -68,10 +68,10 @@ router.get("/:id", validateObjectId, async (req, res) => {
 
 router.put("/:id", async (req, res) => {
   const currentState = await Deduction.findById(req.params.id).select("state");
-  if (currentState.name == "Posted")
+  if (currentState.name == "resolved")
     return res
       .status(400)
-      .send("You can't modify a deduction that has been posted");
+      .send("You can't modify a deduction that has been resolved");
 
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
