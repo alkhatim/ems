@@ -12,7 +12,6 @@ const vacationsRouter = require("./routes/vacations");
 const errors = require("./middleware/errors");
 
 require("./startup/db")();
-require("./startup/winston")();
 
 app.use(express.json());
 app.use("/api/users", usersRouter);

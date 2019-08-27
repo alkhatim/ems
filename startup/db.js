@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const config = require("config");
-const logger = require("../logs/logger");
+const logger = require("../startup/logger");
 
 module.exports = function() {
   db = config.get("db");
