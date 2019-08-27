@@ -68,7 +68,7 @@ const validate = function(vacation) {
         .min(new Date())
         .when("duration", { is: Joi.exist(), then: Joi.required() }),
       duartion: Joi.number().when("endDate", {
-        is: Joi.exist(),
+        is: !Joi.exist(),
         then: Joi.required()
       }),
       notes: Joi.string(),
