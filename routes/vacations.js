@@ -79,3 +79,5 @@ router.get("/:id", validateObjectId, async (req, res) => {
 
   return res.status(200).send(vacations);
 });
+
+module.exports = router;
