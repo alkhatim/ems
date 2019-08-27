@@ -3,10 +3,13 @@ const config = require("config");
 const logger = require("../startup/logger");
 
 module.exports = function() {
-  db = config.get("db");
+  const dbConnectionString = config.get("dbConnectionString");
   mongoose.set("useCreateIndex", true);
   mongoose
-    .connect(db, { useNewUrlParser: true, useFindAndModify: false })
-    .then(() => console.log("connected to", db))
+    .connect(dbConnectionString, {
+      useNewUrlParser: true,
+      useFindAndModify: false
+    })
+    .then(() => console.log("connected to", dbConnectionString))
     .catch(e => logger.error(e));
 };
