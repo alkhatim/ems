@@ -62,6 +62,9 @@ router.post("/", async (req, res) => {
     ).select("_id name");
 
   await vacation.save();
+
+  credit.remainingCredit -= req.body.duration;
+  await credit.save();
 });
 
 router.get("/", async (req, res) => {
