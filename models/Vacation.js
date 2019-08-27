@@ -57,6 +57,7 @@ const schema = new mongoose.Schema({
 
 const Vacation = mongoose.model("Vacation", schema);
 
+// TODO: validate endDate with startdate and ongoing vacations
 const validate = function(vacation) {
   const schema = Joi.object()
     .keys({
@@ -65,7 +66,7 @@ const validate = function(vacation) {
         .min(new Date())
         .required(),
       endDate: Joi.date()
-        .min(new Date())
+        .min(Joi.ref("startDate"))
         .when("duration", { is: Joi.exist(), then: Joi.required() }),
       duartion: Joi.number().when("endDate", {
         is: !Joi.exist(),
