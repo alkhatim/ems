@@ -5,8 +5,7 @@ const schema = new mongoose.Schema({
     type: String,
     required: true,
     minlength: 1,
-    maxlength: 30,
-    unique: true
+    maxlength: 30
   }
 });
 
