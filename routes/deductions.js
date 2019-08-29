@@ -51,7 +51,7 @@ router.post("/", async (req, res) => {
 
   await deduction.save();
 
-  return res.status(201).send(deduction);
+  res.status(201).send(deduction);
 });
 
 router.get("/", async (req, res) => {
@@ -113,7 +113,7 @@ router.put("/:id", async (req, res) => {
 
   await Deduction.findByIdAndUpdate(req.params.id, deduction);
 
-  return res.status(200).send(deduction);
+  res.status(200).send(deduction);
 });
 
 router.delete("/:id", validateObjectId, async (req, res) => {

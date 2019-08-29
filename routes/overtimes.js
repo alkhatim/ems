@@ -55,7 +55,7 @@ router.post("/", async (req, res) => {
 
   await overtime.save();
 
-  return res.status(201).send(overtime);
+  res.status(201).send(overtime);
 });
 
 router.get("/", async (req, res) => {
@@ -121,7 +121,7 @@ router.put("/:id", async (req, res) => {
 
   await Overtime.findByIdAndUpdate(req.params.id, overtime);
 
-  return res.status(200).send(overtime);
+  res.status(200).send(overtime);
 });
 
 router.delete("/:id", validateObjectId, async (req, res) => {

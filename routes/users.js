@@ -27,7 +27,7 @@ router.post("/", async (req, res) => {
   await user.save();
 
   const token = user.genJwt();
-  return res
+  res
     .status(201)
     .header("x-jwt", token)
     .header("access-control-expose-headers", "x-jwt")
