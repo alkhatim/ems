@@ -18,11 +18,9 @@ router.post("/", async (req, res) => {
   if (!employee)
     return res.status(404).send("There is no employee with the given ID");
 
-  if (req.body.endDate)
-    req.body.duration = moment(req.body.endDate).diff(
-      moment(req.body.startDate),
-      "days"
-    );
+  req.body.endDate = moment(req.body.startDate)
+    .add(req.body.duration, "d")
+    .toDate();
 
   const credit = await VacationCredit.findOne({
     "employee._id": req.body.employeeId
@@ -31,7 +29,6 @@ router.post("/", async (req, res) => {
     return res
       .status(400)
       .send("Register a vacations credit for this employee first");
-
   if (credit.remainingCredit < req.body.duration)
     return res
       .status(400)

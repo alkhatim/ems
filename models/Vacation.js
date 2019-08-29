@@ -57,27 +57,18 @@ const schema = new mongoose.Schema({
 
 const Vacation = mongoose.model("Vacation", schema);
 
-// TODO: validate endDate with startdate and ongoing vacations
 const validate = function(vacation) {
-  const schema = Joi.object()
-    .keys({
-      employeeId: Joi.objectId().required(),
-      startDate: Joi.date()
-        .min(new Date())
-        .required(),
-      endDate: Joi.date()
-        .min(Joi.ref("startDate"))
-        .when("duration", { is: Joi.exist(), then: Joi.required() }),
-      duartion: Joi.number().when("endDate", {
-        is: !Joi.exist(),
-        then: Joi.required()
-      }),
-      notes: Joi.string(),
-      stateId: Joi.objectId(),
-      typeId: Joi.objectId().required(),
-      replacementEmployeeId: Joi.objectId()
-    })
-    .or("endDate", "duaration");
+  const schema = Joi.object().keys({
+    employeeId: Joi.objectId().required(),
+    startDate: Joi.date()
+      .min(new Date())
+      .required(),
+    duration: Joi.number().required(),
+    notes: Joi.string(),
+    stateId: Joi.objectId(),
+    typeId: Joi.objectId().required(),
+    replacementEmployeeId: Joi.objectId()
+  });
 
   return Joi.validate(vacation, schema);
 };
