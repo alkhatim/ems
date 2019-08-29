@@ -22,6 +22,26 @@ router.post("/", async (req, res) => {
     .add(req.body.duration, "d")
     .toDate();
 
+  const currentVacation = await Vacation.findOne({
+    "employee._id": req.body.employeeId
+  }).or([
+    {
+      startDate: { $lte: req.body.startDate },
+      endDate: { $gte: req.body.startDate }
+    },
+    {
+      startDate: { $lte: req.body.endDate },
+      endDate: { $gte: req.body.endDate }
+    }
+  ]);
+
+  if (currentVacation)
+    return res
+      .status(400)
+      .send(
+        "The dates coflict with an already scheduled vactaion for the same employee!"
+      );
+
   const credit = await VacationCredit.findOne({
     "employee._id": req.body.employeeId
   });
@@ -62,11 +82,13 @@ router.post("/", async (req, res) => {
 
   credit.remainingCredit -= req.body.duration;
   await credit.save();
+
+  res.status(201).send(vacation);
 });
 
 router.get("/", async (req, res) => {
   const vacations = await Vacation.find();
-  return res.status(200).send(vacations);
+  res.status(200).send(vacations);
 });
 
 router.get("/:id", validateObjectId, async (req, res) => {
@@ -74,7 +96,7 @@ router.get("/:id", validateObjectId, async (req, res) => {
   if (!vacation)
     return res.status(404).send("There is no vacation with the given ID");
 
-  return res.status(200).send(vacations);
+  res.status(200).send(vacations);
 });
 
 module.exports = router;
