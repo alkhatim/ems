@@ -111,11 +111,6 @@ const schema = new mongoose.Schema({
     endOfServiceReason: {
       type: String,
       trim: true
-    },
-    suspensionDate: Date,
-    suspensionReason: {
-      type: String,
-      trim: true
     }
   },
   vacationInfo: {
@@ -164,8 +159,6 @@ const validate = function(employee) {
     socialInsuranceSalary: Joi.number().positive(),
     endOfServiceDate: Joi.date(),
     endOfServiceReason: Joi.string(),
-    suspensionDate: Joi.date(),
-    suspensionReason: Joi.string(),
     vacationDays: Joi.number().positive(),
     vacationSchedule: Joi.array().items(Joi.date())
   };
