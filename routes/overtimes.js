@@ -72,7 +72,7 @@ router.get("/:id", validateObjectId, async (req, res) => {
 
 router.put("/:id", async (req, res) => {
   const currentState = await Overtime.findById(req.params.id).select("state");
-  if (currentState.name == "resolved")
+  if (currentState.name == "Resolved")
     return res
       .status(400)
       .send("You can't modify an overtime that has been resolved");
