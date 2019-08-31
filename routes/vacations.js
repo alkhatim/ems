@@ -22,7 +22,7 @@ router.post("/", async (req, res) => {
     .add(req.body.duration, "d")
     .toDate();
 
-  const currentVacation = await Vacation.findOne({
+  const ongoingVacation = await Vacation.findOne({
     "employee._id": req.body.employeeId
   }).or([
     {
@@ -35,7 +35,7 @@ router.post("/", async (req, res) => {
     }
   ]);
 
-  if (currentVacation)
+  if (ongoingVacation)
     return res
       .status(400)
       .send(
@@ -45,7 +45,7 @@ router.post("/", async (req, res) => {
   const credit = await VacationCredit.findOne({
     "employee._id": req.body.employeeId
   });
-  if (!credit)
+  if (credit == null || credit == undefined)
     return res
       .status(400)
       .send("Register a vacations credit for this employee first");
@@ -73,9 +73,9 @@ router.post("/", async (req, res) => {
     type
   });
 
-  if (req.body.replacementEmplyeeId)
-    vacation.replacementEmplyee = await Employee.findById(
-      req.body.replacementEmplyeeId
+  if (req.body.replacementEmployeeId)
+    vacation.replacementEmployee = await Employee.findById(
+      req.body.replacementEmployeeId
     ).select("_id name");
 
   await vacation.save();
@@ -123,6 +123,93 @@ router.put("/:id", validateObjectId, async (req, res) => {
       );
   if (currentState.name == "Ongoing")
     return res.status(400).send("You can't modify an ongoing vacation");
+
+  const { error } = validate(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+
+  const employee = await Employee.findById(req.body.employeeId).select(
+    "_id name"
+  );
+  if (!employee)
+    return res.status(404).send("There is no employee with the given ID");
+
+  req.body.endDate = moment(req.body.startDate)
+    .add(req.body.duration, "d")
+    .toDate();
+
+  const ongoingVacation = await Vacation.findOne({
+    "employee._id": req.body.employeeId
+  }).or([
+    {
+      startDate: { $lte: req.body.startDate },
+      endDate: { $gte: req.body.startDate }
+    },
+    {
+      startDate: { $lte: req.body.endDate },
+      endDate: { $gte: req.body.endDate }
+    }
+  ]);
+
+  if (ongoingVacation)
+    return res
+      .status(400)
+      .send(
+        "The dates coflict with an already scheduled vactaion for the same employee!"
+      );
+
+  const credit = await VacationCredit.findOne({
+    "employee._id": req.body.employeeId
+  });
+  if (credit == null || credit == undefined)
+    return res
+      .status(400)
+      .send("Register a vacations credit for this employee first");
+  if (credit.remainingCredit < req.body.duration)
+    return res
+      .status(400)
+      .send("The employee doesn't have enough vacations credit");
+
+  const state = await VacationState.findById(req.body.stateId);
+  if (!state)
+    return res.status(500).send("There is no State with the given ID");
+
+  const type = await VacationType.findById(req.body.typeId);
+  if (!type) return res.status(400).send("There is no type with the given ID");
+
+  const vacation = {
+    employee,
+    startDate: req.body.startDate,
+    endDate: req.body.endDate,
+    duration: req.body.duration,
+    notes: req.body.notes,
+    state,
+    type
+  };
+
+  if (req.body.replacementEmployeeId)
+    vacation.replacementEmployee = await Employee.findById(
+      req.body.replacementEmployeeId
+    ).select("_id name");
+
+  await Vacation.findByIdAndUpdate(req.params.id, vacation);
+
+  credit.remainingCredit -= req.body.duration;
+  await credit.save();
+
+  res.status(200).send(vacation);
+});
+
+router.patch("/:id", validateObjectId, async (req, res) => {
+  const state = await VacationState.findById(req.body.stateId);
+  if (!state)
+    return res.status(404).send("There is no state with the given ID");
+
+  const vacation = await Vacation.findByIdAndUpdate(
+    req.params.id,
+    { state },
+    { new: true }
+  );
+  res.status(200).send(vacation);
 });
 
 module.exports = router;
