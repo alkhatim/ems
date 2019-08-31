@@ -112,7 +112,8 @@ router.delete("/:id", validateObjectId, async (req, res) => {
 router.put("/:id", validateObjectId, async (req, res) => {
   const currentState = await Vacation.findById(req.params.id).select("state");
   if (
-    currentState.name == "Resolved" ||
+    currentState.name == "Finished" ||
+    currentState.name == "Finished Early" ||
     currentState.name == "Canceled" ||
     currentState.name == "Approved"
   )
