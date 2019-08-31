@@ -26,6 +26,9 @@ const schema = new mongoose.Schema({
       return !this.duration;
     }
   },
+  actualEndDate: {
+    type: Date
+  },
   duration: {
     type: Number,
     min: 0,

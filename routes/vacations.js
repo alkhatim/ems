@@ -215,11 +215,19 @@ router.patch("/:id", validateObjectId, async (req, res) => {
   if (!state)
     return res.status(404).send("There is no state with the given ID");
 
-  vacation = await Vacation.findByIdAndUpdate(
-    req.params.id,
-    { state },
-    { new: true }
-  );
+  if (vacation.state.name == "Ongoing" && state.name == "Finished Early") {
+    vacation.actualEndDate = new Date().setHours(0, 0, 0, 0);
+    let credit = await credit.findOne({
+      "employee._id": vacation.employee._id
+    });
+    credit.remainingCredit += moment(vacation.endDate).diff(moment(), "d");
+    credit.save();
+  }
+
+  vacation.state = state;
+
+  vacation.save();
+
   res.status(200).send(vacation);
 });
 
