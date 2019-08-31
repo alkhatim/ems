@@ -110,6 +110,10 @@ router.delete("/:id", validateObjectId, async (req, res) => {
 });
 
 router.put("/:id", validateObjectId, async (req, res) => {
+  let employee = Employee.findById(req.params.id);
+  if (!employee)
+    return res.status(404).send("There is no employee with the given ID");
+
   const currentStatus = await Employee.findById(req.params.id).select("status");
   if (currentStatus.name == "Terminated")
     return res
@@ -142,7 +146,7 @@ router.put("/:id", validateObjectId, async (req, res) => {
   if (!department)
     return res.status(404).send("The specified department was not found");
 
-  const employee = {
+  employee = {
     name: req.body.name,
     gender,
     nationality,
@@ -204,6 +208,9 @@ router.patch("/:id", validateObjectId, async (req, res) => {
     { status },
     { new: true }
   );
+  if (!employee)
+    return res.status(404).send("There is no employee with the given ID");
+
   res.status(200).send(employee);
 });
 

@@ -71,6 +71,10 @@ router.get("/:id", validateObjectId, async (req, res) => {
 });
 
 router.put("/:id", async (req, res) => {
+  let overtime = Overtime.findById(req.params.id);
+  if (!overtime)
+    return res.status(404).send("There is no overtime with the given ID");
+
   const currentState = await Overtime.findById(req.params.id).select("state");
   if (currentState.name != "New")
     return res
@@ -111,7 +115,7 @@ router.put("/:id", async (req, res) => {
       break;
   }
 
-  const overtime = {
+  overtime = {
     employee: _.pick(employee, ["_id", "name"]),
     date: req.body.date,
     notes: req.body.notes,
@@ -145,6 +149,9 @@ router.patch("/:id", validateObjectId, async (req, res) => {
     { state },
     { new: true }
   );
+  if (!overtime)
+    return res.status(404).send("There is no overtime with the given ID");
+
   res.status(200).send(overtime);
 });
 

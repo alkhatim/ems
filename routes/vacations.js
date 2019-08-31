@@ -100,9 +100,12 @@ router.get("/:id", validateObjectId, async (req, res) => {
 });
 
 router.delete("/:id", validateObjectId, async (req, res) => {
-  const currentState = await Vacation.findById(req.params.id).select("state");
-  if (currentState.name == "Ongoing")
+  const vacation = await Vacation.findById(req.params.id);
+  if (!vacation)
     return res.status(404).send("There is no vacation with the given ID");
+
+  if (vacation.state.name == "Ongoing")
+    return res.status(400).send("You can't delete an ongoing vacation");
 
   await Vacation.findByIdAndDelete(req.params.id);
 
@@ -110,19 +113,22 @@ router.delete("/:id", validateObjectId, async (req, res) => {
 });
 
 router.put("/:id", validateObjectId, async (req, res) => {
-  const currentState = await Vacation.findById(req.params.id).select("state");
+  let vacation = await Vacation.findById(req.params.id);
+  if (!vacation)
+    return res.status(404).send("There is no vacation with the given ID");
+
   if (
-    currentState.name == "Finished" ||
-    currentState.name == "Finished Early" ||
-    currentState.name == "Canceled" ||
-    currentState.name == "Approved"
+    vacation.state.name == "Finished" ||
+    vacation.state.name == "Finished Early" ||
+    vacation.state.name == "Canceled" ||
+    vacation.state.name == "Approved"
   )
     return res
       .status(400)
       .send(
         "You can't modify a vacation that has been approved, resolved or canceled"
       );
-  if (currentState.name == "Ongoing")
+  if (vacation.state.name == "Ongoing")
     return res.status(400).send("You can't modify an ongoing vacation");
 
   const { error } = validate(req.body);
@@ -177,7 +183,7 @@ router.put("/:id", validateObjectId, async (req, res) => {
   const type = await VacationType.findById(req.body.typeId);
   if (!type) return res.status(400).send("There is no type with the given ID");
 
-  const vacation = {
+  vacation = {
     employee,
     startDate: req.body.startDate,
     endDate: req.body.endDate,
@@ -201,11 +207,15 @@ router.put("/:id", validateObjectId, async (req, res) => {
 });
 
 router.patch("/:id", validateObjectId, async (req, res) => {
+  let vacation = Vacation.findById(req.params.id);
+  if (!vacation)
+    return res.status(404).send("There is no vacation with the given ID");
+
   const state = await VacationState.findById(req.body.stateId);
   if (!state)
     return res.status(404).send("There is no state with the given ID");
 
-  const vacation = await Vacation.findByIdAndUpdate(
+  vacation = await Vacation.findByIdAndUpdate(
     req.params.id,
     { state },
     { new: true }

@@ -38,6 +38,10 @@ router.get("/:id", validateObjectId, async (req, res) => {
 });
 
 router.put("/:id", async (req, res) => {
+  let absencePermission = AbsencePermission.findById(req.params.id);
+  if (!absencePermission)
+    return res.status(404).send("There is no permission with the given ID");
+
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -47,7 +51,7 @@ router.put("/:id", async (req, res) => {
   if (!employee)
     return res.status(404).send("There is no employee with the given ID");
 
-  const absencePermission = {
+  absencePermission = {
     employee,
     date: req.body.date,
     notes: req.body.notes
@@ -59,9 +63,11 @@ router.put("/:id", async (req, res) => {
 });
 
 router.delete("/:id", async (req, res) => {
-  const absencePermission = await AbsencePermission.findByIdAndDelete(
-    req.params.id
-  );
+  let absencePermission = AbsencePermission.findById(req.params.id);
+  if (!absencePermission)
+    return res.status(404).send("There is no permission with the given ID");
+
+  absencePermission = await AbsencePermission.findByIdAndDelete(req.params.id);
   if (!absencePermission)
     return res.status(404).send("There is no permission with the given ID");
   res.status(200).send(absencePermission);

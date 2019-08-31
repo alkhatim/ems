@@ -67,6 +67,10 @@ router.get("/:id", validateObjectId, async (req, res) => {
 });
 
 router.put("/:id", async (req, res) => {
+  let deduction = Deduction.findById(req.params.id);
+  if (!deduction)
+    return res.status(404).send("There is no deduction with the given ID");
+
   const currentState = await Deduction.findById(req.params.id).select("state");
   if (currentState.name != "New")
     return res
@@ -103,7 +107,7 @@ router.put("/:id", async (req, res) => {
       break;
   }
 
-  const deduction = {
+  deduction = {
     employee: _.pick(employee, ["_id", "name"]),
     date: req.body.date,
     notes: req.body.notes,
@@ -128,11 +132,15 @@ router.delete("/:id", validateObjectId, async (req, res) => {
 
 // for changing a deduction's state
 router.patch("/:id", validateObjectId, async (req, res) => {
+  let deduction = Deduction.findById(req.params.id);
+  if (!deduction)
+    return res.status(404).send("There is no deduction with the given ID");
+
   const state = await State.findById(req.body.stateId);
   if (!state)
     return res.status(404).send("There is no state with the given ID");
 
-  const deduction = await Deduction.findByIdAndUpdate(
+  deduction = await Deduction.findByIdAndUpdate(
     req.params.id,
     { state },
     { new: true }
