@@ -71,8 +71,7 @@ router.put("/:id", async (req, res) => {
   if (!deduction)
     return res.status(404).send("There is no deduction with the given ID");
 
-  const currentState = await Deduction.findById(req.params.id).select("state");
-  if (currentState.name != "New")
+  if (deduction.state.name != "New")
     return res
       .status(400)
       .send(

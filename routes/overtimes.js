@@ -75,8 +75,7 @@ router.put("/:id", async (req, res) => {
   if (!overtime)
     return res.status(404).send("There is no overtime with the given ID");
 
-  const currentState = await Overtime.findById(req.params.id).select("state");
-  if (currentState.name != "New")
+  if ((overtime, state.name != "New"))
     return res
       .status(400)
       .send(
