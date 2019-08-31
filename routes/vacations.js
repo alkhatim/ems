@@ -100,17 +100,9 @@ router.get("/:id", validateObjectId, async (req, res) => {
 });
 
 router.delete("/:id", validateObjectId, async (req, res) => {
-  const vacation = await Vacation.findById(req.params.id);
-  if (!vacation)
+  const currentState = await Vacation.findById(req.params.id).select("state");
+  if (currentState.name == "Ongoing")
     return res.status(404).send("There is no vacation with the given ID");
-
-  if (
-    new Date().setHours(0, 0, 0, 0) > vacation.startDate &&
-    new Date().setHours(0, 0, 0, 0) < vacation.endDate
-  )
-    return res
-      .status(400)
-      .send("You can't delete a vacation that has already started");
 
   await Vacation.findByIdAndDelete(req.params.id);
 
@@ -119,10 +111,18 @@ router.delete("/:id", validateObjectId, async (req, res) => {
 
 router.put("/:id", validateObjectId, async (req, res) => {
   const currentState = await Vacation.findById(req.params.id).select("state");
-  if (currentState.name == "Resolved")
+  if (
+    currentState.name == "Resolved" ||
+    currentState.name == "Canceled" ||
+    currentState.name == "Approved"
+  )
     return res
       .status(400)
-      .send("You can't modify a vacation that has been Resolved");
+      .send(
+        "You can't modify a vacation that has been approved, resolved or canceled"
+      );
+  if (currentState.name == "Ongoing")
+    return res.status(400).send("You can't modify an ongoing vacation");
 });
 
 module.exports = router;

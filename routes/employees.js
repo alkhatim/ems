@@ -114,7 +114,7 @@ router.put("/:id", validateObjectId, async (req, res) => {
   if (currentStatus.name == "Terminated")
     return res
       .status(400)
-      .send("You can't modify an employee that's not working here anymore");
+      .send("You can't modify an employee that has been terminated");
 
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
