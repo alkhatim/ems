@@ -118,8 +118,8 @@ router.put("/:id", validateObjectId, async (req, res) => {
     return res.status(404).send("There is no vacation with the given ID");
 
   if (
-    vacation.state.name == "Finished" ||
-    vacation.state.name == "Finished Early" ||
+    vacation.state.name == "Resolved" ||
+    vacation.state.name == "Cutoff" ||
     vacation.state.name == "Canceled" ||
     vacation.state.name == "Approved"
   )
@@ -215,7 +215,7 @@ router.patch("/:id", validateObjectId, async (req, res) => {
   if (!state)
     return res.status(404).send("There is no state with the given ID");
 
-  if (vacation.state.name == "Ongoing" && state.name == "Finished Early") {
+  if (vacation.state.name == "Ongoing" && state.name == "Cutoff") {
     vacation.actualEndDate = new Date().setHours(0, 0, 0, 0);
     let credit = await credit.findOne({
       "employee._id": vacation.employee._id

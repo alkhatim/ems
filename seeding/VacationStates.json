@@ -9,10 +9,10 @@
     "name": "Ongoing"
   },
   {
-    "name": "Finished"
+    "name": "Resolved"
   },
   {
-    "name": "Finished Early"
+    "name": "Cutoff"
   },
   {
     "name": "Canceled"
