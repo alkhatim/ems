@@ -134,8 +134,7 @@ router.put("/:id", validateObjectId, async (req, res) => {
   if (!contract)
     return res.status(404).send("The specified contract was not found");
 
-  let status = await EmployeeStatus.findById(req.body.statusId);
-  if (!status) status = employee.status;
+  const status = employee.status;
 
   const job = await Job.findById(req.body.jobId);
   if (!job) return res.status(404).send("The specified job was not found");
