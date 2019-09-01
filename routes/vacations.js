@@ -176,9 +176,7 @@ router.put("/:id", validateObjectId, async (req, res) => {
       .status(400)
       .send("The employee doesn't have enough vacations credit");
 
-  const state = await VacationState.findById(req.body.stateId);
-  if (!state)
-    return res.status(500).send("There is no State with the given ID");
+  const state = vacation.state;
 
   const type = await VacationType.findById(req.body.typeId);
   if (!type) return res.status(400).send("There is no type with the given ID");

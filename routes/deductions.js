@@ -88,9 +88,7 @@ router.put("/:id", async (req, res) => {
   if (!employee)
     return res.status(404).send("There is no employee with the given ID");
 
-  const state = await State.findById(req.body.stateId);
-  if (!state)
-    return res.status(500).send("There is no state with the given ID");
+  const state = deduction.state;
 
   const type = await DeductionType.findById(req.body.typeId);
   if (!type) return res.status(400).send("There is no type with the given ID");
