@@ -1,0 +1,1 @@
+mongoimport --host bsarwlniw7uxw3u-mongodb.services.clever-cloud.com --db bsarwlniw7uxw3u --collection genders --type json --file genders.json --jsonArray --authenticationDatabase bsarwlniw7uxw3u --ssl --username uvqnmqhjoxr63zbxddtd --password jcLheqj9d3HbkHq6oFpP
