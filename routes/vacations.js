@@ -145,7 +145,8 @@ router.put("/:id", validateObjectId, async (req, res) => {
     .toDate();
 
   const ongoingVacation = await Vacation.findOne({
-    "employee._id": req.body.employeeId
+    "employee._id": req.body.employeeId,
+    _id: { $ne: vacation._id }
   }).or([
     {
       startDate: { $lte: req.body.startDate },
@@ -167,10 +168,14 @@ router.put("/:id", validateObjectId, async (req, res) => {
   const credit = await VacationCredit.findOne({
     "employee._id": req.body.employeeId
   });
+
   if (credit == null || credit == undefined)
     return res
       .status(400)
       .send("Register a vacations credit for this employee first");
+
+  credit.remainingCredit += vacation.duration;
+
   if (credit.remainingCredit < req.body.duration)
     return res
       .status(400)
