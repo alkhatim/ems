@@ -110,12 +110,11 @@ router.delete("/:id", validateObjectId, async (req, res) => {
 });
 
 router.put("/:id", validateObjectId, async (req, res) => {
-  let employee = Employee.findById(req.params.id);
+  let employee = await Employee.findById(req.params.id);
   if (!employee)
     return res.status(404).send("There is no employee with the given ID");
 
-  const currentStatus = await Employee.findById(req.params.id).select("status");
-  if (currentStatus.name == "Terminated")
+  if (employee.status.name == "Terminated")
     return res
       .status(400)
       .send("You can't modify an employee that has been terminated");
@@ -135,9 +134,8 @@ router.put("/:id", validateObjectId, async (req, res) => {
   if (!contract)
     return res.status(404).send("The specified contract was not found");
 
-  const status = await EmployeeStatus.findById(req.body.statusId);
-  if (!status)
-    return res.status(404).send("The specified status was not found");
+  let status = await EmployeeStatus.findById(req.body.statusId);
+  if (!status) status = employee.status;
 
   const job = await Job.findById(req.body.jobId);
   if (!job) return res.status(404).send("The specified job was not found");
