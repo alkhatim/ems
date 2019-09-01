@@ -20,21 +20,15 @@ const schema = new mongoose.Schema({
     default: new Date()
   },
   endDate: {
-    type: Date,
-    min: new Date(),
-    required: function() {
-      return !this.duration;
-    }
+    type: Date
   },
   actualEndDate: {
     type: Date
   },
   duration: {
     type: Number,
-    min: 0,
-    required: function() {
-      return !this.endDate;
-    }
+    min: 1,
+    required: true
   },
   notes: {
     type: String,
