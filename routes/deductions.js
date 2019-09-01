@@ -67,7 +67,7 @@ router.get("/:id", validateObjectId, async (req, res) => {
 });
 
 router.put("/:id", async (req, res) => {
-  let deduction = Deduction.findById(req.params.id);
+  let deduction = await Deduction.findById(req.params.id);
   if (!deduction)
     return res.status(404).send("There is no deduction with the given ID");
 

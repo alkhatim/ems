@@ -71,7 +71,7 @@ router.get("/:id", validateObjectId, async (req, res) => {
 });
 
 router.put("/:id", async (req, res) => {
-  let overtime = Overtime.findById(req.params.id);
+  let overtime = await Overtime.findById(req.params.id);
   if (!overtime)
     return res.status(404).send("There is no overtime with the given ID");
 

@@ -36,7 +36,7 @@ router.post("/", async (req, res) => {
 
 // for changing a user's password
 router.patch("/:id", async (req, res) => {
-  const user = User.findById(req.params.id);
+  const user = await User.findById(req.params.id);
   if (!user) return res.status(404).send("There is no user with the given ID");
 
   const schema = {

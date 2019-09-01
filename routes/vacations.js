@@ -207,7 +207,7 @@ router.put("/:id", validateObjectId, async (req, res) => {
 });
 
 router.patch("/:id", validateObjectId, async (req, res) => {
-  let vacation = Vacation.findById(req.params.id);
+  let vacation = await Vacation.findById(req.params.id);
   if (!vacation)
     return res.status(404).send("There is no vacation with the given ID");
 

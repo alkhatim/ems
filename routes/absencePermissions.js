@@ -38,7 +38,7 @@ router.get("/:id", validateObjectId, async (req, res) => {
 });
 
 router.put("/:id", async (req, res) => {
-  let absencePermission = AbsencePermission.findById(req.params.id);
+  let absencePermission = await AbsencePermission.findById(req.params.id);
   if (!absencePermission)
     return res.status(404).send("There is no permission with the given ID");
 
