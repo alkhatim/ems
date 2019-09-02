@@ -201,7 +201,7 @@ router.put("/:id", validateObjectId, async (req, res) => {
 });
 
 router.patch("/:id", validateObjectId, async (req, res) => {
-  let vacation = await Vacation.findById(req.params.id);
+  const vacation = await Vacation.findById(req.params.id);
   if (!vacation)
     return res.status(404).send("There is no vacation with the given ID");
 
@@ -211,7 +211,7 @@ router.patch("/:id", validateObjectId, async (req, res) => {
 
   if (vacation.state.name == "Ongoing" && state.name == "Cutoff") {
     vacation.actualEndDate = new Date().setHours(0, 0, 0, 0);
-    let credit = await credit.findOne({
+    const credit = await credit.findOne({
       "employee._id": vacation.employee._id
     });
     credit.remainingCredit += moment(vacation.endDate).diff(moment(), "d");
