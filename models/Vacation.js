@@ -55,7 +55,7 @@ const schema = new mongoose.Schema({
 const Vacation = mongoose.model("Vacation", schema);
 
 const validate = function(vacation) {
-  const schema = Joi.object().keys({
+  const schema = {
     employeeId: Joi.objectId().required(),
     startDate: Joi.date()
       .min(new Date())
@@ -65,7 +65,7 @@ const validate = function(vacation) {
     stateId: Joi.objectId(),
     typeId: Joi.objectId().required(),
     replacementEmployeeId: Joi.objectId()
-  });
+  };
 
   return Joi.validate(vacation, schema);
 };
