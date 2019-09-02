@@ -103,7 +103,7 @@ router.get("/:id", validateObjectId, async (req, res) => {
 });
 
 router.delete("/:id", validateObjectId, async (req, res) => {
-  const employee = await Employee.findByIdAndDelete({ _id: req.params.id });
+  const employee = await Employee.findByIdAndDelete(req.params.id);
   if (!employee)
     return res.status(404).send("There is no employee with the given ID");
   res.status(200).send(employee);
