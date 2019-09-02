@@ -117,19 +117,10 @@ router.put("/:id", validateObjectId, async (req, res) => {
   if (!vacation)
     return res.status(404).send("There is no vacation with the given ID");
 
-  if (
-    vacation.state.name == "Resolved" ||
-    vacation.state.name == "Cutoff" ||
-    vacation.state.name == "Canceled" ||
-    vacation.state.name == "Approved"
-  )
+  if (vacation.state.name != "New")
     return res
       .status(400)
-      .send(
-        "You can't modify a vacation that has been approved, resolved or canceled"
-      );
-  if (vacation.state.name == "Ongoing")
-    return res.status(400).send("You can't modify an ongoing vacation");
+      .send("You can't modify a vacation that has been approved");
 
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
