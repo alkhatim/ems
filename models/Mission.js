@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
+const { schema: stateSchema } = require("../models/MissionState");
 
 const schema = new mongoose.Schema({
   destination: {
@@ -16,25 +17,29 @@ const schema = new mongoose.Schema({
   },
   startDate: {
     type: Date,
-    min: new Date(),
+    min: new Date().setHours(0, 0, 0, 0),
     required: true
   },
   endDate: {
     type: Date,
-    min: new Date(),
+    min: new Date().setHours(0, 0, 0, 0),
     required: true
   },
   actualEndDate: {
     type: Date
   },
-  expense: {
+  expenses: {
     type: Number,
     min: 1,
     required: true
   },
-  actualExpense: {
+  actualExpenses: {
     type: Number,
     min: 0
+  },
+  state: {
+    type: stateSchema,
+    required: true
   },
   employees: [
     {
@@ -72,25 +77,22 @@ const validate = function(mission) {
       .required(),
     notes: Joi.string().required(),
     startDate: Joi.date()
-      .min(new Date())
+      .min(new Date().setHours(0, 0, 0, 0))
       .required(),
     endDate: Joi.date()
       .min(Joi.ref("startDate"))
       .required(),
     actualEndDate: Joi.date().min(Joi.ref("startDate")),
-    expense: Joi.number()
+    expenses: Joi.number()
       .positive()
       .required(),
-    actualExpense: Joi.number().min(0),
+    actualExpenses: Joi.number().min(0),
+    stateId: Joi.objectId(),
     employees: Joi.array()
       .min(1)
       .items(
         Joi.object().keys({
           _id: Joi.objectId().required(),
-          name: Joi.string()
-            .min(3)
-            .max(50)
-            .required(),
           allowance: Joi.number()
             .min(0)
             .required(),
