@@ -88,7 +88,9 @@ router.put("/:id", validateObjectId, async (req, res) => {
     employees.push(employee);
   });
 
-  const state = mission.state;
+  const state = await MissionState.findById(req.body.stateId);
+  if (!state)
+    return res.status(404).send("There is no status with the given ID");
 
   mission = {
     destination: req.body.destination,
@@ -102,6 +104,30 @@ router.put("/:id", validateObjectId, async (req, res) => {
 
   await Mission.findByIdAndUpdate(req.params.id, mission);
   res.status(200).send(mission);
+});
+
+router.delete("/:id", validateObjectId, async (req, res) => {
+  const mission = await Mission.findByIdAndDelete(req.params.id);
+  if (!mission)
+    return res.status(404).send("There is no mission with the given ID");
+
+  res.status(200).send(mission);
+});
+
+router.patch("/:id", validateObjectId, async (req, res) => {
+  const state = await MissionState.findById(req.body.stateId);
+  if (!state)
+    return res.status(404).send("There is no state with the given ID");
+
+  const mission = await Mission.findByIdAndUpdate(
+    req.params.id,
+    { state },
+    {
+      new: true
+    }
+  );
+  if (!mission)
+    return res.status(404).send("There is no mission with the given ID");
 });
 
 module.exports = router;
