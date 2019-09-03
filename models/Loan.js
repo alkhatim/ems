@@ -57,9 +57,7 @@ const Loan = mongoose.model("Loan", schema);
 const validate = function(loan) {
   const schema = {
     employeeId: Joi.objectId().required(),
-    date: Joi.date()
-      .min(new Date())
-      .required(),
+    date: Joi.date().min(new Date()),
     startingMonth: Joi.number()
       .min(0)
       .required(),
