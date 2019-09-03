@@ -1,0 +1,23 @@
+loan model:
+
+employee => name
+date
+startingDate
+state
+amount
+installments=> month, amount, state=> scheduled, paid, cash
+
+---------------------------------
+
+processes:
+
+start of year => calculate new vacation credits
+start of day => change vacation states and employee status
+
+----------------------------------
+
+TODO:
+
+review state in vacation and add to missions
+Validation => setHours(0,0,0,0)
+
