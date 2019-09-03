@@ -10,6 +10,7 @@ const deductionsRouter = require("./routes/deductions");
 const absencePermissionsRouter = require("./routes/absencePermissions");
 const vacationsRouter = require("./routes/vacations");
 const missionsRouter = require("./routes/missions");
+const loansRouter = require("./routes/loans");
 const errors = require("./middleware/errors");
 
 require("./startup/db")();
@@ -22,6 +23,7 @@ app.use("/api/deductions", deductionsRouter);
 app.use("/api/absencePermissions", absencePermissionsRouter);
 app.use("/api/vacations", vacationsRouter);
 app.use("/api/missions", missionsRouter);
+app.use("/api/loans", loansRouter);
 app.use(errors);
 
 const port = process.env.PORT || 3000;
