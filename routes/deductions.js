@@ -120,7 +120,7 @@ router.put("/:id", async (req, res) => {
 });
 
 router.delete("/:id", validateObjectId, async (req, res) => {
-  const deduction = await Deduction.findByIdAndDelete(_id: req.params.id);
+  const deduction = await Deduction.findByIdAndDelete(req.params.id);
   if (!deduction)
     return res.status(404).send("There is no deduction with the given ID");
 
