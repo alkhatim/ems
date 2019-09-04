@@ -71,6 +71,22 @@ router.post("/", async (req, res) => {
   res.status(201).send(loan);
 });
 
-router.get("/", async (req, res) => {});
+router.get("/", async (req, res) => {
+  const loans = await Loan.find();
+  res.status(200).send(loans);
+});
+
+router.get("/:id", validateObjectId, async (req, res) => {
+  const loan = await Loan.find(req.params.id);
+  if (!loan) return res.status(404).send("There is no loan with the given ID");
+
+  res.status(200).send(loan);
+});
+
+router.put("/:id", validateObjectId, async (req, res) => {});
+
+router.delete("/:id", validateObjectId, async (req, res) => {});
+
+router.patch("/:id", validateObjectId, async (req, res) => {});
 
 module.exports = router;
