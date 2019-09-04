@@ -92,11 +92,11 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/:id", validateObjectId, async (req, res) => {
-  const vacation = await Vacation.find({ _id: req.params.id });
+  const vacation = await Vacation.find(req.params.id);
   if (!vacation)
     return res.status(404).send("There is no vacation with the given ID");
 
-  res.status(200).send(vacations);
+  res.status(200).send(vacation);
 });
 
 router.delete("/:id", validateObjectId, async (req, res) => {
