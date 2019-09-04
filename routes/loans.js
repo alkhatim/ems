@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
+const moment = require("moment");
+const _ = require("lodash");
 const { Loan, validate } = require("../models/Loan");
 const { Employee } = require("../models/Employee");
 const { InstallmentState } = require("../models/InstallmentState");
-const _ = require("lodash");
 const validateObjectId = require("../middleware/validateObjectId");
 
 router.post("/", async (req, res) => {
@@ -21,7 +22,9 @@ router.post("/", async (req, res) => {
   if (req.body.installmentAmount == req.body.amount)
     req.body.installments = [
       {
-        month: req.body.startingMonth,
+        date: moment(req.body.firstPayDate)
+          .endOf("month")
+          .toDate(),
         amount: req.body.amount,
         state
       }
@@ -34,14 +37,20 @@ router.post("/", async (req, res) => {
     req.body.installments = _.range(numberOfInstallments);
     req.body.installments.forEach(i => {
       req.body.installments[i] = {
-        month: req.body.startingMonth + i,
+        date: moment(req.body.firstPayDate)
+          .add(i, "month")
+          .endOf("month")
+          .toDate(),
         amount: req.body.installmentAmount,
         state
       };
     });
     if (lastInstallmentAmount)
       req.body.installments.push({
-        month: req.body.startingMonth,
+        date: moment(_.last(req.body.installments).month)
+          .add(1, "month")
+          .endOf("month")
+          .toDate(),
         amount: lastInstallmentAmount,
         state
       });
@@ -50,7 +59,9 @@ router.post("/", async (req, res) => {
   const loan = new Loan({
     employee,
     date: req.body.date,
-    startingMonth: req.body.startingMonth,
+    firstPayDate: moment(req.body.firstPayDate)
+      .endOf("month")
+      .toDate(),
     amount: req.body.amount,
     installments: req.body.installments
   });
@@ -59,5 +70,7 @@ router.post("/", async (req, res) => {
 
   res.status(201).send(loan);
 });
+
+router.get("/", async (req, res) => {});
 
 module.exports = router;
