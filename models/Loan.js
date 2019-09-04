@@ -14,15 +14,12 @@ const schema = new mongoose.Schema({
   },
   date: {
     type: Date,
-    min: new Date(),
-    required: true,
-    default: new Date()
+    min: new Date().setHours(0, 0, 0, 0),
+    required: true
   },
-  startingMonth: {
-    type: Number,
-    min: 0,
-    required: true,
-    default: new Date().getMonth()
+  firstPayDate: {
+    type: Date,
+    required: true
   },
   amount: {
     type: Number,
@@ -32,9 +29,8 @@ const schema = new mongoose.Schema({
   installments: {
     type: [
       {
-        month: {
-          type: Number,
-          min: 0,
+        date: {
+          type: Date,
           required: true
         },
         amount: {
@@ -57,9 +53,9 @@ const Loan = mongoose.model("Loan", schema);
 const validate = function(loan) {
   const schema = {
     employeeId: Joi.objectId().required(),
-    date: Joi.date().min(new Date()),
-    startingMonth: Joi.number()
-      .min(0)
+    date: Joi.date().min(new Date().setHours(0, 0, 0, 0)),
+    firstPayDate: Joi.date()
+      .min(Joi.ref("date"))
       .required(),
     amount: Joi.number()
       .positive()
