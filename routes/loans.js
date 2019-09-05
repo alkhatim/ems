@@ -130,7 +130,7 @@ router.patch("/:id", validateObjectId, async (req, res) => {
       });
   }
 
-  const loan = {
+  loan = {
     employee: loan.employee,
     date: req.body.date,
     firstPayDate: moment(req.body.firstPayDate)
@@ -155,6 +155,14 @@ router.delete("/:id", validateObjectId, async (req, res) => {
 
   await Loan.findByIdAndDelete(req.params.id);
   res.status(200).send(loan);
+});
+
+router.get("/installments/:id", validateObjectId, async (req, res) => {
+  const loan = await Loan.findOne({ "installments._id": req.params.id });
+  if (!loan)
+    return res.status(404).send("There is no installment with the given ID");
+
+  res.status(200).send(loan.installments.filter(i => i._id == req.params.id));
 });
 
 module.exports = router;
