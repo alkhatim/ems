@@ -162,7 +162,26 @@ router.get("/installments/:id", validateObjectId, async (req, res) => {
   if (!loan)
     return res.status(404).send("There is no installment with the given ID");
 
-  res.status(200).send(loan.installments.filter(i => i._id == req.params.id));
+  const installment = loan.installments.find(i => i._id == req.params.id);
+  res.status(200).send(installment);
+});
+
+router.patch("/installments/:id", validateObjectId, async (req, res) => {
+  const loan = await Loan.findOne({ "installments._id": req.params.id });
+  if (!loan)
+    return res.status(404).send("There is no installment with the given ID");
+
+  const installment = loan.installments.find(i => i._id == req.params.id);
+  const index = loan.installments.findIndex(i => i._id == req.params.id);
+
+  const state = await InstallmentState.findById(req.body.statusId);
+  if (!state)
+    return res.status(404).send("There is no state with the given ID");
+
+  installment.state = state;
+
+  loan.installments[index] = installment;
+  await loan.save();
 });
 
 module.exports = router;
