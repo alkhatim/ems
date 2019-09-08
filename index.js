@@ -11,6 +11,7 @@ const absencePermissionsRouter = require("./routes/absencePermissions");
 const vacationsRouter = require("./routes/vacations");
 const missionsRouter = require("./routes/missions");
 const loansRouter = require("./routes/loans");
+const batchesRouter = require("./routes/batches");
 const errors = require("./middleware/errors");
 
 require("./startup/db")();
@@ -24,6 +25,7 @@ app.use("/api/absencePermissions", absencePermissionsRouter);
 app.use("/api/vacations", vacationsRouter);
 app.use("/api/missions", missionsRouter);
 app.use("/api/loans", loansRouter);
+app.use("/api/batches", batchesRouter);
 app.use(errors);
 
 const port = process.env.PORT || 3000;
