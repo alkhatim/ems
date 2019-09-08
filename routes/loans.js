@@ -83,7 +83,7 @@ router.get("/:id", validateObjectId, async (req, res) => {
   res.status(200).send(loan);
 });
 
-router.patch("/:id", validateObjectId, async (req, res) => {
+router.put("/:id", validateObjectId, async (req, res) => {
   let loan = await Loan.findById(req.params.id);
 
   if (loan.installments.filter(i => i.state.name != "Pending") == true)
