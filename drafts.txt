@@ -7,6 +7,8 @@ start of day => change vacation states and employee status
 
 TODO:
 
+resolve overtimes, loans..etch after batch save
+reject adding loan if one already not resolved
 add filtered get to all routers
 fix winston format
 review state in vacation and add to missions
