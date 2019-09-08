@@ -9,7 +9,7 @@ const schema = new mongoose.Schema({
   }
 });
 
-const Batch = mongoose.model("Batch", schema);
+const BatchType = mongoose.model("BatchType", schema);
 
-exports.Batch = Batch;
+exports.BatchType = BatchType;
 exports.schema = schema;

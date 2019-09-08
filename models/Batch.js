@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
-const Joi = require("Joi");
-const { schema: typeSchema } = require("./BatchType");
+const Joi = require("joi");
 const { schema: stateSchema } = require("./State");
+const { schema: typeSchema } = require("./BatchType");
 
 const schema = new mongoose.Schema({
   notes: {
@@ -21,13 +21,17 @@ const schema = new mongoose.Schema({
     type: stateSchema,
     required: true
   },
+  total: {
+    type: Number,
+    required: true
+  },
   employees: [
     new mongoose.Schema({
       name: {
         type: String,
         required: true
       },
-      batchDetails: [
+      payments: [
         {
           name: {
             type: String,
@@ -42,3 +46,21 @@ const schema = new mongoose.Schema({
     })
   ]
 });
+
+const Batch = mongoose.model("Batch", schema);
+
+const validate = function(batch) {
+  const schema = {
+    notes: Joi.string().required(),
+    date: Joi.date().required(),
+    typeId: Joi.objectId().required(),
+    stateId: Joi.objectId(),
+    employees: Joi.array(),
+    departmentId: Joi.objectId()
+  };
+
+  return Joi.validate(batch, schema);
+};
+
+exports.Batch = Batch;
+exports.validate = validate;
