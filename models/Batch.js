@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Joi = require("Joi");
-const { schema: typeSchema } = require("../models/PackageType");
-const { schema: stateSchema } = require("../models/State");
+const { schema: typeSchema } = require("./BatchType");
+const { schema: stateSchema } = require("./State");
 
 const schema = new mongoose.Schema({
   notes: {
@@ -26,7 +26,19 @@ const schema = new mongoose.Schema({
       name: {
         type: String,
         required: true
-      }
+      },
+      batchDetails: [
+        {
+          name: {
+            type: String,
+            required: true
+          },
+          amount: {
+            type: Number,
+            required: true
+          }
+        }
+      ]
     })
   ]
 });
