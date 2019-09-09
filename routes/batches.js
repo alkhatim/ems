@@ -33,16 +33,36 @@ router.post("/", async (req, res) => {
 
   const type = await BatchType.findById(req.body.typeId);
 
-  const state = await State.find({ name: "New" });
+  const state = await State.findOne({ name: "New" });
 
   if (type.name == "Salaries") {
     req.body.total = 0;
+
     employees.forEach(async employee => {
+      employee.batchDetails = {};
       // salary
-      for (key in employee.salaryInfo) {
-        if (employee.salaryInfo[key])
-          employee.batchDetails[key] = employee.salaryInfo[key];
-      }
+      employee.batchDetails.basicSalary = employee.salaryInfo.basicSalary;
+
+      if (employee.salaryInfo.livingExpenseAllowance)
+        employee.batchDetails.livingExpenseAllowance =
+          employee.salaryInfo.livingExpenseAllowance;
+
+      if (employee.salaryInfo.livingExpenseAllowance)
+        employee.batchDetails.livingExpenseAllowance =
+          employee.salaryInfo.livingExpenseAllowance;
+
+      if (employee.salaryInfo.housingAllowance)
+        employee.batchDetails.housingAllowance =
+          employee.salaryInfo.housingAllowance;
+
+      if (employee.salaryInfo.transportAllowance)
+        employee.batchDetails.transportAllowance =
+          employee.salaryInfo.transportAllowance;
+
+      if (employee.salaryInfo.foodAllowance)
+        employee.batchDetails.foodAllowance = employee.salaryInfo.foodAllowance;
+
+      employee.batchDetails.totalSalary = employee.salaryInfo.totalSalary;
 
       // overtimes
       const overtimes = await Overtime.find({
@@ -67,13 +87,17 @@ router.post("/", async (req, res) => {
       });
 
       // loan
-      const installment = await Loan.find({
+      const date = moment(req.body.date)
+        .endOf("month")
+        .toDate();
+      const loan = await Loan.findOne({
         "employee._id": employee._id,
         "installments.state.name": "Pending",
-        "installments.date": moment(req.body.date)
-          .endOf("month")
-          .toDate()
+        "installments.date": date
       });
+      const installment = loan.installments.find(
+        i => i.state.name == "Pending"
+      );
       employee.batchDetails.loan = installment.amount;
 
       //total
@@ -83,6 +107,7 @@ router.post("/", async (req, res) => {
         employee.batchDetails.deduction -
         employee.batchDetails.loan;
       req.body.total += employee.batchDetails.total;
+      console.log(employee.batchDetails);
     });
   }
 
