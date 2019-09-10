@@ -31,18 +31,18 @@ const schema = new mongoose.Schema({
         type: String,
         required: true
       },
-      payments: [
-        {
-          name: {
-            type: String,
-            required: true
-          },
-          amount: {
-            type: Number,
-            required: true
-          }
-        }
-      ]
+      details: {
+        basicSalary: Number,
+        housingAllowance: Number,
+        transportAllowance: Number,
+        livingExpenseAllowance: Number,
+        foodAllowance: Number,
+        totalSalary: Number,
+        loan: Number,
+        overtime: Number,
+        deduction: Number,
+        total: Number
+      }
     })
   ]
 });
