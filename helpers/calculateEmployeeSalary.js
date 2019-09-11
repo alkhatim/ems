@@ -31,10 +31,12 @@ const calculateEmployeeSalary = async function(employee, date) {
     date: { $lt: date },
     "state.name": { $eq: "Approved" }
   });
-  salary.overtime = 0;
-  overtimes.forEach(overtime => {
-    salary.overtime += overtime.total;
-  });
+  if (overtimes) {
+    salary.overtimes = 0;
+    overtimes.forEach(overtime => {
+      salary.overtimes += overtime.total;
+    });
+  }
 
   // deductions
   const deductions = await Deduction.find({
@@ -42,10 +44,12 @@ const calculateEmployeeSalary = async function(employee, date) {
     date: { $lt: date },
     "state.name": { $eq: "Approved" }
   });
-  salary.deduction = 0;
-  deductions.forEach(deduction => {
-    salary.deduction += deduction.total;
-  });
+  if (deductions) {
+    salary.deductions = 0;
+    deductions.forEach(deduction => {
+      salary.deductions += deduction.total;
+    });
+  }
 
   // loan
   const loan = await Loan.findOne({
@@ -55,13 +59,22 @@ const calculateEmployeeSalary = async function(employee, date) {
       .endOf("month")
       .toDate()
   });
-  const installment = loan.installments.find(i => i.state.name == "Pending");
-  salary.loan = installment.amount;
+  if (loan) {
+    const installment = loan.installments.find(
+      i =>
+        i.state.name == "Pending" &&
+        i.date.getMonth() == new Date(date).getMonth()
+    );
+
+    salary.loan = installment.amount;
+  }
 
   //total
   salary.total =
-    salary.totalSalary + salary.overtime - salary.deduction - salary.loan;
-
+    salary.totalSalary +
+    (salary.overtimes || 0) -
+    (salary.deductions || 0) -
+    (salary.loan || 0);
   return salary;
 };
 

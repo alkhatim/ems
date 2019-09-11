@@ -15,6 +15,7 @@ router.post("/", async (req, res) => {
   if (error) return res.status(400).send(error.details[0].message);
 
   const employees = [];
+  req.body.employees = [];
 
   if (req.body.employees) {
     req.body.employees.forEach(async id => {
@@ -43,11 +44,17 @@ router.post("/", async (req, res) => {
 
   req.body.total = 0;
 
-  employees.forEach(async employee => {
-    employee.details = await calculateEmployeeSalary(employee, req.body.date);
-    req.body.total += employee.details.total;
-    console.log(req.body.total);
-  });
+  for (employee of employees) {
+    const newEmployee = {};
+    newEmployee._id = employee._id;
+    newEmployee.name = employee.name;
+    newEmployee.details = await calculateEmployeeSalary(
+      employee,
+      req.body.date
+    );
+    req.body.employees.push(newEmployee);
+    req.body.total += newEmployee.details.total;
+  }
 
   const batch = new Batch({
     notes: req.body.notes,
@@ -55,10 +62,10 @@ router.post("/", async (req, res) => {
     type,
     state,
     total: req.body.total,
-    employees
+    employees: req.body.employees
   });
 
-  // await batch.save();
+  await batch.save();
   res.status(201).send(batch);
 });
 
