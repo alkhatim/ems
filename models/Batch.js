@@ -39,8 +39,8 @@ const schema = new mongoose.Schema({
         foodAllowance: Number,
         totalSalary: Number,
         loan: Number,
-        overtime: Number,
-        deduction: Number,
+        overtimes: Number,
+        deductions: Number,
         total: Number
       }
     })
