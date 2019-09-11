@@ -1,10 +1,13 @@
 const express = require("express");
 const router = express.Router();
+const moment = require("moment");
 const { Batch, validate } = require("../models/Batch");
 const { Employee } = require("../models/Employee");
 const { BatchType } = require("../models/BatchType");
 const { State } = require("../models/State");
-const calculateEmployeeSalary = require("../helpers/calculateEmployeeSalary");
+const { Overtime } = require("../models/Overtime");
+const { Deduction } = require("../models/Deduction");
+const { Loan } = require("../models/Loan");
 const validateObjectId = require("../middleware/validateObjectId");
 
 router.post("/", async (req, res) => {
@@ -45,10 +48,83 @@ router.post("/", async (req, res) => {
     const newEmployee = {};
     newEmployee._id = employee._id;
     newEmployee.name = employee.name;
-    newEmployee.details = await calculateEmployeeSalary(
-      employee,
-      req.body.date
-    );
+    newEmployee.details = {};
+
+    //salary
+    newEmployee.details.basicSalary = employee.salaryInfo.basicSalary;
+
+    if (employee.salaryInfo.livingExpenseAllowance)
+      newEmployee.details.livingExpenseAllowance =
+        employee.salaryInfo.livingExpenseAllowance;
+
+    if (employee.salaryInfo.livingExpenseAllowance)
+      newEmployee.details.livingExpenseAllowance =
+        employee.salaryInfo.livingExpenseAllowance;
+
+    if (employee.salaryInfo.housingAllowance)
+      newEmployee.details.housingAllowance =
+        employee.salaryInfo.housingAllowance;
+
+    if (employee.salaryInfo.transportAllowance)
+      newEmployee.details.transportAllowance =
+        employee.salaryInfo.transportAllowance;
+
+    if (employee.salaryInfo.foodAllowance)
+      newEmployee.details.foodAllowance = employee.salaryInfo.foodAllowance;
+
+    newEmployee.details.totalSalary = employee.salaryInfo.totalSalary;
+
+    // overtimes
+    const overtimes = await Overtime.find({
+      "employee._id": employee._id,
+      date: { $lt: req.body.date },
+      "state.name": { $eq: "Approved" }
+    });
+    if (overtimes) {
+      newEmployee.details.overtimes = 0;
+      overtimes.forEach(overtime => {
+        newEmployee.details.overtimes += overtime.total;
+      });
+    }
+
+    // deductions
+    const deductions = await Deduction.find({
+      "employee._id": employee._id,
+      date: { $lt: req.body.date },
+      "state.name": { $eq: "Approved" }
+    });
+    if (deductions) {
+      newEmployee.details.deductions = 0;
+      deductions.forEach(deduction => {
+        newEmployee.details.deductions += deduction.total;
+      });
+    }
+
+    // loan
+    const loan = await Loan.findOne({
+      "employee._id": employee._id,
+      "installments.state.name": "Pending",
+      "installments.date": moment(req.body.date)
+        .endOf("month")
+        .toDate()
+    });
+    if (loan) {
+      const installment = loan.installments.find(
+        i =>
+          i.state.name == "Pending" &&
+          i.date.getMonth() == new Date(req.body.date).getMonth()
+      );
+
+      newEmployee.details.loan = installment.amount;
+    }
+
+    //total
+    newEmployee.details.total =
+      newEmployee.details.totalSalary +
+      (newEmployee.details.overtimes || 0) -
+      (newEmployee.details.deductions || 0) -
+      (newEmployee.details.loan || 0);
+
     req.body.employees.push(newEmployee);
     req.body.total += newEmployee.details.total;
   }
