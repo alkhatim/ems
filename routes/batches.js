@@ -37,7 +37,7 @@ router.post("/", async (req, res) => {
     return res.status(404).send("There is no batch type with the given ID");
 
   const state = await State.findOne({ name: "New" });
-  if (!type)
+  if (!state)
     return res
       .status(500)
       .send("The default batch state is missing from the server!");
