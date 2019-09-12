@@ -8,6 +8,7 @@ const { State } = require("../models/State");
 const { Overtime } = require("../models/Overtime");
 const { Deduction } = require("../models/Deduction");
 const { Loan } = require("../models/Loan");
+const { InstallmentState } = require("../models/InstallmentState");
 const validateObjectId = require("../middleware/validateObjectId");
 
 router.post("/", async (req, res) => {
@@ -16,6 +17,11 @@ router.post("/", async (req, res) => {
 
   const employees = [];
   req.body.employees = [];
+  const toBeResolved = {
+    overtimes: [],
+    deductions: [],
+    installments: []
+  };
 
   if (req.body.employees) {
     req.body.employees.forEach(async id => {
@@ -84,6 +90,8 @@ router.post("/", async (req, res) => {
       newEmployee.details.overtimes = 0;
       overtimes.forEach(overtime => {
         newEmployee.details.overtimes += overtime.total;
+        // to resolve
+        toBeResolved.overtimes.push(overtime);
       });
     }
 
@@ -97,6 +105,8 @@ router.post("/", async (req, res) => {
       newEmployee.details.deductions = 0;
       deductions.forEach(deduction => {
         newEmployee.details.deductions += deduction.total;
+        // to resolve
+        toBeResolved.deductions.push(deduction);
       });
     }
 
@@ -116,6 +126,8 @@ router.post("/", async (req, res) => {
       );
 
       newEmployee.details.loan = installment.amount;
+      // to resolve
+      toBeResolved.installments.push(installment);
     }
 
     //total
@@ -139,6 +151,36 @@ router.post("/", async (req, res) => {
   });
 
   await batch.save();
+
+  // resolve batch entries
+  const resolvedState = await State.findOne({ name: "Resolved" });
+  if (!state)
+    return res
+      .status(500)
+      .send("The resolved state is missing from the server!");
+
+  const installmentResolvedState = await InstallmentState.findOne({
+    name: "Resolved"
+  });
+  if (!state)
+    return res
+      .status(500)
+      .send("The resolved loans state is missing from the server!");
+
+  for (overtime of toBeResolved.overtimes) {
+    await Overtime.findByIdAndUpdate(overtime._id, { state: resolvedState });
+  }
+
+  for (deduction of toBeResolved.deductions) {
+    await Deduction.findByIdAndUpdate(deduction._id, { state: resolvedState });
+  }
+
+  for (installment of toBeResolved.installments) {
+    const loan = await Loan.findOne({ "installments._id": installment._id });
+    loan.installments.id(installment._id).state = installmentResolvedState;
+    await loan.save();
+  }
+
   res.status(201).send(batch);
 });
 
