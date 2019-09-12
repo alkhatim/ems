@@ -185,4 +185,17 @@ router.post("/", async (req, res) => {
   res.status(201).send(batch);
 });
 
+router.get("/", async (req, res) => {
+  const batches = await Batch.find();
+  res.status(200).send(batches);
+});
+
+router.get("/:id", validateObjectId, async (req, res) => {
+  const batch = await Batch.findById(req.params.id);
+  if (!batch)
+    return res.status(404).send("There is no batch with the given ID");
+
+  res.status(200).send(batch);
+});
+
 module.exports = router;
