@@ -14,7 +14,6 @@ const schema = new mongoose.Schema({
   },
   date: {
     type: Date,
-    min: new Date().setHours(0, 0, 0, 0),
     required: true
   },
   firstPayDate: {
