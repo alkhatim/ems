@@ -10,6 +10,7 @@ TODO:
 resolve overtimes, loans..etch after batch save
 reject adding loan if one already not resolved
 add filtered get to all routers
+only select "state" when querying documents for delete methods
 fix winston format
 review state in vacation and add to missions
 Validation => setHours(0,0,0,0)
