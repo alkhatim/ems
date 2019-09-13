@@ -59,7 +59,7 @@ router.post("/", async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
-  const overtimes = await Overtime.find();
+  const overtimes = await Overtime.find(req.query);
   res.status(200).send(overtimes);
 });
 

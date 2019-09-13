@@ -91,7 +91,7 @@ router.post("/", async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
-  const employees = await Employee.find();
+  const employees = await Employee.find(req.query);
   res.status(200).send(employees);
 });
 

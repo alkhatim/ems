@@ -72,7 +72,7 @@ router.post("/", async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
-  const loans = await Loan.find();
+  const loans = await Loan.find(req.query);
   res.status(200).send(loans);
 });
 

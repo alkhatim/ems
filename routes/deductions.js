@@ -55,7 +55,7 @@ router.post("/", async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
-  const deductions = await Deduction.find();
+  const deductions = await Deduction.find(req.query);
   res.status(200).send(deductions);
 });
 

@@ -87,7 +87,7 @@ router.post("/", async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
-  const vacations = await Vacation.find();
+  const vacations = await Vacation.find(req.query);
   res.status(200).send(vacations);
 });
 
