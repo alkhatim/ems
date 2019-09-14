@@ -8,7 +8,7 @@ const { Nationality } = require("../models/Nationality");
 const { Contract } = require("../models/Contract");
 const { Job } = require("../models/Job");
 const { Department } = require("../models/Department");
-const {} = require("../models/Loan");
+const { Loan } = require("../models/Loan");
 const { VacationCredit } = require("../models/VacationCredit");
 const validateObjectId = require("../middleware/validateObjectId");
 
@@ -88,11 +88,11 @@ router.post("/", async (req, res) => {
     }
   });
 
-  if (vacationDays) {
+  if (req.body.vacationDays) {
     const vacationCredit = new VacationCredit({
       employee: _.pick(employee, ["_id", "name"]),
-      totalCredit: vacationDays,
-      remainingCredit: vacationDays
+      totalCredit: req.body.vacationDays,
+      remainingCredit: req.body.vacationDays
     });
     await vacationCredit.save();
   }
@@ -117,7 +117,7 @@ router.get("/:id", validateObjectId, async (req, res) => {
 
 router.delete("/:id", validateObjectId, async (req, res) => {
   if (
-    await Location.findOne({
+    await Loan.findOne({
       "employee._id": req.params.id,
       "installments.state.name": "Pending"
     })
@@ -183,7 +183,9 @@ router.put("/:id", validateObjectId, async (req, res) => {
     const usedCredit =
       vacationCredit.totalCredit - vacationCredit.remainingCredit;
     const remainingCredit =
-      req.body.vacationDays >= usedCredit ? vacationCredit - usedCredit : 0;
+      req.body.vacationDays >= usedCredit
+        ? req.body.vacationDays - usedCredit
+        : 0;
 
     vacationCredit.totalCredit = req.body.vacationDays;
     vacationCredit.remainingCredit = remainingCredit;
