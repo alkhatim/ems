@@ -8,6 +8,8 @@ const { Nationality } = require("../models/Nationality");
 const { Contract } = require("../models/Contract");
 const { Job } = require("../models/Job");
 const { Department } = require("../models/Department");
+const {} = require("../models/Loan");
+const { VacationCredit } = require("../models/VacationCredit");
 const validateObjectId = require("../middleware/validateObjectId");
 
 router.post("/", async (req, res) => {
@@ -86,12 +88,23 @@ router.post("/", async (req, res) => {
     }
   });
 
+  if (vacationDays) {
+    const vacationCredit = new VacationCredit({
+      employee: _.pick(employee, ["_id", "name"]),
+      totalCredit: vacationDays,
+      remainingCredit: vacationDays
+    });
+    await vacationCredit.save();
+  }
+
   await employee.save();
   res.status(201).send(employee);
 });
 
 router.get("/", async (req, res) => {
-  const employees = await Employee.find(req.query);
+  const employees = await Employee.find(req.query).select(
+    "-salaryInfo -serviceInfo -socialInsuranceInfo -vacationInfo"
+  );
   res.status(200).send(employees);
 });
 
@@ -103,6 +116,16 @@ router.get("/:id", validateObjectId, async (req, res) => {
 });
 
 router.delete("/:id", validateObjectId, async (req, res) => {
+  if (
+    await Location.findOne({
+      "employee._id": req.params.id,
+      "installments.state.name": "Pending"
+    })
+  )
+    return res
+      .status(400)
+      .send("You can't delete an employee with an unresolved loan");
+
   const employee = await Employee.findByIdAndDelete(req.params.id);
   if (!employee)
     return res.status(404).send("There is no employee with the given ID");
@@ -142,6 +165,31 @@ router.put("/:id", validateObjectId, async (req, res) => {
   const department = await Department.findById(req.body.departmentId);
   if (!department)
     return res.status(404).send("The specified department was not found");
+
+  if (!employee.vacationInfo.vacationDays && req.body.vacationDays) {
+    const vacationCredit = new VacationCredit({
+      employee: _.pick(employee, ["_id", "name"]),
+      totalCredit: req.body.vacationDays,
+      remainingCredit: req.body.vacationDays
+    });
+
+    await vacationCredit.save();
+  }
+
+  if (employee.vacationInfo.vacationDays && req.body.vacationDays) {
+    const vacationCredit = await VacationCredit.findOne({
+      "employee._id": employee._id
+    });
+    const usedCredit =
+      vacationCredit.totalCredit - vacationCredit.remainingCredit;
+    const remainingCredit =
+      req.body.vacationDays >= usedCredit ? vacationCredit - usedCredit : 0;
+
+    vacationCredit.totalCredit = req.body.vacationDays;
+    vacationCredit.remainingCredit = remainingCredit;
+
+    await vacationCredit.save();
+  }
 
   employee = {
     name: req.body.name,
