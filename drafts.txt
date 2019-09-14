@@ -7,9 +7,8 @@ start of day => change vacation states and employee status
 
 TODO:
 
-resolve overtimes, loans..etch after batch save
+save resolved overtimes, loans..etch with each batch save
 reject adding loan if one already not resolved
-add filtered get to all routers
 only select "state" when querying documents for delete methods
 fix winston format
 review state in vacation and add to missions
