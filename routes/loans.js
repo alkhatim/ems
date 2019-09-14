@@ -8,6 +8,15 @@ const { InstallmentState } = require("../models/InstallmentState");
 const validateObjectId = require("../middleware/validateObjectId");
 
 router.post("/", async (req, res) => {
+  const currentLoan = await Loan.findOne({
+    "employee._id": req.body.employeeId,
+    "installments.state.name": "Pending"
+  });
+  if (currentLoan)
+    return res
+      .status(400)
+      .send("This employee didn't finish paying out his last loan");
+
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
