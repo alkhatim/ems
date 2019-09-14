@@ -48,7 +48,7 @@ router.post("/", async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
-  const missions = await Mission.find();
+  const missions = await Mission.find(req.query);
   res.status(200).send(missions);
 });
 

@@ -186,7 +186,7 @@ router.post("/", async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
-  const batches = await Batch.find();
+  const batches = await Batch.find(req.query);
   res.status(200).send(batches);
 });
 

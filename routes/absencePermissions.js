@@ -26,7 +26,7 @@ router.post("/", async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
-  const absencePermissions = await AbsencePermission.find();
+  const absencePermissions = await AbsencePermission.find(req.query);
   res.status(200).send(absencePermissions);
 });
 
