@@ -36,7 +36,8 @@ const schema = new mongoose.Schema({
     type: String,
     minlength: 9,
     maxlength: 13,
-    trim: true
+    trim: true,
+    required: true
   },
   email: {
     type: String,
