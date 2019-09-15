@@ -50,7 +50,6 @@ const validate = function(user) {
     }),
     roles: Joi.array()
       .items(Joi.string())
-      .min(1)
       .unique()
   };
 
