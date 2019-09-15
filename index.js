@@ -12,11 +12,13 @@ const vacationsRouter = require("./routes/vacations");
 const missionsRouter = require("./routes/missions");
 const loansRouter = require("./routes/loans");
 const batchesRouter = require("./routes/batches");
+const auth = require("./middleware/auth");
 const errors = require("./middleware/errors");
 
 require("./startup/db")();
 
 app.use(express.json());
+// app.use(auth);
 app.use("/api/users", usersRouter);
 app.use("/api/employees", employeesRouter);
 app.use("/api/overtimes", overtimesRouter);
