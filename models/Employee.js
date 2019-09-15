@@ -65,10 +65,7 @@ const schema = new mongoose.Schema({
       type: departmentSchema,
       required: true
     },
-    dateOfEmployment: {
-      type: Date,
-      max: new Date()
-    },
+    dateOfEmployment: Date,
     contractExpiryDate: Date
   },
   salaryInfo: {
@@ -146,7 +143,7 @@ const validate = function(employee) {
     jobId: Joi.objectId().required(),
     contractId: Joi.objectId().required(),
     departmentId: Joi.objectId().required(),
-    dateOfEmployment: Joi.date().max(new Date()),
+    dateOfEmployment: Joi.date(),
     contractExpiryDate: Joi.date(),
     basicSalary: Joi.number()
       .positive()
