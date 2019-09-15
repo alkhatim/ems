@@ -115,23 +115,6 @@ router.get("/:id", validateObjectId, async (req, res) => {
   res.status(200).send(employee);
 });
 
-router.delete("/:id", validateObjectId, async (req, res) => {
-  if (
-    await Loan.findOne({
-      "employee._id": req.params.id,
-      "installments.state.name": "Pending"
-    })
-  )
-    return res
-      .status(400)
-      .send("You can't delete an employee with an unresolved loan");
-
-  const employee = await Employee.findByIdAndDelete(req.params.id);
-  if (!employee)
-    return res.status(404).send("There is no employee with the given ID");
-  res.status(200).send(employee);
-});
-
 router.put("/:id", validateObjectId, async (req, res) => {
   let employee = await Employee.findById(req.params.id);
   if (!employee)
@@ -258,6 +241,23 @@ router.patch("/:id", validateObjectId, async (req, res) => {
   if (!employee)
     return res.status(404).send("There is no employee with the given ID");
 
+  res.status(200).send(employee);
+});
+
+router.delete("/:id", validateObjectId, async (req, res) => {
+  if (
+    await Loan.findOne({
+      "employee._id": req.params.id,
+      "installments.state.name": "Pending"
+    })
+  )
+    return res
+      .status(400)
+      .send("You can't delete an employee with an unresolved loan");
+
+  const employee = await Employee.findByIdAndDelete(req.params.id);
+  if (!employee)
+    return res.status(404).send("There is no employee with the given ID");
   res.status(200).send(employee);
 });
 
