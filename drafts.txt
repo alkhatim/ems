@@ -9,6 +9,7 @@ TODO:
 
 save resolved overtimes, loans..etch with each batch save
 add lookup schema and replace all lookup schemas with it
+ignore deduction if a matching absence permission exists
 only select "state" when querying documents for delete methods
 fix winston format
 review state in vacation and add to missions
