@@ -15,9 +15,7 @@ const schema = new mongoose.Schema({
   },
   date: {
     type: Date,
-    required: true,
-    max: new Date(),
-    default: new Date()
+    required: true
   },
   notes: {
     type: String,
@@ -33,6 +31,7 @@ const schema = new mongoose.Schema({
   },
   amount: {
     type: Number,
+    min: 1,
     required: true
   },
   total: {
@@ -48,9 +47,11 @@ const validate = function(overtime) {
     employeeId: Joi.objectId().required(),
     notes: Joi.string(),
     stateId: Joi.objectId(),
-    date: Joi.date().max(new Date()),
+    date: Joi.date().required(),
     typeId: Joi.objectId().required(),
-    amount: Joi.number().required()
+    amount: Joi.number()
+      .positive()
+      .required()
   };
 
   return Joi.validate(overtime, schema);

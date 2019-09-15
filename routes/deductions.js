@@ -119,29 +119,28 @@ router.put("/:id", async (req, res) => {
   res.status(200).send(deduction);
 });
 
-router.delete("/:id", validateObjectId, async (req, res) => {
-  const deduction = await Deduction.findByIdAndDelete(req.params.id);
+// for changing a deduction's state
+router.patch("/:id", validateObjectId, async (req, res) => {
+  const state = await State.findById(req.body.stateId);
+  if (!state)
+    return res.status(404).send("There is no state with the given ID");
+
+  const deduction = await Deduction.findByIdAndUpdate(
+    req.params.id,
+    { state },
+    { new: true }
+  );
   if (!deduction)
     return res.status(404).send("There is no deduction with the given ID");
 
   res.status(200).send(deduction);
 });
 
-// for changing a deduction's state
-router.patch("/:id", validateObjectId, async (req, res) => {
-  let deduction = Deduction.findById(req.params.id);
+router.delete("/:id", validateObjectId, async (req, res) => {
+  const deduction = await Deduction.findByIdAndDelete(req.params.id);
   if (!deduction)
     return res.status(404).send("There is no deduction with the given ID");
 
-  const state = await State.findById(req.body.stateId);
-  if (!state)
-    return res.status(404).send("There is no state with the given ID");
-
-  deduction = await Deduction.findByIdAndUpdate(
-    req.params.id,
-    { state },
-    { new: true }
-  );
   res.status(200).send(deduction);
 });
 

@@ -75,7 +75,7 @@ router.put("/:id", async (req, res) => {
   if (!overtime)
     return res.status(404).send("There is no overtime with the given ID");
 
-  if ((overtime, state.name != "New"))
+  if (overtime.state.name != "New")
     return res
       .status(400)
       .send(
@@ -127,14 +127,6 @@ router.put("/:id", async (req, res) => {
   res.status(200).send(overtime);
 });
 
-router.delete("/:id", validateObjectId, async (req, res) => {
-  const overtime = await Overtime.findByIdAndDelete(req.params.id);
-  if (!overtime)
-    return res.status(404).send("There is no overtime with the given ID");
-
-  res.status(200).send(overtime);
-});
-
 // for changing an overtime's state
 router.patch("/:id", validateObjectId, async (req, res) => {
   const state = await State.findById(req.body.stateId);
@@ -146,6 +138,14 @@ router.patch("/:id", validateObjectId, async (req, res) => {
     { state },
     { new: true }
   );
+  if (!overtime)
+    return res.status(404).send("There is no overtime with the given ID");
+
+  res.status(200).send(overtime);
+});
+
+router.delete("/:id", validateObjectId, async (req, res) => {
+  const overtime = await Overtime.findByIdAndDelete(req.params.id);
   if (!overtime)
     return res.status(404).send("There is no overtime with the given ID");
 
