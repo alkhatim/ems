@@ -8,7 +8,7 @@ start of day => change vacation states and employee status
 TODO:
 
 save resolved overtimes, loans..etch with each batch save
-reject adding loan if one already not resolved
+add lookup schema and replace all lookup schemas with it
 only select "state" when querying documents for delete methods
 fix winston format
 review state in vacation and add to missions
