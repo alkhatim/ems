@@ -17,20 +17,16 @@ const schema = new mongoose.Schema({
   },
   startDate: {
     type: Date,
-    min: new Date().setHours(0, 0, 0, 0),
     required: true
   },
   endDate: {
     type: Date,
-    min: new Date().setHours(0, 0, 0, 0),
     required: true
   },
-  actualEndDate: {
-    type: Date
-  },
+  actualEndDate: Date,
   expenses: {
     type: Number,
-    min: 1,
+    min: 0,
     required: true
   },
   actualExpenses: {
@@ -42,11 +38,7 @@ const schema = new mongoose.Schema({
     required: true
   },
   employees: [
-    {
-      _id: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true
-      },
+    new mongoose.Schema({
       name: {
         type: String,
         minlength: 3,
@@ -63,7 +55,7 @@ const schema = new mongoose.Schema({
         required: true,
         default: false
       }
-    }
+    })
   ]
 });
 
@@ -76,9 +68,7 @@ const validate = function(mission) {
       .max(30)
       .required(),
     notes: Joi.string().required(),
-    startDate: Joi.date()
-      .min(new Date().setHours(0, 0, 0, 0))
-      .required(),
+    startDate: Joi.date().required(),
     endDate: Joi.date()
       .min(Joi.ref("startDate"))
       .required(),
