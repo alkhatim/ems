@@ -11,11 +11,16 @@ router.post("/", async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
+  if (req.body.employees.filter(e => e.isHead == true).length != 1)
+    return res
+      .status(400)
+      .send("You must choose one employee to head the mission");
+
   const employees = [];
 
-  req.body.employees.forEach(async employee => {
+  for (employee of req.body.employees) {
     if (!mongoose.Types.ObjectId.isValid(employee._id))
-      return res.status(404).send("One of the given IDs is not valdid");
+      return res.status(404).send("One of the given employee IDs is not valid");
 
     const employeeFromDb = await Employee.findById(employee._id).select("name");
     if (!employeeFromDb)
@@ -25,7 +30,7 @@ router.post("/", async (req, res) => {
 
     employee.name = employeeFromDb.name;
     employees.push(employee);
-  });
+  }
 
   const state = await MissionState.findOne({ name: "New" });
   if (!state)
@@ -60,7 +65,7 @@ router.get("/:id", validateObjectId, async (req, res) => {
 });
 
 router.put("/:id", validateObjectId, async (req, res) => {
-  const mission = await Mission.findById(req.params.id);
+  let mission = await Mission.findById(req.params.id);
   if (!mission)
     return res.status(404).send("There is no mission with the given ID");
 
@@ -72,9 +77,14 @@ router.put("/:id", validateObjectId, async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
+  if (req.body.employees.filter(e => e.isHead == true).length != 1)
+    return res
+      .status(400)
+      .send("You must choose one employee to head the mission");
+
   const employees = [];
 
-  req.body.employees.forEach(async employee => {
+  for (employee of req.body.employees) {
     if (!mongoose.Types.ObjectId.isValid(employee._id))
       return res.status(404).send("One of the given IDs is not valdid");
 
@@ -86,11 +96,9 @@ router.put("/:id", validateObjectId, async (req, res) => {
 
     employee.name = employeeFromDb.name;
     employees.push(employee);
-  });
+  }
 
-  const state = await MissionState.findById(req.body.stateId);
-  if (!state)
-    return res.status(404).send("There is no status with the given ID");
+  const state = mission.state;
 
   mission = {
     destination: req.body.destination,
@@ -106,18 +114,36 @@ router.put("/:id", validateObjectId, async (req, res) => {
   res.status(200).send(mission);
 });
 
-router.delete("/:id", validateObjectId, async (req, res) => {
-  const mission = await Mission.findByIdAndDelete(req.params.id);
-  if (!mission)
-    return res.status(404).send("There is no mission with the given ID");
-
-  res.status(200).send(mission);
-});
-
+// for changing mission state
 router.patch("/:id", validateObjectId, async (req, res) => {
   const state = await MissionState.findById(req.body.stateId);
   if (!state)
     return res.status(404).send("There is no state with the given ID");
+
+  if (state.name == "Finished") {
+    let mission = await Mission.findById(req.params.id).select("state");
+
+    if (mission.state.name != "Approved")
+      return res
+        .status(400)
+        .send("You can only change approved missions to finished");
+
+    mission = await Mission.findByIdAndUpdate(
+      req.params.id,
+      {
+        state,
+        actualExpenses: req.body.actualExpenses,
+        actualEndDate: req.body.actualEndDate
+      },
+      {
+        new: true
+      }
+    );
+    if (!mission)
+      return res.status(404).send("There is no mission with the given ID");
+
+    return res.status(200).send(mission);
+  }
 
   const mission = await Mission.findByIdAndUpdate(
     req.params.id,
@@ -128,6 +154,16 @@ router.patch("/:id", validateObjectId, async (req, res) => {
   );
   if (!mission)
     return res.status(404).send("There is no mission with the given ID");
+
+  return res.status(200).send(mission);
+});
+
+router.delete("/:id", validateObjectId, async (req, res) => {
+  const mission = await Mission.findByIdAndDelete(req.params.id);
+  if (!mission)
+    return res.status(404).send("There is no mission with the given ID");
+
+  res.status(200).send(mission);
 });
 
 module.exports = router;
