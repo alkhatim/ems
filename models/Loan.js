@@ -52,7 +52,7 @@ const Loan = mongoose.model("Loan", schema);
 const validate = function(loan) {
   const schema = {
     employeeId: Joi.objectId().required(),
-    date: Joi.date().min(new Date().setHours(0, 0, 0, 0)),
+    date: Joi.date().required(),
     firstPayDate: Joi.date()
       .min(Joi.ref("date"))
       .required(),
@@ -60,7 +60,8 @@ const validate = function(loan) {
       .positive()
       .required(),
     installmentAmount: Joi.number()
-      .min(1)
+      .max(Joi.ref("amount"))
+      .positive()
       .required()
   };
   return Joi.validate(loan, schema);
