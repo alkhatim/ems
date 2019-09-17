@@ -9,7 +9,7 @@ module.exports = createLogger({
     })
   ],
   exceptionHandlers: [
-    new transports.File({ filename: "logs/exceptions.log" }),
+    new transports.File({ filename: "logs/unhandledExceptions.log" }),
     new transports.Console()
   ]
 });
