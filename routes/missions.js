@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
-const _ = require("lodash");
 const { Mission, validate } = require("../models/Mission");
 const { Employee } = require("../models/Employee");
 const { MissionState } = require("../models/MissionState");
