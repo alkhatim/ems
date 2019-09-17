@@ -35,7 +35,7 @@ router.post("/", async (req, res) => {
           .endOf("month")
           .toDate(),
         amount: req.body.amount,
-        state
+        state: state
       }
     ];
   else {
@@ -51,17 +51,17 @@ router.post("/", async (req, res) => {
           .endOf("month")
           .toDate(),
         amount: req.body.installmentAmount,
-        state
+        state: state
       };
     });
     if (lastInstallmentAmount)
       req.body.installments.push({
-        date: moment(_.last(req.body.installments).month)
+        date: moment(_.last(req.body.installments).date)
           .add(1, "month")
           .endOf("month")
           .toDate(),
         amount: lastInstallmentAmount,
-        state
+        state: state
       });
   }
 
@@ -86,7 +86,7 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/:id", validateObjectId, async (req, res) => {
-  const loan = await Loan.find(req.params.id);
+  const loan = await Loan.findById(req.params.id);
   if (!loan) return res.status(404).send("There is no loan with the given ID");
 
   res.status(200).send(loan);
@@ -94,49 +94,126 @@ router.get("/:id", validateObjectId, async (req, res) => {
 
 router.put("/:id", validateObjectId, async (req, res) => {
   let loan = await Loan.findById(req.params.id);
+  if (!loan) return res.status(404).send("There is no Loan with the given ID");
 
-  if (loan.installments.filter(i => i.state.name != "Pending") == true)
-    return res
-      .status(400)
-      .send("You can only delete loans with no paid installments!");
+  const { error } = validate(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+
+  const employee = await Employee.findById(req.body.employeeId).select(
+    "_id name"
+  );
+  if (!employee)
+    return res.status(404).send("There is no employee with the given ID");
 
   const state = await InstallmentState.findOne({ name: "Pending" });
 
-  if (req.body.installmentAmount == req.body.amount)
-    req.body.installments = [
-      {
-        date: moment(req.body.firstPayDate)
-          .endOf("month")
-          .toDate(),
-        amount: req.body.amount,
-        state
-      }
-    ];
-  else {
-    const lastInstallmentAmount = req.body.amount % req.body.installmentAmount;
-    const numberOfInstallments = Math.floor(
-      req.body.amount / req.body.installmentAmount
+  const paidInstallments = loan.installments.filter(
+    i => i.state.name == "Resolved"
+  );
+
+  if (paidInstallments.length) {
+    req.body.installments = paidInstallments;
+
+    const totalPaid = paidInstallments.reduce(
+      (total, installment) => total + installment.amount,
+      0
     );
-    req.body.installments = _.range(numberOfInstallments);
-    req.body.installments.forEach(i => {
-      req.body.installments[i] = {
-        date: moment(req.body.firstPayDate)
-          .add(i, "month")
-          .endOf("month")
-          .toDate(),
-        amount: req.body.installmentAmount,
-        state
-      };
-    });
-    if (lastInstallmentAmount)
+    const remaining = req.body.amount - totalPaid;
+    const lastDate = paidInstallments[paidInstallments.length - 1].date;
+
+    if (remaining < 0)
+      return res
+        .status(400)
+        .send(
+          "The amount of the loan can't be less than the amount already paid by the employee"
+        );
+
+    if (req.body.installmentAmount == remaining) {
       req.body.installments.push({
-        date: moment(_.last(req.body.installments).month)
+        date: moment(lastDate)
           .add(1, "month")
           .endOf("month")
           .toDate(),
-        amount: lastInstallmentAmount,
-        state
+        amount: remaining,
+        state: state
       });
+    }
+
+    if (req.body.installmentAmount < remaining) {
+      const lastInstallmentAmount = remaining % req.body.installmentAmount;
+      const numberOfInstallments = Math.floor(
+        remaining / req.body.installmentAmount
+      );
+      const newInstallments = _.range(numberOfInstallments);
+      newInstallments.forEach(i => {
+        req.body.installments.push({
+          date: moment(lastDate)
+            .add(i + 1, "month")
+            .endOf("month")
+            .toDate(),
+          amount: req.body.installmentAmount,
+          state: state
+        });
+      });
+      if (lastInstallmentAmount)
+        req.body.installments.push({
+          date: moment(_.last(req.body.installments).month)
+            .add(1, "month")
+            .endOf("month")
+            .toDate(),
+          amount: lastInstallmentAmount,
+          state: state
+        });
+    }
+
+    if (req.body.installmentAmount > remaining && remaining != 0) {
+      req.body.installments.push({
+        date: moment(lastDate)
+          .add(1, "month")
+          .endOf("month")
+          .toDate(),
+        amount: remaining,
+        state: state
+      });
+    }
+  } else {
+    if (req.body.installmentAmount == req.body.amount)
+      req.body.installments = [
+        {
+          date: moment(req.body.firstPayDate)
+            .endOf("month")
+            .toDate(),
+          amount: req.body.amount,
+          state: state
+        }
+      ];
+    else {
+      const lastInstallmentAmount =
+        req.body.amount % req.body.installmentAmount;
+      const numberOfInstallments = Math.floor(
+        req.body.amount / req.body.installmentAmount
+      );
+      req.body.installments = _.range(numberOfInstallments);
+      req.body.installments.forEach(i => {
+        req.body.installments[i] = {
+          date: moment(req.body.firstPayDate)
+            .add(i, "month")
+            .endOf("month")
+            .toDate(),
+          amount: req.body.installmentAmount,
+          state: state
+        };
+      });
+      if (lastInstallmentAmount)
+        req.body.installments.push({
+          date: moment(_.last(req.body.installments).month)
+            .add(1, "month")
+            .endOf("month")
+            .toDate(),
+          amount: lastInstallmentAmount,
+          state: state
+        });
+    }
   }
 
   loan = {
@@ -149,7 +226,7 @@ router.put("/:id", validateObjectId, async (req, res) => {
     installments: req.body.installments
   };
 
-  await loan.save();
+  await Loan.findByIdAndUpdate(req.params.id, loan);
 
   res.status(200).send(loan);
 });
@@ -183,7 +260,7 @@ router.patch("/installments/:id", validateObjectId, async (req, res) => {
   const installment = loan.installments.find(i => i._id == req.params.id);
   const index = loan.installments.findIndex(i => i._id == req.params.id);
 
-  const state = await InstallmentState.findById(req.body.statusId);
+  const state = await InstallmentState.findById(req.body.stateId);
   if (!state)
     return res.status(404).send("There is no state with the given ID");
 
@@ -191,6 +268,7 @@ router.patch("/installments/:id", validateObjectId, async (req, res) => {
 
   loan.installments[index] = installment;
   await loan.save();
+  res.status(200).send(installment);
 });
 
 module.exports = router;
