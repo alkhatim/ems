@@ -114,7 +114,9 @@ router.put("/:id", async (req, res) => {
     total: req.body.total
   };
 
-  await Deduction.findByIdAndUpdate(req.params.id, deduction);
+  deduction = await Deduction.findByIdAndUpdate(req.params.id, deduction, {
+    new: true
+  });
 
   res.status(200).send(deduction);
 });

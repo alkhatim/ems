@@ -249,7 +249,7 @@ router.put("/:id", validateObjectId, async (req, res) => {
     installments: req.body.installments
   };
 
-  await Loan.findByIdAndUpdate(req.params.id, loan);
+  loan = await Loan.findByIdAndUpdate(req.params.id, loan, { new: true });
 
   res.status(200).send(loan);
 });

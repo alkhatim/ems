@@ -234,7 +234,9 @@ router.put("/:id", validateObjectId, async (req, res) => {
     }
   };
 
-  await Employee.findByIdAndUpdate(req.params.id, employee, { new: true });
+  employee = await Employee.findByIdAndUpdate(req.params.id, employee, {
+    new: true
+  });
   res.status(200).send(employee);
 });
 

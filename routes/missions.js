@@ -110,7 +110,9 @@ router.put("/:id", validateObjectId, async (req, res) => {
     employees
   };
 
-  await Mission.findByIdAndUpdate(req.params.id, mission);
+  mission = await Mission.findByIdAndUpdate(req.params.id, mission, {
+    new: true
+  });
   res.status(200).send(mission);
 });
 

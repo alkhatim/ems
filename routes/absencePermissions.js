@@ -68,7 +68,11 @@ router.put("/:id", async (req, res) => {
     notes: req.body.notes
   };
 
-  await AbsencePermission.findByIdAndUpdate(req.params.id, absencePermission);
+  absencePermission = await AbsencePermission.findByIdAndUpdate(
+    req.params.id,
+    absencePermission,
+    { new: true }
+  );
 
   res.status(200).send(absencePermission);
 });
