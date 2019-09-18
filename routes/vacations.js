@@ -38,9 +38,7 @@ router.post("/", async (req, res) => {
   if (ongoingVacation)
     return res
       .status(400)
-      .send(
-        "The dates coflict with an already scheduled vactaion for the same employee!"
-      );
+      .send("The employee already has a vacation at the same time");
 
   const credit = await VacationCredit.findOne({
     "employee._id": req.body.employeeId
@@ -49,6 +47,7 @@ router.post("/", async (req, res) => {
     return res
       .status(400)
       .send("Register a vacations credit for this employee first");
+
   if (credit.remainingCredit < req.body.duration)
     return res
       .status(400)
@@ -92,22 +91,9 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/:id", validateObjectId, async (req, res) => {
-  const vacation = await Vacation.find(req.params.id);
-  if (!vacation)
-    return res.status(404).send("There is no vacation with the given ID");
-
-  res.status(200).send(vacation);
-});
-
-router.delete("/:id", validateObjectId, async (req, res) => {
   const vacation = await Vacation.findById(req.params.id);
   if (!vacation)
     return res.status(404).send("There is no vacation with the given ID");
-
-  if (vacation.state.name == "Ongoing")
-    return res.status(400).send("You can't delete an ongoing vacation");
-
-  await Vacation.findByIdAndDelete(req.params.id);
 
   res.status(200).send(vacation);
 });
@@ -192,7 +178,9 @@ router.put("/:id", validateObjectId, async (req, res) => {
       req.body.replacementEmployeeId
     ).select("_id name");
 
-  await Vacation.findByIdAndUpdate(req.params.id, vacation);
+  vacation = await Vacation.findByIdAndUpdate(req.params.id, vacation, {
+    new: true
+  });
 
   credit.remainingCredit -= req.body.duration;
   await credit.save();
@@ -200,6 +188,7 @@ router.put("/:id", validateObjectId, async (req, res) => {
   res.status(200).send(vacation);
 });
 
+//for changing a vacation's state
 router.patch("/:id", validateObjectId, async (req, res) => {
   const vacation = await Vacation.findById(req.params.id);
   if (!vacation)
@@ -210,17 +199,32 @@ router.patch("/:id", validateObjectId, async (req, res) => {
     return res.status(404).send("There is no state with the given ID");
 
   if (vacation.state.name == "Ongoing" && state.name == "Cutoff") {
-    vacation.actualEndDate = new Date().setHours(0, 0, 0, 0);
+    if (!req.body.actualEndDate)
+      return res.status(400).send("You must select a cutoff date");
+    vacation.actualEndDate = req.body.actualEndDate;
     const credit = await credit.findOne({
       "employee._id": vacation.employee._id
     });
-    credit.remainingCredit += moment(vacation.endDate).diff(moment(), "d");
+    credit.remainingCredit += moment(vacation.endDate).diff(actualEndDate, "d");
     credit.save();
   }
 
   vacation.state = state;
 
   vacation.save();
+
+  res.status(200).send(vacation);
+});
+
+router.delete("/:id", validateObjectId, async (req, res) => {
+  const vacation = await Vacation.findById(req.params.id);
+  if (!vacation)
+    return res.status(404).send("There is no vacation with the given ID");
+
+  if (vacation.state.name == "Ongoing")
+    return res.status(400).send("You can't delete an ongoing vacation");
+
+  await Vacation.findByIdAndDelete(req.params.id);
 
   res.status(200).send(vacation);
 });
