@@ -201,11 +201,15 @@ router.patch("/:id", validateObjectId, async (req, res) => {
   if (vacation.state.name == "Ongoing" && state.name == "Cutoff") {
     if (!req.body.actualEndDate)
       return res.status(400).send("You must select a cutoff date");
+
     vacation.actualEndDate = req.body.actualEndDate;
-    const credit = await credit.findOne({
+    const credit = await VacationCredit.findOne({
       "employee._id": vacation.employee._id
     });
-    credit.remainingCredit += moment(vacation.endDate).diff(actualEndDate, "d");
+    credit.remainingCredit += moment(vacation.endDate).diff(
+      vacation.actualEndDate,
+      "d"
+    );
     credit.save();
   }
 
