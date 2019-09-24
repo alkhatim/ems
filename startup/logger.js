@@ -6,7 +6,8 @@ module.exports = createLogger({
     new transports.File({
       filename: "logs/logfile.log",
       level: "warn"
-    })
+    }),
+    new transports.Console()
   ],
   exceptionHandlers: [
     new transports.File({ filename: "logs/unhandledExceptions.log" }),
