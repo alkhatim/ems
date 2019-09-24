@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
-const { schema: stateSchema } = require("./InstallmentState");
+const { schema: installmentStateSchema } = require("./InstallmentState");
+const { schema: stateSchema } = require("./State");
 
 const schema = new mongoose.Schema({
   employee: {
@@ -25,6 +26,10 @@ const schema = new mongoose.Schema({
     min: 1,
     required: true
   },
+  state: {
+    type: stateSchema,
+    required: true
+  },
   installments: {
     type: [
       {
@@ -38,7 +43,7 @@ const schema = new mongoose.Schema({
           required: true
         },
         state: {
-          type: stateSchema,
+          type: installmentStateSchema,
           required: true
         }
       }

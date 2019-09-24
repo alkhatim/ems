@@ -8,6 +8,7 @@ const { Nationality } = require("../models/Nationality");
 const { Contract } = require("../models/Contract");
 const { Job } = require("../models/Job");
 const { Department } = require("../models/Department");
+const { Location } = require("../models/Location");
 const { Loan } = require("../models/Loan");
 const { VacationCredit } = require("../models/VacationCredit");
 const validateObjectId = require("../middleware/validateObjectId");
@@ -41,6 +42,10 @@ router.post("/", async (req, res) => {
   if (!department)
     return res.status(404).send("The specified department was not found");
 
+  const location = await Location.findById(req.body.locationId);
+  if (!location)
+    return res.status(404).send("The specified location was not found");
+
   const employee = new Employee({
     name: req.body.name,
     gender,
@@ -55,6 +60,7 @@ router.post("/", async (req, res) => {
       job,
       contract,
       department,
+      location,
       dateOfEmployment: req.body.dateOfEmployment,
       contractExpiryDate: req.body.contractExpiryDate
     },
@@ -149,6 +155,10 @@ router.put("/:id", validateObjectId, async (req, res) => {
   if (!department)
     return res.status(404).send("The specified department was not found");
 
+  const location = await Location.findById(req.body.locationId);
+  if (!location)
+    return res.status(404).send("The specified location was not found");
+
   if (!employee.vacationInfo.vacationDays && req.body.vacationDays) {
     const vacationCredit = new VacationCredit({
       employee: _.pick(employee, ["_id", "name"]),
@@ -190,6 +200,7 @@ router.put("/:id", validateObjectId, async (req, res) => {
       job,
       contract,
       department,
+      location,
       dateOfEmployment: req.body.dateOfEmployment,
       contractExpiryDate: req.body.contractExpiryDate
     },
@@ -223,7 +234,9 @@ router.put("/:id", validateObjectId, async (req, res) => {
     }
   };
 
-  await Employee.findByIdAndUpdate(req.params.id, employee, { new: true });
+  employee = await Employee.findByIdAndUpdate(req.params.id, employee, {
+    new: true
+  });
   res.status(200).send(employee);
 });
 

@@ -122,7 +122,9 @@ router.put("/:id", async (req, res) => {
     total: req.body.total
   };
 
-  await Overtime.findByIdAndUpdate(req.params.id, overtime);
+  overtime = await Overtime.findByIdAndUpdate(req.params.id, overtime, {
+    new: true
+  });
 
   res.status(200).send(overtime);
 });

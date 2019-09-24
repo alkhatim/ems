@@ -4,6 +4,7 @@ const moment = require("moment");
 const _ = require("lodash");
 const { Loan, validate } = require("../models/Loan");
 const { Employee } = require("../models/Employee");
+const { State } = require("../models/State");
 const { InstallmentState } = require("../models/InstallmentState");
 const validateObjectId = require("../middleware/validateObjectId");
 
@@ -26,7 +27,17 @@ router.post("/", async (req, res) => {
   if (!employee)
     return res.status(404).send("There is no employee with the given ID");
 
-  const state = await InstallmentState.findOne({ name: "Pending" });
+  const installmentState = await InstallmentState.findOne({ name: "Pending" });
+  if (!installmentState)
+    return res
+      .status(500)
+      .send("The default installment state is missing from the server");
+
+  const state = await State.findOne({ name: "New" });
+  if (!state)
+    return res
+      .status(500)
+      .send("The default loan state is missing from the server");
 
   if (req.body.installmentAmount == req.body.amount)
     req.body.installments = [
@@ -35,7 +46,7 @@ router.post("/", async (req, res) => {
           .endOf("month")
           .toDate(),
         amount: req.body.amount,
-        state: state
+        state: installmentState
       }
     ];
   else {
@@ -51,7 +62,7 @@ router.post("/", async (req, res) => {
           .endOf("month")
           .toDate(),
         amount: req.body.installmentAmount,
-        state: state
+        state: installmentState
       };
     });
     if (lastInstallmentAmount)
@@ -61,7 +72,7 @@ router.post("/", async (req, res) => {
           .endOf("month")
           .toDate(),
         amount: lastInstallmentAmount,
-        state: state
+        state: installmentState
       });
   }
 
@@ -72,6 +83,7 @@ router.post("/", async (req, res) => {
       .endOf("month")
       .toDate(),
     amount: req.body.amount,
+    state,
     installments: req.body.installments
   });
 
@@ -96,6 +108,11 @@ router.put("/:id", validateObjectId, async (req, res) => {
   let loan = await Loan.findById(req.params.id);
   if (!loan) return res.status(404).send("There is no Loan with the given ID");
 
+  if (loan.state.name == "Resolved" || loan.state.name == "Canceled")
+    return res
+      .status(400)
+      .send("You can't modify a loan that has been resolved or canceled");
+
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -105,7 +122,7 @@ router.put("/:id", validateObjectId, async (req, res) => {
   if (!employee)
     return res.status(404).send("There is no employee with the given ID");
 
-  const state = await InstallmentState.findOne({ name: "Pending" });
+  const installmentState = await InstallmentState.findOne({ name: "Pending" });
 
   const paidInstallments = loan.installments.filter(
     i => i.state.name == "Resolved"
@@ -135,7 +152,7 @@ router.put("/:id", validateObjectId, async (req, res) => {
           .endOf("month")
           .toDate(),
         amount: remaining,
-        state: state
+        state: installmentState
       });
     }
 
@@ -152,7 +169,7 @@ router.put("/:id", validateObjectId, async (req, res) => {
             .endOf("month")
             .toDate(),
           amount: req.body.installmentAmount,
-          state: state
+          state: installmentState
         });
       });
       if (lastInstallmentAmount)
@@ -162,7 +179,7 @@ router.put("/:id", validateObjectId, async (req, res) => {
             .endOf("month")
             .toDate(),
           amount: lastInstallmentAmount,
-          state: state
+          state: installmentState
         });
     }
 
@@ -173,7 +190,7 @@ router.put("/:id", validateObjectId, async (req, res) => {
           .endOf("month")
           .toDate(),
         amount: remaining,
-        state: state
+        state: installmentState
       });
     }
   } else {
@@ -184,7 +201,7 @@ router.put("/:id", validateObjectId, async (req, res) => {
             .endOf("month")
             .toDate(),
           amount: req.body.amount,
-          state: state
+          state: installmentState
         }
       ];
     else {
@@ -201,7 +218,7 @@ router.put("/:id", validateObjectId, async (req, res) => {
             .endOf("month")
             .toDate(),
           amount: req.body.installmentAmount,
-          state: state
+          state: installmentState
         };
       });
       if (lastInstallmentAmount)
@@ -211,22 +228,44 @@ router.put("/:id", validateObjectId, async (req, res) => {
             .endOf("month")
             .toDate(),
           amount: lastInstallmentAmount,
-          state: state
+          state: installmentState
         });
     }
   }
 
+  if (
+    req.body.installments.filter(i => i.state.name == "Pending").length == 0 &&
+    loan.state.name == "Approved"
+  )
+    req.body.state = await State.findOne({ name: "Resolved" });
+  else req.body.state = loan.state;
+
   loan = {
     employee: loan.employee,
     date: req.body.date,
-    firstPayDate: moment(req.body.firstPayDate)
-      .endOf("month")
-      .toDate(),
+    firstPayDate: loan.firstPayDate,
     amount: req.body.amount,
+    state: req.body.state,
     installments: req.body.installments
   };
 
-  await Loan.findByIdAndUpdate(req.params.id, loan);
+  loan = await Loan.findByIdAndUpdate(req.params.id, loan, { new: true });
+
+  res.status(200).send(loan);
+});
+
+// for changing a loan's state
+router.patch("/:id", validateObjectId, async (req, res) => {
+  const state = await State.findById(req.body.stateId);
+  if (!state)
+    return res.status(404).send("There is no state with the given ID");
+
+  const loan = await Loan.findByIdAndUpdate(
+    req.params.id,
+    { state },
+    { new: true }
+  );
+  if (!loan) return res.status(404).send("There is no loan with the given ID");
 
   res.status(200).send(loan);
 });
@@ -257,6 +296,11 @@ router.patch("/installments/:id", validateObjectId, async (req, res) => {
   if (!loan)
     return res.status(404).send("There is no installment with the given ID");
 
+  if (loan.state.name != "Approved")
+    return res
+      .status(400)
+      .send("You can mark installments as paid only for approved loans");
+
   const installment = loan.installments.find(i => i._id == req.params.id);
   const index = loan.installments.findIndex(i => i._id == req.params.id);
 
@@ -264,9 +308,14 @@ router.patch("/installments/:id", validateObjectId, async (req, res) => {
   if (!state)
     return res.status(404).send("There is no state with the given ID");
 
+  if (state.name != "Resolved")
+    return res.status(400).send("You can't revert a paid installment");
+
   installment.state = state;
 
   loan.installments[index] = installment;
+  if (loan.installments.filter(i => i.state.name == "Pending").length == 0)
+    loan.state = await State.findOne({ name: "Resolved" });
   await loan.save();
   res.status(200).send(installment);
 });

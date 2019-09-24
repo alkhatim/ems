@@ -6,6 +6,7 @@ const { schema: contractSchema } = require("../models/Contract");
 const { schema: statusSchema } = require("../models/EmployeeStatus");
 const { schema: genderSchema } = require("../models/Gender");
 const { schema: departmentSchema } = require("../models/Department");
+const { schema: locationSchema } = require("../models/Location");
 
 const schema = new mongoose.Schema({
   name: {
@@ -63,6 +64,10 @@ const schema = new mongoose.Schema({
     },
     department: {
       type: departmentSchema,
+      required: true
+    },
+    location: {
+      type: locationSchema,
       required: true
     },
     dateOfEmployment: Date,
@@ -143,6 +148,7 @@ const validate = function(employee) {
     jobId: Joi.objectId().required(),
     contractId: Joi.objectId().required(),
     departmentId: Joi.objectId().required(),
+    locationId: Joi.objectId().required(),
     dateOfEmployment: Joi.date(),
     contractExpiryDate: Joi.date(),
     basicSalary: Joi.number()
