@@ -3,7 +3,7 @@ const { Overtime } = require("../models/Overtime");
 const { Deduction } = require("../models/Deduction");
 const { Loan } = require("../models/Loan");
 
-const calculateEmployeeSalary = async function(employee, date) {
+const employeeSalary = async function(employee, date) {
   const salary = {};
   // salary
   salary.basicSalary = employee.salaryInfo.basicSalary;
@@ -78,4 +78,4 @@ const calculateEmployeeSalary = async function(employee, date) {
   return salary;
 };
 
-module.exports = calculateEmployeeSalary;
+module.exports = employeeSalary;
