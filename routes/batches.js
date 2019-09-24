@@ -23,12 +23,14 @@ router.post("/", async (req, res) => {
     installments: []
   };
 
+  //specificly selected employees
   if (req.body.employees) {
     req.body.employees.forEach(async id => {
       employees.push(await Employee.findById(id).select("name salaryInfo"));
     });
   }
 
+  //employees by department
   if (req.body.departmentId) {
     const departmentEmployees = await Employee.find({
       "jobInfo.department._id": req.body.departmentId
