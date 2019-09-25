@@ -22,6 +22,11 @@ router.post("/", async (req, res) => {
     deductions: [],
     installments: []
   };
+  req.body.entries = {
+    overtimes: [],
+    deductions: [],
+    installments: []
+  };
 
   //specificly selected employees
   if (req.body.employees) {
@@ -49,8 +54,6 @@ router.post("/", async (req, res) => {
       if (!employees.includes(employee)) employees.push(employee);
     });
   }
-
-  console.log(employees);
 
   const type = await BatchType.findById(req.body.typeId);
   if (!type)
@@ -155,13 +158,27 @@ router.post("/", async (req, res) => {
     req.body.total += newEmployee.details.total;
   }
 
+  //add entries to batch
+  for (overtime of toBeResolved.overtimes) {
+    req.body.entries.overtimes.push(overtime._id);
+  }
+
+  for (deduction of toBeResolved.deductions) {
+    req.body.entries.deductions.push(deduction._id);
+  }
+
+  for (installment of toBeResolved.installments) {
+    req.body.entries.installments.push(installment._id);
+  }
+
   const batch = new Batch({
     notes: req.body.notes,
     date: req.body.date,
     type,
     state,
     total: req.body.total,
-    employees: req.body.employees
+    employees: req.body.employees,
+    entries: req.body.entries
   });
 
   await batch.save();

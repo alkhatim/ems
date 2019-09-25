@@ -25,26 +25,40 @@ const schema = new mongoose.Schema({
     type: Number,
     required: true
   },
-  employees: [
-    new mongoose.Schema({
-      name: {
-        type: String,
-        required: true
-      },
-      details: {
-        basicSalary: Number,
-        housingAllowance: Number,
-        transportAllowance: Number,
-        livingExpenseAllowance: Number,
-        foodAllowance: Number,
-        totalSalary: Number,
-        loan: Number,
-        overtimes: Number,
-        deductions: Number,
-        total: Number
+  employees: {
+    type: [
+      {
+        name: {
+          type: String,
+          required: true
+        },
+        details: {
+          type: {
+            basicSalary: Number,
+            housingAllowance: Number,
+            transportAllowance: Number,
+            livingExpenseAllowance: Number,
+            foodAllowance: Number,
+            totalSalary: Number,
+            loan: Number,
+            overtimes: Number,
+            deductions: Number,
+            total: Number
+          },
+          required: true
+        }
       }
-    })
-  ]
+    ],
+    required: true
+  },
+  entries: {
+    type: {
+      overtimes: [mongoose.Schema.Types.ObjectId],
+      deductions: [mongoose.Schema.Types.ObjectId],
+      installments: [mongoose.Schema.Types.ObjectId]
+    },
+    required: true
+  }
 });
 
 const Batch = mongoose.model("Batch", schema);
