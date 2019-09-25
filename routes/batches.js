@@ -40,6 +40,18 @@ router.post("/", async (req, res) => {
     });
   }
 
+  //employees by location
+  if (req.body.locationId) {
+    const locationEmployees = await Employee.find({
+      "jobInfo.location._id": req.body.locationId
+    }).select("name salaryInfo");
+    locationEmployees.forEach(employee => {
+      if (!employees.includes(employee)) employees.push(employee);
+    });
+  }
+
+  console.log(employees);
+
   const type = await BatchType.findById(req.body.typeId);
   if (!type)
     return res.status(404).send("There is no batch type with the given ID");
