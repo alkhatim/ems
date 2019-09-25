@@ -56,7 +56,8 @@ const validate = function(batch) {
     typeId: Joi.objectId().required(),
     stateId: Joi.objectId(),
     employees: Joi.array(),
-    departmentId: Joi.objectId()
+    departmentId: Joi.objectId(),
+    locationId: Joi.objectId()
   };
 
   return Joi.validate(batch, schema);
