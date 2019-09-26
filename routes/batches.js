@@ -182,6 +182,7 @@ router.post("/", async (req, res) => {
   });
 
   await batch.save();
+  res.status(201).send(batch);
 
   //#region resolve batch entries
   const resolvedState = await State.findOne({ name: "Resolved" });
@@ -212,8 +213,6 @@ router.post("/", async (req, res) => {
     await loan.save();
   }
   //#endregion
-
-  res.status(201).send(batch);
 });
 
 router.get("/", async (req, res) => {
