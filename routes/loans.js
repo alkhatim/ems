@@ -296,20 +296,12 @@ router.patch("/installments/:id", validateObjectId, async (req, res) => {
   if (!loan)
     return res.status(404).send("There is no installment with the given ID");
 
-  if (loan.state.name != "Approved")
-    return res
-      .status(400)
-      .send("You can mark installments as paid only for approved loans");
-
   const installment = loan.installments.find(i => i._id == req.params.id);
   const index = loan.installments.findIndex(i => i._id == req.params.id);
 
   const state = await InstallmentState.findById(req.body.stateId);
   if (!state)
     return res.status(404).send("There is no state with the given ID");
-
-  if (state.name != "Resolved")
-    return res.status(400).send("You can't revert a paid installment");
 
   installment.state = state;
 
