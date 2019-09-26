@@ -16,9 +16,10 @@ router.post("/", async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
+  //#region declarations
   const employees = [];
-  const calculatedEmployees = [];
-  const toBeResolved = {
+  const batchEmployees = [];
+  const entries = {
     overtimes: [],
     deductions: [],
     installments: []
@@ -28,8 +29,10 @@ router.post("/", async (req, res) => {
     deductions: [],
     installments: []
   };
+  req.body.total = 0;
+  //#endregion
 
-  //specificly selected employees
+  //#region selected employees
   if (req.body.employees) {
     for (id of req.body.employees) {
       if (!ObjectId.isValid(id))
@@ -38,8 +41,9 @@ router.post("/", async (req, res) => {
       if (employee) employees.push(employee);
     }
   }
+  //#endregion
 
-  //employees by department
+  //#region employees by department
   if (req.body.departmentId) {
     const departmentEmployees = await Employee.find({
       "jobInfo.department._id": req.body.departmentId
@@ -48,8 +52,9 @@ router.post("/", async (req, res) => {
       if (!employees.includes(employee)) employees.push(employee);
     });
   }
+  //#endregion
 
-  //employees by location
+  //#region employees by location
   if (req.body.locationId) {
     const locationEmployees = await Employee.find({
       "jobInfo.location._id": req.body.locationId
@@ -58,6 +63,10 @@ router.post("/", async (req, res) => {
       if (!employees.includes(employee)) employees.push(employee);
     });
   }
+  //#endregion
+
+  if (employees.length == 0)
+    return res.status(400).send("There is no employees in this batch");
 
   const type = await BatchType.findById(req.body.typeId);
   if (!type)
@@ -69,113 +78,122 @@ router.post("/", async (req, res) => {
       .status(500)
       .send("The default batch state is missing from the server!");
 
-  req.body.total = 0;
-
-  if (employees.length == 0)
-    return res.status(400).send("There is no employees in this batch");
-
   //calculate salary foreach employee
   for (employee of employees) {
-    const newEmployee = {};
-    newEmployee._id = employee._id;
-    newEmployee.name = employee.name;
-    newEmployee.details = {};
+    const batchEmployee = {};
+    batchEmployee._id = employee._id;
+    batchEmployee.name = employee.name;
+    batchEmployee.details = {};
 
-    //salary
-    newEmployee.details.basicSalary = employee.salaryInfo.basicSalary;
+    //#region salary
+    batchEmployee.details.basicSalary = employee.salaryInfo.basicSalary;
 
     if (employee.salaryInfo.livingExpenseAllowance)
-      newEmployee.details.livingExpenseAllowance =
+      batchEmployee.details.livingExpenseAllowance =
         employee.salaryInfo.livingExpenseAllowance;
 
     if (employee.salaryInfo.livingExpenseAllowance)
-      newEmployee.details.livingExpenseAllowance =
+      batchEmployee.details.livingExpenseAllowance =
         employee.salaryInfo.livingExpenseAllowance;
 
     if (employee.salaryInfo.housingAllowance)
-      newEmployee.details.housingAllowance =
+      batchEmployee.details.housingAllowance =
         employee.salaryInfo.housingAllowance;
 
     if (employee.salaryInfo.transportAllowance)
-      newEmployee.details.transportAllowance =
+      batchEmployee.details.transportAllowance =
         employee.salaryInfo.transportAllowance;
 
     if (employee.salaryInfo.foodAllowance)
-      newEmployee.details.foodAllowance = employee.salaryInfo.foodAllowance;
+      batchEmployee.details.foodAllowance = employee.salaryInfo.foodAllowance;
 
-    newEmployee.details.totalSalary = employee.salaryInfo.totalSalary;
+    batchEmployee.details.totalSalary = employee.salaryInfo.totalSalary;
+    //#endregion
 
-    // overtimes
+    //#region overtimes
     const overtimes = await Overtime.find({
       "employee._id": employee._id,
       date: { $lt: req.body.date },
       "state.name": { $eq: "Approved" }
     });
     if (overtimes) {
-      newEmployee.details.overtimes = 0;
+      batchEmployee.details.overtimes = 0;
       overtimes.forEach(overtime => {
-        newEmployee.details.overtimes += overtime.total;
+        batchEmployee.details.overtimes += overtime.total;
         // to resolve
-        toBeResolved.overtimes.push(overtime);
+        entries.overtimes.push(overtime);
       });
     }
+    //#endregion
 
-    // deductions
+    //#region deductions
     const deductions = await Deduction.find({
       "employee._id": employee._id,
       date: { $lt: req.body.date },
       "state.name": { $eq: "Approved" }
     });
     if (deductions) {
-      newEmployee.details.deductions = 0;
+      batchEmployee.details.deductions = 0;
       deductions.forEach(deduction => {
-        newEmployee.details.deductions += deduction.total;
+        batchEmployee.details.deductions += deduction.total;
         // to resolve
-        toBeResolved.deductions.push(deduction);
+        entries.deductions.push(deduction);
       });
     }
+    //#endregion
 
-    // loan
+    //#region loans
     const loan = await Loan.findOne({
       "employee._id": employee._id,
-      "installments.state.name": "Pending",
-      "installments.date": moment(req.body.date)
-        .endOf("month")
-        .toDate()
+      "state.name": "Approved",
+      "installments.date": {
+        $le: moment(req.body.date)
+          .endOf("month")
+          .toDate()
+      }
     });
     if (loan) {
-      const installment = loan.installments.find(
+      const installments = loan.installments.filter(
         i =>
           i.state.name == "Pending" &&
-          i.date.getMonth() == new Date(req.body.date).getMonth()
+          i.date <=
+            moment(req.body.date)
+              .endOf("month")
+              .toDate()
       );
-      newEmployee.details.loan = installment.amount;
-      toBeResolved.installments.push(installment);
+      if (installments) {
+        batchEmployee.details.loan = 0;
+        installments.forEach(installment => {
+          batchEmployee.details.loan += installment.amount;
+          entries.installments.push(installment);
+        });
+      }
     }
+    //#endregion
 
-    //total
-    newEmployee.details.total =
-      newEmployee.details.totalSalary +
-      (newEmployee.details.overtimes || 0) -
-      (newEmployee.details.deductions || 0) -
-      (newEmployee.details.loan || 0);
+    batchEmployee.details.total =
+      batchEmployee.details.totalSalary +
+      (batchEmployee.details.overtimes || 0) -
+      (batchEmployee.details.deductions || 0) -
+      (batchEmployee.details.loan || 0);
 
-    calculatedEmployees.push(newEmployee);
-    req.body.total += newEmployee.details.total;
+    batchEmployees.push(batchEmployee);
+    req.body.total += batchEmployee.details.total;
   }
 
-  //add entries to batch
-  for (overtime of toBeResolved.overtimes) {
+  //#region add entries
+  for (overtime of entries.overtimes) {
     req.body.entries.overtimes.push(overtime._id);
   }
 
-  for (deduction of toBeResolved.deductions) {
+  for (deduction of entries.deductions) {
     req.body.entries.deductions.push(deduction._id);
   }
 
-  for (installment of toBeResolved.installments) {
+  for (installment of entries.installments) {
     req.body.entries.installments.push(installment._id);
   }
+  //#endregion
 
   const batch = new Batch({
     notes: req.body.notes,
@@ -183,14 +201,15 @@ router.post("/", async (req, res) => {
     type,
     state,
     total: req.body.total,
-    employees: calculatedEmployees,
+    employees: batchEmployees,
     entries: req.body.entries
   });
 
   await batch.save();
-  res.status(201).send(batch);
 
-  //#region resolve batch entries
+  return res.status(201).send(batch);
+
+  //#region resolve entries
   const resolvedState = await State.findOne({ name: "Resolved" });
   if (!state)
     return res
@@ -205,15 +224,15 @@ router.post("/", async (req, res) => {
       .status(500)
       .send("The resolved loans state is missing from the server!");
 
-  for (overtime of toBeResolved.overtimes) {
+  for (overtime of entries.overtimes) {
     await Overtime.findByIdAndUpdate(overtime._id, { state: resolvedState });
   }
 
-  for (deduction of toBeResolved.deductions) {
+  for (deduction of entries.deductions) {
     await Deduction.findByIdAndUpdate(deduction._id, { state: resolvedState });
   }
 
-  for (installment of toBeResolved.installments) {
+  for (installment of entries.installments) {
     const loan = await Loan.findOne({ "installments._id": installment._id });
     loan.installments.id(installment._id).state = installmentResolvedState;
     await loan.save();
