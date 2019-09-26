@@ -69,7 +69,7 @@ const validate = function(batch) {
     date: Joi.date().required(),
     typeId: Joi.objectId().required(),
     stateId: Joi.objectId(),
-    employees: Joi.array(),
+    employees: Joi.array().items(Joi.string()),
     departmentId: Joi.objectId(),
     locationId: Joi.objectId()
   };

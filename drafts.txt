@@ -7,6 +7,7 @@ start of day => change vacation states and employee status
 
 TODO:
 
+fix issue with selecting a loan and installment in batches router
 add check for employee to not be terminated in all routes
 save resolved overtimes, loans..etch with each batch save
 add lookup schema and replace all lookup schemas with it

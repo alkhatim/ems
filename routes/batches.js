@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const moment = require("moment");
+const ObjectId = require("mongoose").Types.ObjectId;
 const { Batch, validate } = require("../models/Batch");
 const { Employee } = require("../models/Employee");
 const { BatchType } = require("../models/BatchType");
@@ -16,7 +17,7 @@ router.post("/", async (req, res) => {
   if (error) return res.status(400).send(error.details[0].message);
 
   const employees = [];
-  req.body.employees = [];
+  const calculatedEmployees = [];
   const toBeResolved = {
     overtimes: [],
     deductions: [],
@@ -30,9 +31,12 @@ router.post("/", async (req, res) => {
 
   //specificly selected employees
   if (req.body.employees) {
-    req.body.employees.forEach(async id => {
-      employees.push(await Employee.findById(id).select("name salaryInfo"));
-    });
+    for (id of req.body.employees) {
+      if (!ObjectId.isValid(id))
+        return res.status(404).send("One of the given Ids is not valdid");
+      const employee = await Employee.findById(id).select("name salaryInfo");
+      if (employee) employees.push(employee);
+    }
   }
 
   //employees by department
@@ -67,6 +71,10 @@ router.post("/", async (req, res) => {
 
   req.body.total = 0;
 
+  if (employees.length == 0)
+    return res.status(400).send("There is no employees in this batch");
+
+  //calculate salary foreach employee
   for (employee of employees) {
     const newEmployee = {};
     newEmployee._id = employee._id;
@@ -141,9 +149,7 @@ router.post("/", async (req, res) => {
           i.state.name == "Pending" &&
           i.date.getMonth() == new Date(req.body.date).getMonth()
       );
-
       newEmployee.details.loan = installment.amount;
-      // to resolve
       toBeResolved.installments.push(installment);
     }
 
@@ -154,7 +160,7 @@ router.post("/", async (req, res) => {
       (newEmployee.details.deductions || 0) -
       (newEmployee.details.loan || 0);
 
-    req.body.employees.push(newEmployee);
+    calculatedEmployees.push(newEmployee);
     req.body.total += newEmployee.details.total;
   }
 
@@ -177,7 +183,7 @@ router.post("/", async (req, res) => {
     type,
     state,
     total: req.body.total,
-    employees: req.body.employees,
+    employees: calculatedEmployees,
     entries: req.body.entries
   });
 
