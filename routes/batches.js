@@ -145,12 +145,7 @@ router.post("/", async (req, res) => {
     //#region loans
     const loan = await Loan.findOne({
       "employee._id": employee._id,
-      "state.name": "Approved",
-      "installments.date": {
-        $le: moment(req.body.date)
-          .endOf("month")
-          .toDate()
-      }
+      "state.name": "Approved"
     });
     if (loan) {
       const installments = loan.installments.filter(
