@@ -113,7 +113,7 @@ router.post("/", async (req, res) => {
     //#region overtimes
     const overtimes = await Overtime.find({
       "employee._id": employee._id,
-      date: { $lt: req.body.date },
+      date: { $lte: req.body.date },
       "state.name": { $eq: "Approved" }
     });
     if (overtimes) {
@@ -129,7 +129,7 @@ router.post("/", async (req, res) => {
     //#region deductions
     const deductions = await Deduction.find({
       "employee._id": employee._id,
-      date: { $lt: req.body.date },
+      date: { $lte: req.body.date },
       "state.name": { $eq: "Approved" }
     });
     if (deductions) {
