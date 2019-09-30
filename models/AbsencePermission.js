@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
-const { schema: typeSchema } = require("./AbsencePermissionType");
+const { schema: typeSchema } = require("./DeductionType");
 
 const schema = new mongoose.Schema({
   employee: {
@@ -14,10 +14,6 @@ const schema = new mongoose.Schema({
   },
   date: {
     type: Date,
-    required: true
-  },
-  type: {
-    type: typeSchema,
     required: true
   },
   amount: {
@@ -37,7 +33,6 @@ const validate = function(absencePermission) {
   const schema = {
     employeeId: Joi.objectId().required(),
     date: Joi.date().required(),
-    typeId: Joi.objectId().required(),
     amount: Joi.number()
       .min(0)
       .required(),
