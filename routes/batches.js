@@ -248,4 +248,49 @@ router.get("/:id", validateObjectId, async (req, res) => {
   res.status(200).send(batch);
 });
 
+router.delete("/:id", validateObjectId, async (req, res) => {
+  const batch = await Batch.findById(req.params.id);
+  if (!batch)
+    return res.status(404).send("There is no batch with the given ID");
+
+  if (batch.state.name != "New")
+    return res
+      .status(400)
+      .send("You can't delete a resolved or approved batch");
+
+  await Batch.findByIdAndDelete(req.params.id);
+
+  //#region un-resolve entries
+  const approvedState = await State.findOne({ name: "Approved" });
+  if (!state)
+    return res
+      .status(500)
+      .send("The approved state is missing from the server!");
+
+  const installmentPendingState = await InstallmentState.findOne({
+    name: "Pending"
+  });
+  if (!state)
+    return res
+      .status(500)
+      .send("The pending loans installment state is missing from the server!");
+
+  for (overtime of batch.entries.overtimes) {
+    await Overtime.findByIdAndUpdate(overtime._id, { state: approvedState });
+  }
+
+  for (deduction of batch.entries.deductions) {
+    await Deduction.findByIdAndUpdate(deduction._id, { state: approvedState });
+  }
+
+  for (installment of batch.entries.installments) {
+    const loan = await Loan.findOne({ "installments._id": installment._id });
+    loan.installments.id(installment._id).state = installmentPendingState;
+    await loan.save();
+  }
+  //#endregion
+
+  res.status(200).send(batch);
+});
+
 module.exports = router;
