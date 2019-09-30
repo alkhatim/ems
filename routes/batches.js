@@ -87,28 +87,37 @@ router.post("/", async (req, res) => {
     batchEmployee.details = {};
 
     //#region salary
-    batchEmployee.details.basicSalary = employee.salaryInfo.basicSalary;
+
+    const salaryRatio =
+      (30 -
+        moment(req.body.date)
+          .endOf("month")
+          .diff(moment(req.body.date), "days")) /
+      30;
+
+    if (!salaryRatio) return res.status(400).send("Enter a correct batch date");
+
+    batchEmployee.details.basicSalary =
+      employee.salaryInfo.basicSalary * salaryRatio;
 
     if (employee.salaryInfo.livingExpenseAllowance)
       batchEmployee.details.livingExpenseAllowance =
-        employee.salaryInfo.livingExpenseAllowance;
-
-    if (employee.salaryInfo.livingExpenseAllowance)
-      batchEmployee.details.livingExpenseAllowance =
-        employee.salaryInfo.livingExpenseAllowance;
+        employee.salaryInfo.livingExpenseAllowance * salaryRatio;
 
     if (employee.salaryInfo.housingAllowance)
       batchEmployee.details.housingAllowance =
-        employee.salaryInfo.housingAllowance;
+        employee.salaryInfo.housingAllowance * salaryRatio;
 
     if (employee.salaryInfo.transportAllowance)
       batchEmployee.details.transportAllowance =
-        employee.salaryInfo.transportAllowance;
+        employee.salaryInfo.transportAllowance * salaryRatio;
 
     if (employee.salaryInfo.foodAllowance)
-      batchEmployee.details.foodAllowance = employee.salaryInfo.foodAllowance;
+      batchEmployee.details.foodAllowance =
+        employee.salaryInfo.foodAllowance * salaryRatio;
 
-    batchEmployee.details.totalSalary = employee.salaryInfo.totalSalary;
+    batchEmployee.details.totalSalary =
+      employee.salaryInfo.totalSalary * salaryRatio;
     //#endregion
 
     //#region overtimes
