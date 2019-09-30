@@ -8,6 +8,7 @@ const { BatchType } = require("../models/BatchType");
 const { State } = require("../models/State");
 const { Overtime } = require("../models/Overtime");
 const { Deduction } = require("../models/Deduction");
+const { AbsencePermission } = require("../models/AbsencePermission");
 const { Loan } = require("../models/Loan");
 const { InstallmentState } = require("../models/InstallmentState");
 const validateObjectId = require("../middleware/validateObjectId");
@@ -120,7 +121,6 @@ router.post("/", async (req, res) => {
       batchEmployee.details.overtimes = 0;
       overtimes.forEach(overtime => {
         batchEmployee.details.overtimes += overtime.total;
-        // to resolve
         entries.overtimes.push(overtime);
       });
     }
@@ -134,11 +134,22 @@ router.post("/", async (req, res) => {
     });
     if (deductions) {
       batchEmployee.details.deductions = 0;
-      deductions.forEach(deduction => {
-        batchEmployee.details.deductions += deduction.total;
-        // to resolve
+      for (deduction of deductions) {
+        const permissions = await AbsencePermission.find({
+          "employee._id": employee._id
+        });
+        const currentPermissions = permissions.filter(p =>
+          moment(deduction.date).isBetween(
+            moment(p.date),
+            moment(p.date).add(p.amount, "days"),
+            null,
+            "[]"
+          )
+        );
+        if (currentPermissions.length == 0)
+          batchEmployee.details.deductions += deduction.total;
         entries.deductions.push(deduction);
-      });
+      }
     }
     //#endregion
 
