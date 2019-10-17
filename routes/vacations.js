@@ -104,9 +104,7 @@ router.put("/:id", validateObjectId, async (req, res) => {
     return res.status(404).send("There is no vacation with the given ID");
 
   if (vacation.state.name != "New")
-    return res
-      .status(400)
-      .send("You can't modify a vacation that isn't in the New state");
+    return res.status(400).send("You can only modify new vacations");
 
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);

@@ -276,7 +276,7 @@ router.delete("/:id", validateObjectId, async (req, res) => {
   if (batch.state.name != "New")
     return res
       .status(400)
-      .send("You can't delete a resolved or approved batch");
+      .send("You can't delete a resolved or an approved batch");
 
   await Batch.findByIdAndDelete(req.params.id);
 

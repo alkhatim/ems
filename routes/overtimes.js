@@ -76,11 +76,7 @@ router.put("/:id", async (req, res) => {
     return res.status(404).send("There is no overtime with the given ID");
 
   if (overtime.state.name != "New")
-    return res
-      .status(400)
-      .send(
-        "You can't modify an overtime that has been approved, resolved or canceled"
-      );
+    return res.status(400).send("You can only modify new overtimes");
 
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);

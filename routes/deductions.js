@@ -72,11 +72,7 @@ router.put("/:id", async (req, res) => {
     return res.status(404).send("There is no deduction with the given ID");
 
   if (deduction.state.name != "New")
-    return res
-      .status(400)
-      .send(
-        "You can't modify a deduction that has been approved, resolved or canceled"
-      );
+    return res.status(400).send("You can only modify new deductions");
 
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);

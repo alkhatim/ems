@@ -108,10 +108,8 @@ router.put("/:id", validateObjectId, async (req, res) => {
   let loan = await Loan.findById(req.params.id);
   if (!loan) return res.status(404).send("There is no Loan with the given ID");
 
-  if (loan.state.name == "Resolved" || loan.state.name == "Canceled")
-    return res
-      .status(400)
-      .send("You can't modify a loan that has been resolved or canceled");
+  if (loan.state.name != "New")
+    return res.status(400).send("You can only modify new loans");
 
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
@@ -276,7 +274,7 @@ router.delete("/:id", validateObjectId, async (req, res) => {
   if (loan.installments.filter(i => i.state.name != "Pending") == true)
     return res
       .status(400)
-      .send("You can only delete loans with no paid installments!");
+      .send("You can't delete loans with pending installments!");
 
   await Loan.findByIdAndDelete(req.params.id);
   res.status(200).send(loan);

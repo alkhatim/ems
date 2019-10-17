@@ -69,9 +69,7 @@ router.put("/:id", validateObjectId, async (req, res) => {
     return res.status(404).send("There is no mission with the given ID");
 
   if (mission.state.name != "New")
-    return res
-      .status(400)
-      .send("You can't modify a mission that isn't in the New state");
+    return res.status(400).send("You can only modify new missions");
 
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
@@ -85,13 +83,13 @@ router.put("/:id", validateObjectId, async (req, res) => {
 
   for (employee of req.body.employees) {
     if (!mongoose.Types.ObjectId.isValid(employee._id))
-      return res.status(404).send("One of the given IDs is not valdid");
+      return res.status(404).send(`The ID ${employee._id} isn't valid`);
 
     const employeeFromDb = await Employee.findById(employee._id).select("name");
     if (!employeeFromDb)
       return res
         .status(404)
-        .send(`The employee with the ID ${employee._id} "doesn't exist`);
+        .send(`The employee with the ID ${employee._id} doesn't exist`);
 
     employee.name = employeeFromDb.name;
     employees.push(employee);
