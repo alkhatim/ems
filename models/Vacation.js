@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
 const { schema: typeSchema } = require("./VacationType");
-const { schema: stateSchema } = require("./State");
+const { schema: stateSchema } = require("./VacationState");
 
 const schema = new mongoose.Schema({
   employee: {

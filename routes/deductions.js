@@ -119,25 +119,35 @@ router.put("/:id", async (req, res) => {
 
 // for changing a deduction's state
 router.patch("/:id", validateObjectId, async (req, res) => {
+  let deduction = await Deduction.findById(req.params.id);
+  if (!deduction)
+    return res.status(404).send("There is no deduction with the given ID");
+
   const state = await State.findById(req.body.stateId);
   if (!state)
     return res.status(404).send("There is no state with the given ID");
 
-  const deduction = await Deduction.findByIdAndUpdate(
-    req.params.id,
-    { state },
-    { new: true }
-  );
-  if (!deduction)
-    return res.status(404).send("There is no deduction with the given ID");
+  if (state.name == "Resolved" && deduction.state.name != "Approved")
+    return res.status(400).send("You can't resolve an un-approved deduction");
+
+  if (deduction.state.name == "Resolved")
+    return res.status(400).send("You can't change a resolved deduction");
+
+  deduction.state = state;
+  await deduction.save();
 
   res.status(200).send(deduction);
 });
 
 router.delete("/:id", validateObjectId, async (req, res) => {
-  const deduction = await Deduction.findByIdAndDelete(req.params.id);
+  const deduction = await Deduction.findById(req.params.id);
   if (!deduction)
     return res.status(404).send("There is no deduction with the given ID");
+
+  if (deduction.state.name == "Resolved")
+    return res.status(400).send("You can't delete resolved deductions");
+
+  await Deduction.findByIdAndDelete(req.params.id);
 
   res.status(200).send(deduction);
 });

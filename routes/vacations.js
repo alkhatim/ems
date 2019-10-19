@@ -196,6 +196,9 @@ router.patch("/:id", validateObjectId, async (req, res) => {
   if (!state)
     return res.status(404).send("There is no state with the given ID");
 
+  if (state.name == "Ongoing" && vacation.state.name != "Approved")
+    return res.status(400).send("The vacation must be approved first");
+
   if (vacation.state.name == "Ongoing" && state.name == "Cutoff") {
     if (!req.body.actualEndDate)
       return res.status(400).send("You must select a cutoff date");
@@ -212,8 +215,7 @@ router.patch("/:id", validateObjectId, async (req, res) => {
   }
 
   vacation.state = state;
-
-  vacation.save();
+  await vacation.save();
 
   res.status(200).send(vacation);
 });
