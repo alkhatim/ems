@@ -7,6 +7,7 @@ start of day => change vacation states and employee status
 
 TODO:
 
+update routers patch, put and delete validation
 ignore deduction if a matching absence permission exists
 
 --stretch
