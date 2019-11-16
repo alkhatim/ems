@@ -224,32 +224,30 @@ router.post("/", async (req, res) => {
 
   return res.status(201).send(batch);
 
-  //#region resolve entries
-  const resolvedState = await State.findOne({ name: "Resolved" });
+  //#region close entries
+  const closedState = await State.findOne({ name: "Closed" });
   if (!state)
-    return res
-      .status(500)
-      .send("The resolved state is missing from the server!");
+    return res.status(500).send("The closed state is missing from the server!");
 
-  const installmentResolvedState = await InstallmentState.findOne({
-    name: "Resolved"
+  const installmentClosedState = await InstallmentState.findOne({
+    name: "Closed"
   });
   if (!state)
     return res
       .status(500)
-      .send("The resolved loans state is missing from the server!");
+      .send("The closed loans state is missing from the server!");
 
   for (overtime of entries.overtimes) {
-    await Overtime.findByIdAndUpdate(overtime._id, { state: resolvedState });
+    await Overtime.findByIdAndUpdate(overtime._id, { state: closedState });
   }
 
   for (deduction of entries.deductions) {
-    await Deduction.findByIdAndUpdate(deduction._id, { state: resolvedState });
+    await Deduction.findByIdAndUpdate(deduction._id, { state: closedState });
   }
 
   for (installment of entries.installments) {
     const loan = await Loan.findOne({ "installments._id": installment._id });
-    loan.installments.id(installment._id).state = installmentResolvedState;
+    loan.installments.id(installment._id).state = installmentClosedState;
     await loan.save();
   }
   //#endregion
@@ -276,11 +274,11 @@ router.delete("/:id", validateObjectId, async (req, res) => {
   if (batch.state.name != "New")
     return res
       .status(400)
-      .send("You can't delete a resolved or an approved batch");
+      .send("You can't delete a closed or an approved batch");
 
   await Batch.findByIdAndDelete(req.params.id);
 
-  //#region un-resolve entries
+  //#region un-close entries
   const approvedState = await State.findOne({ name: "Approved" });
   if (!state)
     return res

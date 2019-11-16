@@ -123,7 +123,7 @@ router.put("/:id", validateObjectId, async (req, res) => {
   const installmentState = await InstallmentState.findOne({ name: "Pending" });
 
   const paidInstallments = loan.installments.filter(
-    i => i.state.name == "Resolved"
+    i => i.state.name == "Closed"
   );
 
   if (paidInstallments.length) {
@@ -235,7 +235,7 @@ router.put("/:id", validateObjectId, async (req, res) => {
     req.body.installments.filter(i => i.state.name == "Pending").length == 0 &&
     loan.state.name == "Approved"
   )
-    req.body.state = await State.findOne({ name: "Resolved" });
+    req.body.state = await State.findOne({ name: "Closed" });
   else req.body.state = loan.state;
 
   loan = {
@@ -305,7 +305,7 @@ router.patch("/installments/:id", validateObjectId, async (req, res) => {
 
   loan.installments[index] = installment;
   if (loan.installments.filter(i => i.state.name == "Pending").length == 0)
-    loan.state = await State.findOne({ name: "Resolved" });
+    loan.state = await State.findOne({ name: "Closed" });
   await loan.save();
   res.status(200).send(installment);
 });

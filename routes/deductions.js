@@ -127,11 +127,11 @@ router.patch("/:id", validateObjectId, async (req, res) => {
   if (!state)
     return res.status(404).send("There is no state with the given ID");
 
-  if (state.name == "Resolved" && deduction.state.name != "Approved")
-    return res.status(400).send("You can't resolve an un-approved deduction");
+  if (state.name == "Closed" && deduction.state.name != "Approved")
+    return res.status(400).send("You can't close an un-approved deduction");
 
-  if (deduction.state.name == "Resolved")
-    return res.status(400).send("You can't change a resolved deduction");
+  if (deduction.state.name == "Closed")
+    return res.status(400).send("You can't change a closed deduction");
 
   deduction.state = state;
   await deduction.save();
@@ -144,8 +144,8 @@ router.delete("/:id", validateObjectId, async (req, res) => {
   if (!deduction)
     return res.status(404).send("There is no deduction with the given ID");
 
-  if (deduction.state.name == "Resolved")
-    return res.status(400).send("You can't delete resolved deductions");
+  if (deduction.state.name == "Closed")
+    return res.status(400).send("You can't delete closed deductions");
 
   await Deduction.findByIdAndDelete(req.params.id);
 

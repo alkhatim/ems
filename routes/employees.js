@@ -266,7 +266,7 @@ router.delete("/:id", validateObjectId, async (req, res) => {
   )
     return res
       .status(400)
-      .send("You can't delete an employee with an unresolved loan");
+      .send("You can't delete an employee with an unclosed loan");
 
   const employee = await Employee.findByIdAndDelete(req.params.id);
   if (!employee)

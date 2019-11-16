@@ -11,7 +11,7 @@ update routers patch, put and delete validation
 ignore deduction if a matching absence permission exists
 
 --stretch
-reject patching resolved entries
+reject patching closed entries
 add check for employee to not be terminated in all routes
 add lookup schema and replace all lookup schemas
 only select "state" when querying documents for delete methods
