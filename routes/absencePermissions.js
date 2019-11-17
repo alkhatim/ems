@@ -52,7 +52,7 @@ router.put("/:id", async (req, res) => {
     return res.status(404).send("There is no permission with the given ID");
 
   if (absencePermission.state.name != "New")
-    return res.status(400).send("You can only edit new permissions");
+    return res.status(400).send("You can only modify new permissions");
 
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
@@ -81,13 +81,16 @@ router.put("/:id", async (req, res) => {
 });
 
 router.delete("/:id", async (req, res) => {
-  const absencePermission = await AbsencePermission.findByIdAndDelete(
-    req.params.id
-  );
+  const absencePermission = await AbsencePermission.findById(req.params.id);
   if (!absencePermission)
     return res
       .status(404)
       .send("There is no absence permission with the given ID");
+
+  if (absencePermission.state.name == "Closed")
+    return res.status(400).send("You can't delete closed permission");
+
+  await AbsencePermission.findByIdAndDelete(req.params.id);
 
   res.status(200).send(absencePermission);
 });
