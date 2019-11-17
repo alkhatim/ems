@@ -137,10 +137,13 @@ router.post("/approve/:id", async (req, res) => {
       .status(500)
       .send("The approved deduciton state is missing from the server!");
 
-  deduction.state = state;
-  deduction = await Deduction.findByIdAndUpdate(req.params.id, deduction, {
-    new: true
-  });
+  deduction = await Deduction.findByIdAndUpdate(
+    req.params.id,
+    { state },
+    {
+      new: true
+    }
+  );
   res.status(200).send(deduction);
 });
 
@@ -152,10 +155,11 @@ router.post("/revert/:id", async (req, res) => {
       .status(500)
       .send("The new overtime state is missing from the server!");
 
-  deduction.state = state;
-  deduction = await Deduction.findByIdAndUpdate(req.params.id, deduction, {
-    new: true
-  });
+  deduction = await Deduction.findByIdAndUpdate(
+    req.params.id,
+    { state },
+    { new: true }
+  );
   res.status(200).send(deduction);
 });
 

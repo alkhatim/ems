@@ -145,10 +145,11 @@ router.post("/approve/:id", async (req, res) => {
       .status(500)
       .send("The approved overtime state is missing from the server!");
 
-  overtime.state = state;
-  overtime = await Overtime.findByIdAndUpdate(req.params.id, overtime, {
-    new: true
-  });
+  overtime = await Overtime.findByIdAndUpdate(
+    req.params.id,
+    { state },
+    { new: true }
+  );
   res.status(200).send(overtime);
 });
 
@@ -160,10 +161,11 @@ router.post("/revert/:id", async (req, res) => {
       .status(500)
       .send("The new overtime state is missing from the server!");
 
-  overtime.state = state;
-  overtime = await Overtime.findByIdAndUpdate(req.params.id, overtime, {
-    new: true
-  });
+  overtime = await Overtime.findByIdAndUpdate(
+    req.params.id,
+    { state },
+    { new: true }
+  );
   res.status(200).send(overtime);
 });
 

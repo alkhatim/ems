@@ -240,23 +240,6 @@ router.put("/:id", validateObjectId, async (req, res) => {
   res.status(200).send(employee);
 });
 
-// for changing an employee's status
-router.patch("/:id", validateObjectId, async (req, res) => {
-  const status = await EmployeeStatus.findById(req.body.statusId);
-  if (!status)
-    return res.status(404).send("There is no status with the given ID");
-
-  const employee = await Employee.findByIdAndUpdate(
-    req.params.id,
-    { status },
-    { new: true }
-  );
-  if (!employee)
-    return res.status(404).send("There is no employee with the given ID");
-
-  res.status(200).send(employee);
-});
-
 router.delete("/:id", validateObjectId, async (req, res) => {
   if (
     await Loan.findOne({
@@ -271,6 +254,23 @@ router.delete("/:id", validateObjectId, async (req, res) => {
   const employee = await Employee.findByIdAndDelete(req.params.id);
   if (!employee)
     return res.status(404).send("There is no employee with the given ID");
+  res.status(200).send(employee);
+});
+
+// for changing an employee's status
+router.patch("/:id", validateObjectId, async (req, res) => {
+  const status = await EmployeeStatus.findById(req.body.statusId);
+  if (!status)
+    return res.status(404).send("There is no status with the given ID");
+
+  const employee = await Employee.findByIdAndUpdate(
+    req.params.id,
+    { status },
+    { new: true }
+  );
+  if (!employee)
+    return res.status(404).send("There is no employee with the given ID");
+
   res.status(200).send(employee);
 });
 

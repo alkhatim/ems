@@ -104,10 +104,9 @@ router.post("/approve/:id", async (req, res) => {
       .status(500)
       .send("The approved permission state is missing from the server!");
 
-  absencePermission.state = state;
   absencePermission = await AbsencePermission.findByIdAndUpdate(
     req.params.id,
-    absencePermission,
+    { state },
     { new: true }
   );
   res.status(200).send(absencePermission);
@@ -121,10 +120,9 @@ router.post("/revert/:id", async (req, res) => {
       .status(500)
       .send("The new permission state is missing from the server!");
 
-  absencePermission.state = state;
   absencePermission = await AbsencePermission.findByIdAndUpdate(
     req.params.id,
-    absencePermission,
+    { state },
     { new: true }
   );
   res.status(200).send(absencePermission);
