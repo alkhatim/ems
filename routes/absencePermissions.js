@@ -98,6 +98,9 @@ router.delete("/:id", async (req, res) => {
 //states
 router.post("/approve/:id", async (req, res) => {
   let absencePermission = await AbsencePermission.findById(req.params.id);
+  if (absencePermission.state != "New")
+    return res.status(400).send("You can only approve new permissions");
+
   const state = await State.findOne({ name: "Approved" });
   if (!state)
     return res
@@ -114,11 +117,33 @@ router.post("/approve/:id", async (req, res) => {
 
 router.post("/revert/:id", async (req, res) => {
   let absencePermission = await AbsencePermission.findById(req.params.id);
+  if (absencePermission.state != "Approved")
+    return res.status(400).send("You can only revert approved permissions");
+
   const state = await State.findOne({ name: "New" });
   if (!state)
     return res
       .status(500)
       .send("The new permission state is missing from the server!");
+
+  absencePermission = await AbsencePermission.findByIdAndUpdate(
+    req.params.id,
+    { state },
+    { new: true }
+  );
+  res.status(200).send(absencePermission);
+});
+
+router.post("/cancel/:id", async (req, res) => {
+  let absencePermission = await AbsencePermission.findById(req.params.id);
+  if (absencePermission.state == "Closed")
+    return res.status(400).send("You can't cancel closed permissions");
+
+  const state = await State.findOne({ name: "Cancelled" });
+  if (!state)
+    return res
+      .status(500)
+      .send("The cancelled deduction state is missing from the server!");
 
   absencePermission = await AbsencePermission.findByIdAndUpdate(
     req.params.id,

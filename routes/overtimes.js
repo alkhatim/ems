@@ -139,6 +139,9 @@ router.delete("/:id", validateObjectId, async (req, res) => {
 //states
 router.post("/approve/:id", async (req, res) => {
   let overtime = await Overtime.findById(req.params.id);
+  if (overtime.state != "New")
+    return res.status(400).send("You can only approve new overtimes");
+
   const state = await State.findOne({ name: "Approved" });
   if (!state)
     return res
@@ -155,11 +158,33 @@ router.post("/approve/:id", async (req, res) => {
 
 router.post("/revert/:id", async (req, res) => {
   let overtime = await Overtime.findById(req.params.id);
+  if (overtime.state != "Approved")
+    return res.status(400).send("You can only revert approved deductions");
+
   const state = await State.findOne({ name: "New" });
   if (!state)
     return res
       .status(500)
       .send("The new overtime state is missing from the server!");
+
+  overtime = await Overtime.findByIdAndUpdate(
+    req.params.id,
+    { state },
+    { new: true }
+  );
+  res.status(200).send(overtime);
+});
+
+router.post("/cancel/:id", async (req, res) => {
+  let overtime = await Overtime.findById(req.params.id);
+  if (overtime.state == "Closed")
+    return res.status(400).send("You can't cancel closed overtimes");
+
+  const state = await State.findOne({ name: "Cancelled" });
+  if (!state)
+    return res
+      .status(500)
+      .send("The cancelled overtime state is missing from the server!");
 
   overtime = await Overtime.findByIdAndUpdate(
     req.params.id,

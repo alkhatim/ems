@@ -131,6 +131,9 @@ router.delete("/:id", validateObjectId, async (req, res) => {
 //states
 router.post("/approve/:id", async (req, res) => {
   let deduction = await Deduction.findById(req.params.id);
+  if (deduction.state != "New")
+    return res.status(400).send("You can only approve new deductions");
+
   const state = await State.findOne({ name: "Approved" });
   if (!state)
     return res
@@ -149,11 +152,33 @@ router.post("/approve/:id", async (req, res) => {
 
 router.post("/revert/:id", async (req, res) => {
   let deduction = await Deduction.findById(req.params.id);
+  if (deduction.state != "Approved")
+    return res.status(400).send("You can only revert apporved deductions");
+
   const state = await State.findOne({ name: "New" });
   if (!state)
     return res
       .status(500)
       .send("The new overtime state is missing from the server!");
+
+  deduction = await Deduction.findByIdAndUpdate(
+    req.params.id,
+    { state },
+    { new: true }
+  );
+  res.status(200).send(deduction);
+});
+
+router.post("/cancel/:id", async (req, res) => {
+  let deduction = await Deduction.findById(req.params.id);
+  if (deduction.state == "Closed")
+    return res.status(400).send("You can't cancel closed deductions");
+
+  const state = await State.findOne({ name: "Cancelled" });
+  if (!state)
+    return res
+      .status(500)
+      .send("The cancelled deduction state is missing from the server!");
 
   deduction = await Deduction.findByIdAndUpdate(
     req.params.id,

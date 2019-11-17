@@ -108,8 +108,10 @@ router.put("/:id", validateObjectId, async (req, res) => {
   let loan = await Loan.findById(req.params.id);
   if (!loan) return res.status(404).send("There is no Loan with the given ID");
 
-  if (loan.state.name != "New")
-    return res.status(400).send("You can only modify new loans");
+  if (loan.state.name == "Closed" || loan.state.name == "Cancelled")
+    return res
+      .status(400)
+      .send("You can't only modify closed or cancelled loans");
 
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
@@ -252,22 +254,6 @@ router.put("/:id", validateObjectId, async (req, res) => {
   res.status(200).send(loan);
 });
 
-// for changing a loan's state
-router.patch("/:id", validateObjectId, async (req, res) => {
-  const state = await State.findById(req.body.stateId);
-  if (!state)
-    return res.status(404).send("There is no state with the given ID");
-
-  const loan = await Loan.findByIdAndUpdate(
-    req.params.id,
-    { state },
-    { new: true }
-  );
-  if (!loan) return res.status(404).send("There is no loan with the given ID");
-
-  res.status(200).send(loan);
-});
-
 router.delete("/:id", validateObjectId, async (req, res) => {
   const loan = await Loan.findById(req.params.id);
 
@@ -289,17 +275,74 @@ router.get("/installments/:id", validateObjectId, async (req, res) => {
   res.status(200).send(installment);
 });
 
-router.patch("/installments/:id", validateObjectId, async (req, res) => {
+//states
+router.post("/approve/:id", async (req, res) => {
+  let loan = await Loan.findById(req.params.id);
+  if (loan.state != "New")
+    return res.status(400).send("You can only approve new loans");
+
+  const state = await State.findOne({ name: "Approved" });
+  if (!state)
+    return res
+      .status(500)
+      .send("The approved loan state is missing from the server!");
+
+  loan = await Loan.findByIdAndUpdate(req.params.id, { state }, { new: true });
+  res.status(200).send(loan);
+});
+
+router.post("/revert/:id", async (req, res) => {
+  let loan = await Loan.findById(req.params.id);
+  if (loan.state != "Approved")
+    return res.status(400).send("You can only revert approved loans");
+  if (loan.installments.find(i => i.state.name == "Paid"))
+    return res
+      .status(400)
+      .send("You can't revert a loan with a paid installment");
+
+  const state = await State.findOne({ name: "New" });
+  if (!state)
+    return res
+      .status(500)
+      .send("The new loan state is missing from the server!");
+
+  loan = await Loan.findByIdAndUpdate(req.params.id, { state }, { new: true });
+  res.status(200).send(loan);
+});
+
+router.post("/cancel/:id", async (req, res) => {
+  let loan = await Loan.findById(req.params.id);
+  if (loan.state == "Closed")
+    return res.status(400).send("You can't cancel closed loans");
+
+  const state = await State.findOne({ name: "Cancelled" });
+  if (!state)
+    return res
+      .status(500)
+      .send("The cancelled loan state is missing from the server!");
+
+  loan = await Loan.findByIdAndUpdate(req.params.id, { state }, { new: true });
+  res.status(200).send(loan);
+});
+
+//installment state
+router.post("/installments/pay/:id", validateObjectId, async (req, res) => {
   const loan = await Loan.findOne({ "installments._id": req.params.id });
   if (!loan)
     return res.status(404).send("There is no installment with the given ID");
+  if (loan.state != "Approved")
+    return res
+      .status(400)
+      .send("You can only pay installments for approved loans");
 
   const installment = loan.installments.find(i => i._id == req.params.id);
   const index = loan.installments.findIndex(i => i._id == req.params.id);
 
-  const state = await InstallmentState.findById(req.body.stateId);
+  const state = await InstallmentState.findOne({ name: "Paid" });
   if (!state)
-    return res.status(404).send("There is no state with the given ID");
+    return res
+      .status(500)
+      .send("The paid installment state is missing from the server!");
 
   installment.state = state;
 
