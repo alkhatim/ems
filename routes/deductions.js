@@ -84,8 +84,6 @@ router.put("/:id", async (req, res) => {
   if (!employee)
     return res.status(404).send("There is no employee with the given ID");
 
-  const state = deduction.state;
-
   const type = await DeductionType.findById(req.body.typeId);
   if (!type) return res.status(400).send("There is no type with the given ID");
 
@@ -104,7 +102,7 @@ router.put("/:id", async (req, res) => {
     employee: _.pick(employee, ["_id", "name"]),
     date: req.body.date,
     notes: req.body.notes,
-    state,
+    state: deduction.state,
     type,
     amount: req.body.amount,
     total: req.body.total
@@ -113,28 +111,6 @@ router.put("/:id", async (req, res) => {
   deduction = await Deduction.findByIdAndUpdate(req.params.id, deduction, {
     new: true
   });
-
-  res.status(200).send(deduction);
-});
-
-// for changing a deduction's state
-router.patch("/:id", validateObjectId, async (req, res) => {
-  let deduction = await Deduction.findById(req.params.id);
-  if (!deduction)
-    return res.status(404).send("There is no deduction with the given ID");
-
-  const state = await State.findById(req.body.stateId);
-  if (!state)
-    return res.status(404).send("There is no state with the given ID");
-
-  if (state.name == "Closed" && deduction.state.name != "Approved")
-    return res.status(400).send("You can't close an un-approved deduction");
-
-  if (deduction.state.name == "Closed")
-    return res.status(400).send("You can't change a closed deduction");
-
-  deduction.state = state;
-  await deduction.save();
 
   res.status(200).send(deduction);
 });
@@ -149,6 +125,37 @@ router.delete("/:id", validateObjectId, async (req, res) => {
 
   await Deduction.findByIdAndDelete(req.params.id);
 
+  res.status(200).send(deduction);
+});
+
+//states
+router.post("/approve/:id", async (req, res) => {
+  let deduction = await Deduction.findById(req.params.id);
+  const state = await State.findOne({ name: "Approved" });
+  if (!state)
+    return res
+      .status(500)
+      .send("The approved deduciton state is missing from the server!");
+
+  deduction.state = state;
+  deduction = await Deduction.findByIdAndUpdate(req.params.id, deduction, {
+    new: true
+  });
+  res.status(200).send(deduction);
+});
+
+router.post("/revert/:id", async (req, res) => {
+  let deduction = await Deduction.findById(req.params.id);
+  const state = await State.findOne({ name: "New" });
+  if (!state)
+    return res
+      .status(500)
+      .send("The new overtime state is missing from the server!");
+
+  deduction.state = state;
+  deduction = await Deduction.findByIdAndUpdate(req.params.id, deduction, {
+    new: true
+  });
   res.status(200).send(deduction);
 });
 

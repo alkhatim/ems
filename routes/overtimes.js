@@ -88,8 +88,6 @@ router.put("/:id", async (req, res) => {
   if (!employee)
     return res.status(404).send("There is no employee with the given ID");
 
-  const state = overtime.state;
-
   const type = await OvertimeType.findById(req.body.typeId);
   if (!type) return res.status(400).send("There is no type with the given ID");
 
@@ -112,7 +110,7 @@ router.put("/:id", async (req, res) => {
     employee: _.pick(employee, ["_id", "name"]),
     date: req.body.date,
     notes: req.body.notes,
-    state,
+    state: overtime.state,
     type,
     amount: req.body.amount,
     total: req.body.total
@@ -125,28 +123,47 @@ router.put("/:id", async (req, res) => {
   res.status(200).send(overtime);
 });
 
-// for changing an overtime's state
-router.patch("/:id", validateObjectId, async (req, res) => {
-  const state = await State.findById(req.body.stateId);
-  if (!state)
-    return res.status(404).send("There is no state with the given ID");
-
-  const overtime = await Overtime.findByIdAndUpdate(
-    req.params.id,
-    { state },
-    { new: true }
-  );
+router.delete("/:id", validateObjectId, async (req, res) => {
+  const overtime = await Overtime.findById(req.params.id);
   if (!overtime)
     return res.status(404).send("There is no overtime with the given ID");
+
+  if (overtime.state.name == "Closed")
+    return res.status(400).send("You can't delete closed overtimes");
+
+  await Overtime.findByIdAndDelete(req.params.id);
 
   res.status(200).send(overtime);
 });
 
-router.delete("/:id", validateObjectId, async (req, res) => {
-  const overtime = await Overtime.findByIdAndDelete(req.params.id);
-  if (!overtime)
-    return res.status(404).send("There is no overtime with the given ID");
+//states
+router.post("/approve/:id", async (req, res) => {
+  let overtime = await Overtime.findById(req.params.id);
+  const state = await State.findOne({ name: "Approved" });
+  if (!state)
+    return res
+      .status(500)
+      .send("The approved overtime state is missing from the server!");
 
+  overtime.state = state;
+  overtime = await Overtime.findByIdAndUpdate(req.params.id, overtime, {
+    new: true
+  });
+  res.status(200).send(overtime);
+});
+
+router.post("/revert/:id", async (req, res) => {
+  let overtime = await Overtime.findById(req.params.id);
+  const state = await State.findOne({ name: "New" });
+  if (!state)
+    return res
+      .status(500)
+      .send("The new overtime state is missing from the server!");
+
+  overtime.state = state;
+  overtime = await Overtime.findByIdAndUpdate(req.params.id, overtime, {
+    new: true
+  });
   res.status(200).send(overtime);
 });
 
