@@ -7,13 +7,9 @@ start of day => change vacation states and employee status
 
 TODO:
 
-update routers patch, put and delete validation
 ignore deduction if a matching absence permission exists
-
---stretch
-reject patching closed entries
-add check for employee to not be terminated in all routes
-add lookup schema and replace all lookup schemas
+seperate terminated employees in another table
+add a lookup schema and replace lookup schemas
 only select "state" when querying documents for delete methods
 fix winston format
 
