@@ -113,55 +113,99 @@ router.put("/:id", validateObjectId, async (req, res) => {
   res.status(200).send(mission);
 });
 
-// for changing mission state
-router.patch("/:id", validateObjectId, async (req, res) => {
-  const state = await MissionState.findById(req.body.stateId);
+router.delete("/:id", validateObjectId, async (req, res) => {
+  const mission = await Mission.findById(req.params.id);
+  if (!mission)
+    return res.status(404).send("There is no mission with the given ID");
+
+  if (mission.state.name == "Closed")
+    return res.status(400).send("You can't delete closed missions");
+
+  await Mission.findByIdAndDelete(req.params.id);
+
+  res.status(200).send(mission);
+});
+
+// states
+router.post("/approve/:id", async (req, res) => {
+  let mission = await Mission.findById(req.params.id);
+  if (mission.state.name != "New")
+    return res.status(400).send("You can only approve new missions");
+
+  const state = await MissionState.findOne({ name: "Approved" });
   if (!state)
-    return res.status(404).send("There is no state with the given ID");
+    return res
+      .status(500)
+      .send("The approved mission state is missing from the server!");
 
-  if (state.name == "Finished") {
-    let mission = await Mission.findById(req.params.id).select("state");
-
-    if (mission.state.name != "Approved")
-      return res
-        .status(400)
-        .send("You can only change approved missions to finished");
-
-    mission = await Mission.findByIdAndUpdate(
-      req.params.id,
-      {
-        state,
-        actualExpenses: req.body.actualExpenses,
-        actualEndDate: req.body.actualEndDate
-      },
-      {
-        new: true
-      }
-    );
-    if (!mission)
-      return res.status(404).send("There is no mission with the given ID");
-
-    return res.status(200).send(mission);
-  }
-
-  const mission = await Mission.findByIdAndUpdate(
+  mission = await Mission.findByIdAndUpdate(
     req.params.id,
     { state },
     {
       new: true
     }
   );
-  if (!mission)
-    return res.status(404).send("There is no mission with the given ID");
-
-  return res.status(200).send(mission);
+  res.status(200).send(mission);
 });
 
-router.delete("/:id", validateObjectId, async (req, res) => {
-  const mission = await Mission.findByIdAndDelete(req.params.id);
-  if (!mission)
-    return res.status(404).send("There is no mission with the given ID");
+router.post("/revert/:id", async (req, res) => {
+  let mission = await Mission.findById(req.params.id);
+  if (mission.state.name != "Approved")
+    return res.status(400).send("You can only revert apporved missions");
 
+  const state = await MissionState.findOne({ name: "New" });
+  if (!state)
+    return res
+      .status(500)
+      .send("The new mission state is missing from the server!");
+
+  mission = await Mission.findByIdAndUpdate(
+    req.params.id,
+    { state },
+    { new: true }
+  );
+  res.status(200).send(mission);
+});
+
+router.post("/finish/:id", async (req, res) => {
+  let mission = await Mission.findById(req.params.id);
+  if (mission.state.name != "Approved")
+    return res.status(400).send("You can only finish apporved missions");
+
+  const state = await MissionState.findOne({ name: "Finished" });
+  if (!state)
+    return res
+      .status(500)
+      .send("The finished mission state is missing from the server!");
+
+  mission = await Mission.findByIdAndUpdate(
+    req.params.id,
+    {
+      state,
+      actualExpenses: req.body.actualExpenses,
+      actualEndDate: req.body.actualEndDate
+    },
+    { new: true }
+  );
+  res.status(200).send(mission);
+});
+
+router.post("/cancel/:id", async (req, res) => {
+  let mission = await Mission.findById(req.params.id);
+  if (mission.state.name == "Closed" || mission.state.name == "Finished")
+    return res.status(400).send("You can't cancel closed or finished missions");
+
+  const state = await MissionState.findOne({ name: "Cancelled" });
+  if (!state)
+    return res
+      .status(500)
+      .send("The cancelled mission state is missing from the server!");
+
+  mission = await Mission.findByIdAndUpdate(
+    req.params.id,
+    { state },
+    { new: true }
+  );
   res.status(200).send(mission);
 });
 
