@@ -186,40 +186,6 @@ router.put("/:id", validateObjectId, async (req, res) => {
   res.status(200).send(vacation);
 });
 
-//for changing a vacation's state
-router.patch("/:id", validateObjectId, async (req, res) => {
-  const vacation = await Vacation.findById(req.params.id);
-  if (!vacation)
-    return res.status(404).send("There is no vacation with the given ID");
-
-  const state = await VacationState.findById(req.body.stateId);
-  if (!state)
-    return res.status(404).send("There is no state with the given ID");
-
-  if (state.name == "Ongoing" && vacation.state.name != "Approved")
-    return res.status(400).send("The vacation must be approved first");
-
-  if (vacation.state.name == "Ongoing" && state.name == "Cutoff") {
-    if (!req.body.actualEndDate)
-      return res.status(400).send("You must select a cutoff date");
-
-    vacation.actualEndDate = req.body.actualEndDate;
-    const credit = await VacationCredit.findOne({
-      "employee._id": vacation.employee._id
-    });
-    credit.remainingCredit += moment(vacation.endDate).diff(
-      vacation.actualEndDate,
-      "d"
-    );
-    credit.save();
-  }
-
-  vacation.state = state;
-  await vacation.save();
-
-  res.status(200).send(vacation);
-});
-
 router.delete("/:id", validateObjectId, async (req, res) => {
   const vacation = await Vacation.findById(req.params.id);
   if (!vacation)
@@ -230,6 +196,105 @@ router.delete("/:id", validateObjectId, async (req, res) => {
 
   await Vacation.findByIdAndDelete(req.params.id);
 
+  res.status(200).send(vacation);
+});
+
+//states
+router.post("/approve/:id", async (req, res) => {
+  let vacation = await Vacation.findById(req.params.id);
+  if (vacation.state.name != "New")
+    return res.status(400).send("You can only approve new vacations");
+
+  const state = await VacationState.findOne({ name: "Approved" });
+  if (!state)
+    return res
+      .status(500)
+      .send("The approved vacation state is missing from the server!");
+
+  vacation = await Vacation.findByIdAndUpdate(
+    req.params.id,
+    { state },
+    {
+      new: true
+    }
+  );
+  res.status(200).send(vacation);
+});
+
+router.post("/revert/:id", async (req, res) => {
+  let vacation = await Vacation.findById(req.params.id);
+  if (vacation.state.name != "Approved")
+    return res.status(400).send("You can only revert apporved vacations");
+
+  const state = await VacationState.findOne({ name: "New" });
+  if (!state)
+    return res
+      .status(500)
+      .send("The new vacation state is missing from the server!");
+
+  vacation = await Vacation.findByIdAndUpdate(
+    req.params.id,
+    { state },
+    { new: true }
+  );
+  res.status(200).send(vacation);
+});
+
+router.post("/cutoff/:id", async (req, res) => {
+  let vacation = await Vacation.findById(req.params.id);
+  if (vacation.state.name != "Ongoing")
+    return res.status(400).send("You can only cutoff ongoing vacations");
+
+  if (!req.body.actualEndDate)
+    return res.status(400).send("You must select a cutoff date");
+
+  if (vacation.endDate < req.body.actualEndDate)
+    return res
+      .status(400)
+      .send("The cutoff date must be before the schedueld end date");
+
+  const state = await VacationState.findOne({ name: "Cutoff" });
+  if (!state)
+    return res
+      .status(500)
+      .send("The cutoff vacation state is missing from the server!");
+
+  const credit = await VacationCredit.findOne({
+    "employee._id": vacation.employee._id
+  });
+  credit.remainingCredit += moment(vacation.endDate).diff(
+    req.body.actualEndDate,
+    "d"
+  );
+  await credit.save();
+
+  vacation = await Vacation.findByIdAndUpdate(
+    req.params.id,
+    {
+      state,
+      actualEndDate: req.body.actualEndDate
+    },
+    { new: true }
+  );
+  res.status(200).send(vacation);
+});
+
+router.post("/cancel/:id", async (req, res) => {
+  let vacation = await Vacation.findById(req.params.id);
+  if (vacation.state.name == "Ongoing")
+    return res.status(400).send("You can't cancel ongoing vacations");
+
+  const state = await VacationState.findOne({ name: "Cancelled" });
+  if (!state)
+    return res
+      .status(500)
+      .send("The cancelled vacation state is missing from the server!");
+
+  vacation = await Vacation.findByIdAndUpdate(
+    req.params.id,
+    { state },
+    { new: true }
+  );
   res.status(200).send(vacation);
 });
 
