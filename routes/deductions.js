@@ -131,7 +131,7 @@ router.delete("/:id", validateObjectId, async (req, res) => {
 //states
 router.post("/approve/:id", async (req, res) => {
   let deduction = await Deduction.findById(req.params.id);
-  if (deduction.state != "New")
+  if (deduction.state.name != "New")
     return res.status(400).send("You can only approve new deductions");
 
   const state = await State.findOne({ name: "Approved" });
@@ -152,7 +152,7 @@ router.post("/approve/:id", async (req, res) => {
 
 router.post("/revert/:id", async (req, res) => {
   let deduction = await Deduction.findById(req.params.id);
-  if (deduction.state != "Approved")
+  if (deduction.state.name != "Approved")
     return res.status(400).send("You can only revert apporved deductions");
 
   const state = await State.findOne({ name: "New" });
@@ -171,7 +171,7 @@ router.post("/revert/:id", async (req, res) => {
 
 router.post("/cancel/:id", async (req, res) => {
   let deduction = await Deduction.findById(req.params.id);
-  if (deduction.state == "Closed")
+  if (deduction.state.name == "Closed")
     return res.status(400).send("You can't cancel closed deductions");
 
   const state = await State.findOne({ name: "Cancelled" });

@@ -278,7 +278,7 @@ router.get("/installments/:id", validateObjectId, async (req, res) => {
 //states
 router.post("/approve/:id", async (req, res) => {
   let loan = await Loan.findById(req.params.id);
-  if (loan.state != "New")
+  if (loan.state.name != "New")
     return res.status(400).send("You can only approve new loans");
 
   const state = await State.findOne({ name: "Approved" });
@@ -293,7 +293,7 @@ router.post("/approve/:id", async (req, res) => {
 
 router.post("/revert/:id", async (req, res) => {
   let loan = await Loan.findById(req.params.id);
-  if (loan.state != "Approved")
+  if (loan.state.name != "Approved")
     return res.status(400).send("You can only revert approved loans");
   if (loan.installments.find(i => i.state.name == "Paid"))
     return res
@@ -312,7 +312,7 @@ router.post("/revert/:id", async (req, res) => {
 
 router.post("/cancel/:id", async (req, res) => {
   let loan = await Loan.findById(req.params.id);
-  if (loan.state == "Closed")
+  if (loan.state.name == "Closed")
     return res.status(400).send("You can't cancel closed loans");
 
   const state = await State.findOne({ name: "Cancelled" });
@@ -330,7 +330,7 @@ router.post("/installments/pay/:id", validateObjectId, async (req, res) => {
   const loan = await Loan.findOne({ "installments._id": req.params.id });
   if (!loan)
     return res.status(404).send("There is no installment with the given ID");
-  if (loan.state != "Approved")
+  if (loan.state.name != "Approved")
     return res
       .status(400)
       .send("You can only pay installments for approved loans");
