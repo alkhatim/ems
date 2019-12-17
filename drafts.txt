@@ -1,4 +1,4 @@
-processes:
+Jobs:
 
 start of year => calculate new vacation credits
 start of day => change vacation states and employee status
@@ -7,9 +7,6 @@ start of day => change vacation states and employee status
 
 TODO:
 
-ignore deduction if a matching absence permission exists
-seperate terminated employees in another table
-add a lookup schema and replace lookup schemas
 only select "state" when querying documents for delete methods
 fix winston format
 
