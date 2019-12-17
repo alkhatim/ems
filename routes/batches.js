@@ -419,9 +419,10 @@ router.put("/:id", async (req, res) => {
             "[]"
           )
         );
-        if (currentPermissions.length)
+        if (!currentPermissions.length) {
           batchEmployee.details.deductions += deduction.total;
-        entries.deductions.push(deduction);
+          entries.deductions.push(deduction);
+        }
       }
     }
     //#endregion
