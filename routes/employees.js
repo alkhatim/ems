@@ -79,14 +79,8 @@ router.post("/", async (req, res) => {
     },
     socialInsuranceInfo: {
       registered: req.body.registered,
-      socialInsuranceNumber: req.body.number,
+      socialInsuranceNumber: req.body.socialInsuranceNumber,
       socialInsuranceSalary: req.body.socialInsuranceSalary
-    },
-    serviceInfo: {
-      endOfServiceDate: req.body.endOfServiceDate,
-      endOfServiceReason: req.body.endOfServiceReason,
-      suspensionDate: req.body.suspensionDate,
-      suspensionReason: req.body.suspensionReason
     },
     vacationInfo: {
       vacationDays: req.body.vacationDays,
@@ -221,12 +215,6 @@ router.put("/:id", validateObjectId, async (req, res) => {
       registered: req.body.registered,
       socialInsuranceNumber: req.body.number,
       socialInsuranceSalary: req.body.socialInsuranceSalary
-    },
-    serviceInfo: {
-      endOfServiceDate: req.body.endOfServiceDate,
-      endOfServiceReason: req.body.endOfServiceReason,
-      suspensionDate: req.body.suspensionDate,
-      suspensionReason: req.body.suspensionReason
     },
     vacationInfo: {
       vacationDays: req.body.vacationDays,

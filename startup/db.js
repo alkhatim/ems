@@ -10,6 +10,6 @@ module.exports = function() {
       useNewUrlParser: true,
       useFindAndModify: false
     })
-    .then(() => console.log("connected to", dbConnectionString))
+    .then(() => console.log("connected to database"))
     .catch(e => logger.error(e));
 };
