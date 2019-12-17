@@ -108,10 +108,10 @@ router.put("/:id", validateObjectId, async (req, res) => {
   let loan = await Loan.findById(req.params.id);
   if (!loan) return res.status(404).send("There is no Loan with the given ID");
 
-  if (loan.state.name == "Closed" || loan.state.name == "Cancelled")
+  if (loan.state.name == "Closed" || loan.state.name == "Canceled")
     return res
       .status(400)
-      .send("You can't only modify closed or cancelled loans");
+      .send("You can't only modify closed or canceled loans");
 
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
@@ -315,11 +315,11 @@ router.post("/cancel/:id", async (req, res) => {
   if (loan.state.name == "Closed")
     return res.status(400).send("You can't cancel closed loans");
 
-  const state = await State.findOne({ name: "Cancelled" });
+  const state = await State.findOne({ name: "Canceled" });
   if (!state)
     return res
       .status(500)
-      .send("The cancelled loan state is missing from the server!");
+      .send("The canceled loan state is missing from the server!");
 
   loan = await Loan.findByIdAndUpdate(req.params.id, { state }, { new: true });
   res.status(200).send(loan);

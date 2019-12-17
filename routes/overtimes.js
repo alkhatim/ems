@@ -159,7 +159,7 @@ router.post("/approve/:id", async (req, res) => {
 router.post("/revert/:id", async (req, res) => {
   let overtime = await Overtime.findById(req.params.id);
   if (overtime.state.name != "Approved")
-    return res.status(400).send("You can only revert approved deductions");
+    return res.status(400).send("You can only revert approved overtimes");
 
   const state = await State.findOne({ name: "New" });
   if (!state)
@@ -180,11 +180,11 @@ router.post("/cancel/:id", async (req, res) => {
   if (overtime.state.name == "Closed")
     return res.status(400).send("You can't cancel closed overtimes");
 
-  const state = await State.findOne({ name: "Cancelled" });
+  const state = await State.findOne({ name: "Canceled" });
   if (!state)
     return res
       .status(500)
-      .send("The cancelled overtime state is missing from the server!");
+      .send("The canceled overtime state is missing from the server!");
 
   overtime = await Overtime.findByIdAndUpdate(
     req.params.id,

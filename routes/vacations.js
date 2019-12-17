@@ -284,11 +284,11 @@ router.post("/cancel/:id", async (req, res) => {
   if (vacation.state.name == "Ongoing")
     return res.status(400).send("You can't cancel ongoing vacations");
 
-  const state = await VacationState.findOne({ name: "Cancelled" });
+  const state = await VacationState.findOne({ name: "Canceled" });
   if (!state)
     return res
       .status(500)
-      .send("The cancelled vacation state is missing from the server!");
+      .send("The canceled vacation state is missing from the server!");
 
   vacation = await Vacation.findByIdAndUpdate(
     req.params.id,

@@ -195,11 +195,11 @@ router.post("/cancel/:id", async (req, res) => {
   if (mission.state.name == "Closed" || mission.state.name == "Finished")
     return res.status(400).send("You can't cancel closed or finished missions");
 
-  const state = await MissionState.findOne({ name: "Cancelled" });
+  const state = await MissionState.findOne({ name: "Canceled" });
   if (!state)
     return res
       .status(500)
-      .send("The cancelled mission state is missing from the server!");
+      .send("The canceled mission state is missing from the server!");
 
   mission = await Mission.findByIdAndUpdate(
     req.params.id,

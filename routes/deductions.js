@@ -174,11 +174,11 @@ router.post("/cancel/:id", async (req, res) => {
   if (deduction.state.name == "Closed")
     return res.status(400).send("You can't cancel closed deductions");
 
-  const state = await State.findOne({ name: "Cancelled" });
+  const state = await State.findOne({ name: "Canceled" });
   if (!state)
     return res
       .status(500)
-      .send("The cancelled deduction state is missing from the server!");
+      .send("The canceled deduction state is missing from the server!");
 
   deduction = await Deduction.findByIdAndUpdate(
     req.params.id,

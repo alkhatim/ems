@@ -139,11 +139,11 @@ router.post("/cancel/:id", async (req, res) => {
   if (absencePermission.state.name == "Closed")
     return res.status(400).send("You can't cancel closed permissions");
 
-  const state = await State.findOne({ name: "Cancelled" });
+  const state = await State.findOne({ name: "Canceled" });
   if (!state)
     return res
       .status(500)
-      .send("The cancelled deduction state is missing from the server!");
+      .send("The canceled deduction state is missing from the server!");
 
   absencePermission = await AbsencePermission.findByIdAndUpdate(
     req.params.id,
