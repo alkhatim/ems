@@ -245,19 +245,43 @@ router.delete("/:id", validateObjectId, async (req, res) => {
   res.status(200).send(employee);
 });
 
-// for changing an employee's status
-router.patch("/:id", validateObjectId, async (req, res) => {
-  const status = await EmployeeStatus.findById(req.body.statusId);
-  if (!status)
-    return res.status(404).send("There is no status with the given ID");
+// status
+router.post("/terminate/:id", async (req, res) => {
+  const employee = await Employee.findById(req.params.id);
+  if (employee.status.name == "Terminated")
+    return res.status(400).send("This employee is already terminated");
 
-  const employee = await Employee.findByIdAndUpdate(
-    req.params.id,
-    { status },
-    { new: true }
-  );
-  if (!employee)
-    return res.status(404).send("There is no employee with the given ID");
+  const status = await EmployeeStatus.findOne({ name: "Terminated" });
+  if (!status)
+    return res
+      .status(500)
+      .send("The terminated employee status is missing from the server!");
+
+  employee.status = status;
+  employee.serviceInfo.endOfServiceDate = req.body.endOfServiceDate;
+  employee.serviceInfo.endOfServiceReason = req.body.endOfServiceReason;
+
+  await employee.save();
+
+  res.status(200).send(employee);
+});
+
+router.post("/unterminate/:id", async (req, res) => {
+  const employee = await Employee.findById(req.params.id);
+  if (employee.status.name != "Terminated")
+    return res.status(400).send("This employee is not terminated");
+
+  const status = await EmployeeStatus.findOne({ name: "Normal" });
+  if (!status)
+    return res
+      .status(500)
+      .send("The normal employee status is missing from the server!");
+
+  employee.status = status;
+  employee.serviceInfo.endOfServiceDate = null;
+  employee.serviceInfo.endOfServiceReason = null;
+
+  await employee.save();
 
   res.status(200).send(employee);
 });
