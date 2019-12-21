@@ -14,8 +14,7 @@ const schema = new mongoose.Schema({
     required: true
   },
   startDate: {
-    type: Date,
-    required: true
+    type: Date
   },
   endDate: Date,
   actualEndDate: Date,
@@ -51,7 +50,7 @@ const Vacation = mongoose.model("Vacation", schema);
 const validate = function(vacation) {
   const schema = {
     employeeId: Joi.objectId().required(),
-    startDate: Joi.date().required(),
+    startDate: Joi.date(),
     duration: Joi.number()
       .positive()
       .required(),
