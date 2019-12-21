@@ -378,9 +378,11 @@ router.put("/:id", async (req, res) => {
   }
   //#endregion
 
+  //TODO: add all employees if none is present
   if (employees.length == 0)
     return res.status(400).send("There is no employees in this batch");
 
+  //#region caclulations
   if (type.name == "Salaries") {
     for (employee of employees) {
       const batchEmployee = {};
@@ -552,6 +554,7 @@ router.put("/:id", async (req, res) => {
 
   if (type.name == "Bonus") {
   }
+  //#endregion
 
   batch = {
     notes: req.body.notes,
@@ -563,6 +566,7 @@ router.put("/:id", async (req, res) => {
     entries: req.body.entries
   };
 
+  //TODO: Only revert entries not present in the new batch
   //#region revert previous entries
   const approvedState = await State.findOne({ name: "Approved" });
   if (!state)

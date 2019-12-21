@@ -1,8 +1,7 @@
 TODO:
 
-replace each foreach with for of
+finish batches router forn different batch types
 promotions router and model
-different type of batches
 freeze and reschedule loans
 fix winston format
 
