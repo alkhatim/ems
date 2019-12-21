@@ -206,7 +206,9 @@ router.post("/", async (req, res) => {
         req.body.total += batchEmployee.details.total;
       }
     }
-  } else if (type.name == "Vacations") {
+  }
+
+  if (type.name == "Vacations") {
     for (employee of employees) {
       const batchEmployee = {};
       batchEmployee._id = employee._id;
@@ -236,12 +238,18 @@ router.post("/", async (req, res) => {
         req.body.total += batchEmployee.details.total;
       }
     }
-  } else if (type.name == "Missions") {
-  } else if (type.name == "Social Insurance") {
+  }
+
+  if (type.name == "Missions") {
+  }
+
+  if (type.name == "Social Insurance") {
     return res
       .status(400)
       .send("The social insurance batch is automatically generated");
-  } else if (type.name == "Bonus") {
+  }
+
+  if (type.name == "Bonus") {
   }
 
   const batch = new Batch({
@@ -327,15 +335,12 @@ router.put("/:id", async (req, res) => {
   //#region declarations
   const employees = [];
   const batchEmployees = [];
-  const entries = {
-    overtimes: [],
-    deductions: [],
-    installments: []
-  };
   req.body.entries = {
     overtimes: [],
     deductions: [],
-    installments: []
+    installments: [],
+    vacations: [],
+    missions: []
   };
   req.body.total = 0;
   //#endregion
@@ -376,146 +381,177 @@ router.put("/:id", async (req, res) => {
   if (employees.length == 0)
     return res.status(400).send("There is no employees in this batch");
 
-  //#region calculate salary
-  for (employee of employees) {
-    const batchEmployee = {};
-    batchEmployee._id = employee._id;
-    batchEmployee.name = employee.name;
-    batchEmployee.details = {};
+  if (type.name == "Salaries") {
+    for (employee of employees) {
+      const batchEmployee = {};
+      batchEmployee._id = employee._id;
+      batchEmployee.name = employee.name;
+      batchEmployee.details = {};
 
-    //#region salary
-
-    const salaryRatio =
-      (30 -
+      //#region salary
+      const salaryRatio =
         (30 -
-          moment(req.body.date)
-            .toDate()
-            .getDate())) /
-      30;
+          (30 -
+            moment(req.body.date)
+              .toDate()
+              .getDate())) /
+        30;
 
-    if (
-      moment(req.body.date)
-        .toDate()
-        .getDate() == 31
-    )
-      salaryRatio = 1;
+      if (
+        moment(req.body.date)
+          .toDate()
+          .getDate() == 31
+      )
+        salaryRatio = 1;
 
-    if (!salaryRatio) return res.status(400).send("Enter a correct batch date");
+      if (!salaryRatio)
+        return res.status(400).send("Enter a correct batch date");
 
-    batchEmployee.details.basicSalary =
-      employee.salaryInfo.basicSalary * salaryRatio;
+      batchEmployee.details.basicSalary =
+        employee.salaryInfo.basicSalary * salaryRatio;
 
-    if (employee.salaryInfo.livingExpenseAllowance)
-      batchEmployee.details.livingExpenseAllowance =
-        employee.salaryInfo.livingExpenseAllowance * salaryRatio;
+      if (employee.salaryInfo.livingExpenseAllowance)
+        batchEmployee.details.livingExpenseAllowance =
+          employee.salaryInfo.livingExpenseAllowance * salaryRatio;
 
-    if (employee.salaryInfo.housingAllowance)
-      batchEmployee.details.housingAllowance =
-        employee.salaryInfo.housingAllowance * salaryRatio;
+      if (employee.salaryInfo.housingAllowance)
+        batchEmployee.details.housingAllowance =
+          employee.salaryInfo.housingAllowance * salaryRatio;
 
-    if (employee.salaryInfo.transportAllowance)
-      batchEmployee.details.transportAllowance =
-        employee.salaryInfo.transportAllowance * salaryRatio;
+      if (employee.salaryInfo.transportAllowance)
+        batchEmployee.details.transportAllowance =
+          employee.salaryInfo.transportAllowance * salaryRatio;
 
-    if (employee.salaryInfo.foodAllowance)
-      batchEmployee.details.foodAllowance =
-        employee.salaryInfo.foodAllowance * salaryRatio;
+      if (employee.salaryInfo.foodAllowance)
+        batchEmployee.details.foodAllowance =
+          employee.salaryInfo.foodAllowance * salaryRatio;
 
-    batchEmployee.details.totalSalary =
-      employee.salaryInfo.totalSalary * salaryRatio;
-    //#endregion
+      batchEmployee.details.totalSalary =
+        employee.salaryInfo.totalSalary * salaryRatio;
+      //#endregion
 
-    //#region overtimes
-    const overtimes = await Overtime.find({
-      "employee._id": employee._id,
-      date: { $lte: req.body.date },
-      "state.name": "Approved"
-    });
-    if (overtimes) {
-      batchEmployee.details.overtimes = 0;
-      overtimes.forEach(overtime => {
-        batchEmployee.details.overtimes += overtime.total;
-        entries.overtimes.push(overtime);
+      //#region overtimes
+      const overtimes = await Overtime.find({
+        "employee._id": employee._id,
+        date: { $lte: req.body.date },
+        "state.name": "Approved"
       });
-    }
-    //#endregion
-
-    //#region deductions
-    const deductions = await Deduction.find({
-      "employee._id": employee._id,
-      date: { $lte: req.body.date },
-      "state.name": "Approved"
-    });
-    if (deductions) {
-      batchEmployee.details.deductions = 0;
-      for (deduction of deductions) {
-        const permissions = await AbsencePermission.find({
-          "employee._id": employee._id
+      if (overtimes) {
+        batchEmployee.details.overtimes = 0;
+        overtimes.forEach(overtime => {
+          batchEmployee.details.overtimes += overtime.total;
+          req.body.entries.overtimes.push(overtime._id);
         });
-        const currentPermissions = permissions.filter(p =>
-          moment(deduction.date).isBetween(
-            moment(p.date),
-            moment(p.date).add(p.amount, "days"),
-            null,
-            "[]"
-          )
-        );
-        if (!currentPermissions.length) {
-          batchEmployee.details.deductions += deduction.total;
-          entries.deductions.push(deduction);
+      }
+      //#endregion
+
+      //#region deductions
+      const deductions = await Deduction.find({
+        "employee._id": employee._id,
+        date: { $lte: req.body.date },
+        "state.name": "Approved"
+      });
+      if (deductions) {
+        batchEmployee.details.deductions = 0;
+        for (deduction of deductions) {
+          const permissions = await AbsencePermission.find({
+            "employee._id": employee._id
+          });
+          const currentPermissions = permissions.filter(p =>
+            moment(deduction.date).isBetween(
+              moment(p.date),
+              moment(p.date).add(p.amount, "days"),
+              null,
+              "[]"
+            )
+          );
+          if (currentPermissions.length)
+            batchEmployee.details.deductions += deduction.total;
+          req.body.entries.deductions.push(deduction._id);
         }
       }
-    }
-    //#endregion
+      //#endregion
 
-    //#region loans
-    const loan = await Loan.findOne({
-      "employee._id": employee._id,
-      "state.name": "Approved"
-    });
-    if (loan) {
-      const installments = loan.installments.filter(
-        i =>
-          i.state.name == "Pending" &&
-          i.date <=
-            moment(req.body.date)
-              .endOf("month")
-              .toDate()
-      );
-      if (installments) {
-        batchEmployee.details.loans = 0;
-        installments.forEach(installment => {
-          batchEmployee.details.loans += installment.amount;
-          entries.installments.push(installment);
-        });
+      //#region loans
+      const loan = await Loan.findOne({
+        "employee._id": employee._id,
+        "state.name": "Approved"
+      });
+      if (loan) {
+        const installments = loan.installments.filter(
+          i =>
+            i.state.name == "Pending" &&
+            i.date <=
+              moment(req.body.date)
+                .endOf("month")
+                .toDate()
+        );
+        if (installments) {
+          batchEmployee.details.loans = 0;
+          installments.forEach(installment => {
+            batchEmployee.details.loans += installment.amount;
+            req.body.entries.installments.push(installment._id);
+          });
+        }
+      }
+      //#endregion
+
+      batchEmployee.details.total =
+        batchEmployee.details.totalSalary +
+        (batchEmployee.details.overtimes || 0) -
+        (batchEmployee.details.deductions || 0) -
+        (batchEmployee.details.loans || 0);
+
+      if (batchEmployee.details.total > 0) {
+        batchEmployees.push(batchEmployee);
+        req.body.total += batchEmployee.details.total;
       }
     }
-    //#endregion
-
-    batchEmployee.details.total =
-      batchEmployee.details.totalSalary +
-      (batchEmployee.details.overtimes || 0) -
-      (batchEmployee.details.deductions || 0) -
-      (batchEmployee.details.loans || 0);
-
-    batchEmployees.push(batchEmployee);
-    req.body.total += batchEmployee.details.total;
-  }
-  //#endregion
-
-  //#region add entries
-  for (overtime of entries.overtimes) {
-    req.body.entries.overtimes.push(overtime._id);
   }
 
-  for (deduction of entries.deductions) {
-    req.body.entries.deductions.push(deduction._id);
+  if (type.name == "Vacations") {
+    for (employee of employees) {
+      const batchEmployee = {};
+      batchEmployee._id = employee._id;
+      batchEmployee.name = employee.name;
+      batchEmployee.details = {};
+
+      const vacations = await Vacation.find({
+        "employee._id": employee._id,
+        "type.name": "Purchase",
+        "state.name": "Approved"
+      });
+      if (vacations) {
+        batchEmployee.details.vacations = 0;
+        batchEmployee.totalSalary = await Employee.findById(
+          employee._id
+        ).select("salaryInfo").salaryInfo.totalSalary;
+        for (vacation of vacations) {
+          batchEmployee.details.vacations +=
+            (vacation.duration * batchEmployee.totalSalary) / 30;
+          req.body.entries.vacations.push(vacation._id);
+        }
+      }
+      batchEmployee.details.total = batchEmployee.details.vacations;
+
+      if (batchEmployee.details.total > 0) {
+        batchEmployees.push(batchEmployee);
+        req.body.total += batchEmployee.details.total;
+      }
+    }
   }
 
-  for (installment of entries.installments) {
-    req.body.entries.installments.push(installment._id);
+  if (type.name == "Missions") {
   }
-  //#endregion
+
+  if (type.name == "Social Insurance") {
+    return res
+      .status(400)
+      .send("The social insurance batch is automatically generated");
+  }
+
+  if (type.name == "Bonus") {
+  }
 
   batch = {
     notes: req.body.notes,
@@ -529,6 +565,20 @@ router.put("/:id", async (req, res) => {
 
   //#region revert previous entries
   const approvedState = await State.findOne({ name: "Approved" });
+  if (!state)
+    return res
+      .status(500)
+      .send("The approved state is missing from the server!");
+
+  const vacationApprovedState = await VacationState.findOne({
+    name: "Approved"
+  });
+  if (!state)
+    return res
+      .status(500)
+      .send("The approved state is missing from the server!");
+
+  const missionApprovedState = await MissionState.findOne({ name: "Closed" });
   if (!state)
     return res
       .status(500)
@@ -555,6 +605,18 @@ router.put("/:id", async (req, res) => {
     loan.installments.id(installment._id).state = installmentPendingState;
     await loan.save();
   }
+
+  for (vacation of req.body.entries.vacations) {
+    await Vacation.findByIdAndUpdate(vacation._id, {
+      state: vacationApprovedState
+    });
+  }
+
+  for (mission of req.body.entries.missions) {
+    await Mission.findByIdAndUpdate(mission._id, {
+      state: missionApprovedState
+    });
+  }
   //#endregion
 
   batch = await Batch.findByIdAndUpdate(req.params.id, batch, { new: true });
@@ -566,26 +628,44 @@ router.put("/:id", async (req, res) => {
   if (!state)
     return res.status(500).send("The closed state is missing from the server!");
 
+  const vacationClosedState = await VacationState.findOne({ name: "Closed" });
+  if (!state)
+    return res.status(500).send("The closed state is missing from the server!");
+
+  const missionClosedState = await MissionState.findOne({ name: "Closed" });
+  if (!state)
+    return res.status(500).send("The closed state is missing from the server!");
+
   const installmentClosedState = await InstallmentState.findOne({
     name: "Closed"
   });
   if (!state)
-    return res
-      .status(500)
-      .send("The closed loans state is missing from the server!");
+    return res.status(500).send("The closed state is missing from the server!");
 
-  for (overtime of entries.overtimes) {
+  for (overtime of req.body.entries.overtimes) {
     await Overtime.findByIdAndUpdate(overtime._id, { state: closedState });
   }
 
-  for (deduction of entries.deductions) {
+  for (deduction of req.body.entries.deductions) {
     await Deduction.findByIdAndUpdate(deduction._id, { state: closedState });
   }
 
-  for (installment of entries.installments) {
+  for (installment of req.body.entries.installments) {
     const loan = await Loan.findOne({ "installments._id": installment._id });
     loan.installments.id(installment._id).state = installmentClosedState;
     await loan.save();
+  }
+
+  for (vacation of req.body.entries.vacations) {
+    await Vacation.findByIdAndUpdate(vacation._id, {
+      state: vacationApprovedState
+    });
+  }
+
+  for (mission of req.body.entries.missions) {
+    await Mission.findByIdAndUpdate(mission._id, {
+      state: missionApprovedState
+    });
   }
   //#endregion
 });
