@@ -40,9 +40,13 @@ const schema = new mongoose.Schema({
             livingExpenseAllowance: Number,
             foodAllowance: Number,
             totalSalary: Number,
-            loan: Number,
+            socialInsurance: Number,
+            vat: Number,
             overtimes: Number,
             deductions: Number,
+            loans: Number,
+            vacations: Number,
+            missions: Number,
             total: Number
           },
           required: true
@@ -55,7 +59,9 @@ const schema = new mongoose.Schema({
     type: {
       overtimes: [mongoose.Schema.Types.ObjectId],
       deductions: [mongoose.Schema.Types.ObjectId],
-      installments: [mongoose.Schema.Types.ObjectId]
+      installments: [mongoose.Schema.Types.ObjectId],
+      vacations: [mongoose.Schema.Types.ObjectId],
+      missions: [mongoose.Schema.Types.ObjectId]
     },
     required: true
   }

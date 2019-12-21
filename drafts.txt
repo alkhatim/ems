@@ -1,5 +1,6 @@
 TODO:
 
+replace each foreach with for of
 promotions router and model
 different type of batches
 freeze and reschedule loans
