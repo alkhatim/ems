@@ -3,6 +3,7 @@ const router = express.Router();
 const _ = require("lodash");
 const { Employee, validate } = require("../models/Employee");
 const { EmployeeStatus } = require("../models/EmployeeStatus");
+const { TerminatedEmployee } = require("../models/TerminatedEmployee");
 const { Gender } = require("../models/Gender");
 const { Nationality } = require("../models/Nationality");
 const { Contract } = require("../models/Contract");
@@ -261,15 +262,17 @@ router.post("/terminate/:id", async (req, res) => {
   employee.serviceInfo.endOfServiceDate = req.body.endOfServiceDate;
   employee.serviceInfo.endOfServiceReason = req.body.endOfServiceReason;
 
-  await employee.save();
+  const terminatedEmployee = new TerminatedEmployee(employee);
+  terminatedEmployee.isNew = true;
+  await terminatedEmployee.save();
+
+  employee.remove();
 
   res.status(200).send(employee);
 });
 
 router.post("/unterminate/:id", async (req, res) => {
-  const employee = await Employee.findById(req.params.id);
-  if (employee.status.name != "Terminated")
-    return res.status(400).send("This employee is not terminated");
+  const terminatedEmployee = await TerminatedEmployee.findById(req.params.id);
 
   const status = await EmployeeStatus.findOne({ name: "Normal" });
   if (!status)
@@ -277,13 +280,17 @@ router.post("/unterminate/:id", async (req, res) => {
       .status(500)
       .send("The normal employee status is missing from the server!");
 
-  employee.status = status;
-  employee.serviceInfo.endOfServiceDate = null;
-  employee.serviceInfo.endOfServiceReason = null;
+  terminatedEmployee.status = status;
+  terminatedEmployee.serviceInfo.endOfServiceDate = null;
+  terminatedEmployee.serviceInfo.endOfServiceReason = null;
 
+  const employee = new Employee(terminatedEmployee);
+  employee.isNew = true;
   await employee.save();
 
-  res.status(200).send(employee);
+  terminatedEmployee.remove();
+
+  res.status(200).send(terminatedEmployee);
 });
 
 module.exports = router;
