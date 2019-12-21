@@ -563,7 +563,7 @@ router.get("/:id", validateObjectId, async (req, res) => {
 });
 
 router.delete("/:id", validateObjectId, async (req, res) => {
-  const batch = await Batch.findById(req.params.id);
+  const batch = await Batch.findById(req.params.id).select("state");
   if (!batch)
     return res.status(404).send("There is no batch with the given ID");
 

@@ -233,7 +233,7 @@ router.delete("/:id", validateObjectId, async (req, res) => {
     await Loan.findOne({
       "employee._id": req.params.id,
       "installments.state.name": "Pending"
-    })
+    }).select("_id")
   )
     return res
       .status(400)

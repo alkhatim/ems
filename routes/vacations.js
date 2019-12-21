@@ -225,7 +225,7 @@ router.put("/:id", validateObjectId, async (req, res) => {
 });
 
 router.delete("/:id", validateObjectId, async (req, res) => {
-  const vacation = await Vacation.findById(req.params.id);
+  const vacation = await Vacation.findById(req.params.id).select("state");
   if (!vacation)
     return res.status(404).send("There is no vacation with the given ID");
 

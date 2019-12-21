@@ -255,7 +255,7 @@ router.put("/:id", validateObjectId, async (req, res) => {
 });
 
 router.delete("/:id", validateObjectId, async (req, res) => {
-  const loan = await Loan.findById(req.params.id);
+  const loan = await Loan.findById(req.params.id).select("installments");
 
   if (loan.installments.filter(i => i.state.name != "Pending") == true)
     return res

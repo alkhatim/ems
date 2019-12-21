@@ -12,6 +12,5 @@ promotions router and model
 different type of batches
 freeze and reschedule loans
 add integer() in joi validation
-only select "state" when querying documents for delete methods
 fix winston format
 

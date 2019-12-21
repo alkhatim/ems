@@ -81,7 +81,9 @@ router.put("/:id", async (req, res) => {
 });
 
 router.delete("/:id", async (req, res) => {
-  const absencePermission = await AbsencePermission.findById(req.params.id);
+  const absencePermission = await AbsencePermission.findById(
+    req.params.id
+  ).select("state");
   if (!absencePermission)
     return res
       .status(404)

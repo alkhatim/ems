@@ -124,7 +124,7 @@ router.put("/:id", async (req, res) => {
 });
 
 router.delete("/:id", validateObjectId, async (req, res) => {
-  const overtime = await Overtime.findById(req.params.id);
+  const overtime = await Overtime.findById(req.params.id).select("state");
   if (!overtime)
     return res.status(404).send("There is no overtime with the given ID");
 

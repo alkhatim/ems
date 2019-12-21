@@ -114,7 +114,7 @@ router.put("/:id", validateObjectId, async (req, res) => {
 });
 
 router.delete("/:id", validateObjectId, async (req, res) => {
-  const mission = await Mission.findById(req.params.id);
+  const mission = await Mission.findById(req.params.id.select("state"));
   if (!mission)
     return res.status(404).send("There is no mission with the given ID");
 
