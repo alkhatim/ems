@@ -144,7 +144,9 @@ const validate = function(employee) {
       .max(13)
       .required(),
     email: Joi.string().email(),
-    bankAccount: Joi.number(),
+    bankAccount: Joi.number()
+      .integer()
+      .positive(),
     jobId: Joi.objectId().required(),
     contractId: Joi.objectId().required(),
     departmentId: Joi.objectId().required(),
@@ -159,12 +161,21 @@ const validate = function(employee) {
     transportAllowance: Joi.number().positive(),
     foodAllowance: Joi.number().positive(),
     registered: Joi.boolean(),
-    socialInsuranceNumber: Joi.number(),
+    socialInsuranceNumber: Joi.number()
+      .integer()
+      .positive(),
     socialInsuranceSalary: Joi.number().positive(),
     endOfServiceDate: Joi.date(),
     endOfServiceReason: Joi.string(),
-    vacationDays: Joi.number().positive(),
-    vacationSchedule: Joi.array().items(Joi.date())
+    vacationDays: Joi.number()
+      .positive()
+      .integer(),
+    vacationSchedule: Joi.array().items(
+      Joi.number()
+        .integer()
+        .min(1)
+        .max(12)
+    )
   };
 
   return Joi.validate(employee, schema);

@@ -17,6 +17,10 @@ const schema = new mongoose.Schema({
     type: Date,
     required: true
   },
+  type: {
+    type: typeSchema,
+    required: true
+  },
   state: {
     type: stateSchema,
     required: true
@@ -39,8 +43,11 @@ const validate = function(absencePermission) {
     employeeId: Joi.objectId().required(),
     date: Joi.date().required(),
     stateId: Joi.objectId(),
+    typeId: Joi.objectId().required(),
     amount: Joi.number()
       .min(0)
+      .positive()
+      .integer()
       .required(),
     notes: Joi.string()
   };

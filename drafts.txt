@@ -1,16 +1,13 @@
-Jobs:
-
-start of year => calculate new vacation credits
-start of day => change vacation states and employee status
-
-----------------------------------
-
 TODO:
 
-seperate terminated employees in another table
 promotions router and model
 different type of batches
 freeze and reschedule loans
-add integer() in joi validation
 fix winston format
 
+----------------------------------
+
+Jobs:
+
+start of year => calculate new vacation credits
+start of day => change vacation states, mission states and employee status

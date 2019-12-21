@@ -3,6 +3,7 @@ const router = express.Router();
 const { AbsencePermission, validate } = require("../models/AbsencePermission");
 const { Employee } = require("../models/Employee");
 const { State } = require("../models/State");
+const { DeductionType: Type } = require("../models/DeductionType");
 const validateObjectId = require("../middleware/validateObjectId");
 
 router.post("/", async (req, res) => {
@@ -15,6 +16,9 @@ router.post("/", async (req, res) => {
   if (!employee)
     return res.status(404).send("There is no employee with the given ID");
 
+  const type = await Type.findById(req.body.typeId);
+  if (!type) return res.status(400).send("There is no type with the given ID");
+
   const state = await State.findOne({ name: "New" });
   if (!state)
     return res
@@ -24,6 +28,7 @@ router.post("/", async (req, res) => {
   const absencePermission = new AbsencePermission({
     employee,
     date: req.body.date,
+    type,
     state,
     amount: req.body.amount,
     notes: req.body.notes
@@ -63,9 +68,13 @@ router.put("/:id", async (req, res) => {
   if (!employee)
     return res.status(404).send("There is no employee with the given ID");
 
+  const type = await Type.findById(req.body.typeId);
+  if (!type) return res.status(400).send("There is no type with the given ID");
+
   absencePermission = {
     employee,
     date: req.body.date,
+    type,
     state: absencePermission.state,
     amount: req.body.amount,
     notes: req.body.notes

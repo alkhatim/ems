@@ -52,6 +52,7 @@ const validate = function(deduction) {
     typeId: Joi.objectId().required(),
     amount: Joi.number()
       .positive()
+      .integer()
       .required()
   };
 

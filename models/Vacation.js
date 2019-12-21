@@ -52,6 +52,7 @@ const validate = function(vacation) {
     employeeId: Joi.objectId().required(),
     startDate: Joi.date(),
     duration: Joi.number()
+      .integer()
       .positive()
       .required(),
     notes: Joi.string(),

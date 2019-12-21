@@ -65,7 +65,6 @@ const validate = function(mission) {
   const schema = {
     destination: Joi.string()
       .min(3)
-      .max(30)
       .required(),
     notes: Joi.string().required(),
     startDate: Joi.date().required(),
