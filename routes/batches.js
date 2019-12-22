@@ -154,17 +154,20 @@ router.post("/", async (req, res) => {
         batchEmployee.details.deductions = 0;
         for (deduction of deductions) {
           const permissions = await AbsencePermission.find({
-            "employee._id": employee._id
+            "employee._id": employee._id,
+            "type._id": deduction.type._id,
+            "state.name": "Approved"
           });
-          const currentPermissions = permissions.filter(p =>
-            moment(deduction.date).isBetween(
-              moment(p.date),
-              moment(p.date).add(p.amount, "days"),
-              null,
-              "[]"
-            )
+          const currentPermission = permissions.filter(
+            p =>
+              moment(deduction.date).isBetween(
+                moment(p.date),
+                moment(p.date).add(p.amount, "days"),
+                null,
+                "[]"
+              ) && deduction.amount <= p.amount
           );
-          if (currentPermissions.length)
+          if (!currentPermission.length)
             batchEmployee.details.deductions += deduction.total;
           req.body.entries.deductions.push(deduction._id);
         }
@@ -513,17 +516,20 @@ router.put("/:id", async (req, res) => {
         batchEmployee.details.deductions = 0;
         for (deduction of deductions) {
           const permissions = await AbsencePermission.find({
-            "employee._id": employee._id
+            "employee._id": employee._id,
+            "type._id": deduction.type._id,
+            "state.name": "Approved"
           });
-          const currentPermissions = permissions.filter(p =>
-            moment(deduction.date).isBetween(
-              moment(p.date),
-              moment(p.date).add(p.amount, "days"),
-              null,
-              "[]"
-            )
+          const currentPermission = permissions.filter(
+            p =>
+              moment(deduction.date).isBetween(
+                moment(p.date),
+                moment(p.date).add(p.amount, "days"),
+                null,
+                "[]"
+              ) && deduction.amount <= p.amount
           );
-          if (currentPermissions.length)
+          if (!currentPermission.length)
             batchEmployee.details.deductions += deduction.total;
           req.body.entries.deductions.push(deduction._id);
         }

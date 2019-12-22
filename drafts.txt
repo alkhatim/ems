@@ -1,9 +1,11 @@
 TODO:
 
+finish abscence permissions logic in batches router
+finish batch types in batches router
 rename paid to closed in installments and batches and db
-finish batches router forn different batch types
-promotions router and model
 freeze and reschedule loans
+promotions router and model
+add authorization for routes
 fix winston format
 
 ----------------------------------
