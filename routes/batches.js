@@ -264,8 +264,6 @@ router.post("/", async (req, res) => {
 
   await batch.save();
 
-  return res.status(201).send(batch);
-
   //#region close entries
   const closedState = await State.findOne({ name: "Closed" });
   if (!state)
@@ -279,8 +277,8 @@ router.post("/", async (req, res) => {
   if (!state)
     return res.status(500).send("The closed state is missing from the server!");
 
-  const installmentClosedState = await InstallmentState.findOne({
-    name: "Closed"
+  const installmentPaidState = await InstallmentState.findOne({
+    name: "Paid"
   });
   if (!state)
     return res.status(500).send("The closed state is missing from the server!");
@@ -295,7 +293,7 @@ router.post("/", async (req, res) => {
 
   for (installment of req.body.entries.installments) {
     const loan = await Loan.findOne({ "installments._id": installment._id });
-    loan.installments.id(installment._id).state = installmentClosedState;
+    loan.installments.id(installment._id).state = installmentPaidState;
     await loan.save();
   }
 
@@ -309,6 +307,8 @@ router.post("/", async (req, res) => {
     await Mission.findByIdAndUpdate(mission._id, { state: missionClosedState });
   }
   //#endregion
+
+  return res.status(201).send(batch);
 });
 
 router.put("/:id", async (req, res) => {
@@ -381,6 +381,62 @@ router.put("/:id", async (req, res) => {
   //TODO: add all employees if none is present
   if (employees.length == 0)
     return res.status(400).send("There is no employees in this batch");
+
+  //#region revert previous entries
+  const approvedState = await State.findOne({ name: "Approved" });
+  if (!approvedState)
+    return res
+      .status(500)
+      .send("The approved state is missing from the server!");
+
+  const vacationApprovedState = await VacationState.findOne({
+    name: "Approved"
+  });
+  if (!vacationApprovedState)
+    return res
+      .status(500)
+      .send("The approved state is missing from the server!");
+
+  const missionApprovedState = await MissionState.findOne({ name: "Closed" });
+  if (!missionApprovedState)
+    return res
+      .status(500)
+      .send("The approved state is missing from the server!");
+
+  const installmentPendingState = await InstallmentState.findOne({
+    name: "Pending"
+  });
+  if (!installmentPendingState)
+    return res
+      .status(500)
+      .send("The pending loans installment state is missing from the server!");
+
+  for (overtime of batch.entries.overtimes) {
+    await Overtime.findByIdAndUpdate(overtime._id, { state: approvedState });
+  }
+
+  for (deduction of batch.entries.deductions) {
+    await Deduction.findByIdAndUpdate(deduction._id, { state: approvedState });
+  }
+
+  for (installment of batch.entries.installments) {
+    const loan = await Loan.findOne({ "installments._id": installment._id });
+    loan.installments.id(installment._id).state = installmentPendingState;
+    await loan.save();
+  }
+
+  for (vacation of req.body.entries.vacations) {
+    await Vacation.findByIdAndUpdate(vacation._id, {
+      state: vacationApprovedState
+    });
+  }
+
+  for (mission of req.body.entries.missions) {
+    await Mission.findByIdAndUpdate(mission._id, {
+      state: missionApprovedState
+    });
+  }
+  //#endregion
 
   //#region caclulations
   if (type.name == "Salaries") {
@@ -566,66 +622,7 @@ router.put("/:id", async (req, res) => {
     entries: req.body.entries
   };
 
-  //TODO: Only revert entries not present in the new batch
-  //#region revert previous entries
-  const approvedState = await State.findOne({ name: "Approved" });
-  if (!state)
-    return res
-      .status(500)
-      .send("The approved state is missing from the server!");
-
-  const vacationApprovedState = await VacationState.findOne({
-    name: "Approved"
-  });
-  if (!state)
-    return res
-      .status(500)
-      .send("The approved state is missing from the server!");
-
-  const missionApprovedState = await MissionState.findOne({ name: "Closed" });
-  if (!state)
-    return res
-      .status(500)
-      .send("The approved state is missing from the server!");
-
-  const installmentPendingState = await InstallmentState.findOne({
-    name: "Pending"
-  });
-  if (!state)
-    return res
-      .status(500)
-      .send("The pending loans installment state is missing from the server!");
-
-  for (overtime of batch.entries.overtimes) {
-    await Overtime.findByIdAndUpdate(overtime._id, { state: approvedState });
-  }
-
-  for (deduction of batch.entries.deductions) {
-    await Deduction.findByIdAndUpdate(deduction._id, { state: approvedState });
-  }
-
-  for (installment of batch.entries.installments) {
-    const loan = await Loan.findOne({ "installments._id": installment._id });
-    loan.installments.id(installment._id).state = installmentPendingState;
-    await loan.save();
-  }
-
-  for (vacation of req.body.entries.vacations) {
-    await Vacation.findByIdAndUpdate(vacation._id, {
-      state: vacationApprovedState
-    });
-  }
-
-  for (mission of req.body.entries.missions) {
-    await Mission.findByIdAndUpdate(mission._id, {
-      state: missionApprovedState
-    });
-  }
-  //#endregion
-
   batch = await Batch.findByIdAndUpdate(req.params.id, batch, { new: true });
-
-  return res.status(200).send(batch);
 
   //#region close entries
   const closedState = await State.findOne({ name: "Closed" });
@@ -640,8 +637,8 @@ router.put("/:id", async (req, res) => {
   if (!state)
     return res.status(500).send("The closed state is missing from the server!");
 
-  const installmentClosedState = await InstallmentState.findOne({
-    name: "Closed"
+  const installmentPaidState = await InstallmentState.findOne({
+    name: "Paid"
   });
   if (!state)
     return res.status(500).send("The closed state is missing from the server!");
@@ -656,22 +653,22 @@ router.put("/:id", async (req, res) => {
 
   for (installment of req.body.entries.installments) {
     const loan = await Loan.findOne({ "installments._id": installment._id });
-    loan.installments.id(installment._id).state = installmentClosedState;
+    loan.installments.id(installment._id).state = installmentPaidState;
     await loan.save();
   }
 
   for (vacation of req.body.entries.vacations) {
     await Vacation.findByIdAndUpdate(vacation._id, {
-      state: vacationApprovedState
+      state: vacationClosedState
     });
   }
 
   for (mission of req.body.entries.missions) {
-    await Mission.findByIdAndUpdate(mission._id, {
-      state: missionApprovedState
-    });
+    await Mission.findByIdAndUpdate(mission._id, { state: missionClosedState });
   }
   //#endregion
+
+  return res.status(200).send(batch);
 });
 
 router.get("/", async (req, res) => {
@@ -688,7 +685,7 @@ router.get("/:id", validateObjectId, async (req, res) => {
 });
 
 router.delete("/:id", validateObjectId, async (req, res) => {
-  const batch = await Batch.findById(req.params.id).select("state");
+  const batch = await Batch.findById(req.params.id);
   if (!batch)
     return res.status(404).send("There is no batch with the given ID");
 
@@ -697,11 +694,9 @@ router.delete("/:id", validateObjectId, async (req, res) => {
       .status(400)
       .send("You can't delete a closed or an approved batch");
 
-  await Batch.findByIdAndDelete(req.params.id);
-
   //#region revert entries
   const approvedState = await State.findOne({ name: "Approved" });
-  if (!state)
+  if (!approvedState)
     return res
       .status(500)
       .send("The approved state is missing from the server!");
@@ -709,7 +704,7 @@ router.delete("/:id", validateObjectId, async (req, res) => {
   const installmentPendingState = await InstallmentState.findOne({
     name: "Pending"
   });
-  if (!state)
+  if (!installmentPendingState)
     return res
       .status(500)
       .send("The pending loans installment state is missing from the server!");
@@ -728,6 +723,8 @@ router.delete("/:id", validateObjectId, async (req, res) => {
     await loan.save();
   }
   //#endregion
+
+  await Batch.findByIdAndDelete(req.params.id);
 
   res.status(200).send(batch);
 });

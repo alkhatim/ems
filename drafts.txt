@@ -1,5 +1,6 @@
 TODO:
 
+rename paid to closed in installments and batches and db
 finish batches router forn different batch types
 promotions router and model
 freeze and reschedule loans
