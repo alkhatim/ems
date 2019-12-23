@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const moment = require("moment");
 const ObjectId = require("mongoose").Types.ObjectId;
+const moment = require("moment");
+const _ = require("lodash");
 const { Batch, validate } = require("../models/Batch");
 const { Employee } = require("../models/Employee");
 const { BatchType } = require("../models/BatchType");
@@ -241,15 +242,41 @@ router.post("/", async (req, res) => {
   }
 
   if (type.name == "Missions") {
+    for (employee of employees) {
+      const batchEmployee = {};
+      batchEmployee._id = employee._id;
+      batchEmployee.name = employee.name;
+      batchEmployee.details = {};
+
+      const missions = await Mission.find({
+        "employees._id": employee._id,
+        "state.name": "Finished"
+      });
+      if (missions) {
+        batchEmployee.details.missions = 0;
+        for (mission of missions) {
+          const missionEmployee = _.find(mission.employees, {
+            _id: employee._id
+          });
+          batchEmployee.details.missions +=
+            missionEmployee.allowance *
+            moment(mission.actualEndDate).diff(moment(mission.startDate), "d");
+          req.body.entries.missions.push(mission._id);
+        }
+      }
+      batchEmployee.details.total = batchEmployee.details.missions;
+
+      if (batchEmployee.details.total > 0) {
+        batchEmployees.push(batchEmployee);
+        req.body.total += batchEmployee.details.total;
+      }
+    }
   }
 
   if (type.name == "Social Insurance") {
     return res
       .status(400)
       .send("The social insurance batch is automatically generated");
-  }
-
-  if (type.name == "Bonus") {
   }
 
   const batch = new Batch({
@@ -402,11 +429,11 @@ router.put("/:id", async (req, res) => {
       .status(500)
       .send("The approved vacations state is missing from the server!");
 
-  const missionApprovedState = await MissionState.findOne({ name: "Closed" });
-  if (!missionApprovedState)
+  const missionFinishedState = await MissionState.findOne({ name: "Finished" });
+  if (!missionFinishedState)
     return res
       .status(500)
-      .send("The approved state is missing from the server!");
+      .send("The finished mission state is missing from the server!");
 
   const installmentPendingState = await InstallmentState.findOne({
     name: "Pending"
@@ -424,7 +451,7 @@ router.put("/:id", async (req, res) => {
     await Deduction.findByIdAndUpdate(deduction._id, { state: approvedState });
   }
 
-  for (vacation of req.body.entries.vacations) {
+  for (vacation of batch.entries.vacations) {
     await Vacation.findByIdAndUpdate(vacation._id, {
       state: vacationApprovedState
     });
@@ -436,9 +463,9 @@ router.put("/:id", async (req, res) => {
     await loan.save();
   }
 
-  for (mission of req.body.entries.missions) {
+  for (mission of batch.entries.missions) {
     await Mission.findByIdAndUpdate(mission._id, {
-      state: missionApprovedState
+      state: missionFinishedState
     });
   }
   //#endregion
@@ -605,15 +632,41 @@ router.put("/:id", async (req, res) => {
   }
 
   if (type.name == "Missions") {
+    for (employee of employees) {
+      const batchEmployee = {};
+      batchEmployee._id = employee._id;
+      batchEmployee.name = employee.name;
+      batchEmployee.details = {};
+
+      const missions = await Mission.find({
+        "employees._id": employee._id,
+        "state.name": "Finished"
+      });
+      if (missions) {
+        batchEmployee.details.missions = 0;
+        for (mission of missions) {
+          const missionEmployee = _.find(mission.employees, {
+            _id: employee._id
+          });
+          batchEmployee.details.missions +=
+            missionEmployee.allowance *
+            moment(mission.actualEndDate).diff(moment(mission.startDate), "d");
+          req.body.entries.missions.push(mission._id);
+        }
+      }
+      batchEmployee.details.total = batchEmployee.details.missions;
+
+      if (batchEmployee.details.total > 0) {
+        batchEmployees.push(batchEmployee);
+        req.body.total += batchEmployee.details.total;
+      }
+    }
   }
 
   if (type.name == "Social Insurance") {
     return res
       .status(400)
       .send("The social insurance batch is automatically generated");
-  }
-
-  if (type.name == "Bonus") {
   }
   //#endregion
 
@@ -716,10 +769,16 @@ router.delete("/:id", validateObjectId, async (req, res) => {
   const vacationApprovedState = await VacationState.findOne({
     name: "Approved"
   });
-  if (!approvedState)
+  if (!vacationApprovedState)
     return res
       .status(500)
       .send("The approved vacations state is missing from the server!");
+
+  const missionFinishedState = await MissionState.findOne({ name: "Finished" });
+  if (!missionFinishedState)
+    return res
+      .status(500)
+      .send("The finished mission state is missing from the server!");
 
   const installmentPendingState = await InstallmentState.findOne({
     name: "Pending"
@@ -747,6 +806,12 @@ router.delete("/:id", validateObjectId, async (req, res) => {
     const loan = await Loan.findOne({ "installments._id": installment._id });
     loan.installments.id(installment._id).state = installmentPendingState;
     await loan.save();
+  }
+
+  for (mission of batch.entries.missions) {
+    await Mission.findByIdAndUpdate(mission._id, {
+      state: missionFinishedState
+    });
   }
   //#endregion
 
