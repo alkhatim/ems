@@ -172,6 +172,8 @@ router.post("/finish/:id", async (req, res) => {
   if (mission.state.name != "Approved")
     return res.status(400).send("You can only finish apporved missions");
 
+  if (req.body.actualEndDate < mission.startDate) return res.status(400).send("The end date can't be before the start date");
+
   const state = await MissionState.findOne({ name: "Finished" });
   if (!state)
     return res
