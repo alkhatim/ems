@@ -32,10 +32,10 @@ router.post("/", async (req, res) => {
     case "Late":
       req.body.total =
         req.body.amount *
-        (employee.salaryInfo.basicSalary / (30 * config.get("dailyHours")));
+        (employee.salaryInfo.totalSalary / (30 * config.get("dailyHours")));
       break;
     case "Absence":
-      req.body.total = req.body.amount * (employee.salaryInfo.basicSalary / 30);
+      req.body.total = req.body.amount * (employee.salaryInfo.totalSalary / 30);
       break;
   }
 
@@ -91,10 +91,10 @@ router.put("/:id", async (req, res) => {
     case "Late":
       req.body.total =
         req.body.amount *
-        (employee.salaryInfo.basicSalary / (30 * config.get("dailyHours")));
+        (employee.salaryInfo.totalSalary / (30 * config.get("dailyHours")));
       break;
     case "Absence":
-      req.body.total = req.body.amount * (employee.salaryInfo.basicSalary / 30);
+      req.body.total = req.body.amount * (employee.salaryInfo.totalSalary / 30);
       break;
   }
 
