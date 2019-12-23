@@ -225,12 +225,9 @@ router.post("/", async (req, res) => {
       });
       if (vacations) {
         batchEmployee.details.vacations = 0;
-        batchEmployee.totalSalary = await Employee.findById(
-          employee._id
-        ).select("salaryInfo").salaryInfo.totalSalary;
         for (vacation of vacations) {
           batchEmployee.details.vacations +=
-            (vacation.duration * batchEmployee.totalSalary) / 30;
+            (vacation.duration * employee.salaryInfo.totalSalary) / 30;
           req.body.entries.vacations.push(vacation._id);
         }
       }
@@ -398,7 +395,7 @@ router.put("/:id", async (req, res) => {
   if (!vacationApprovedState)
     return res
       .status(500)
-      .send("The approved state is missing from the server!");
+      .send("The approved vacations state is missing from the server!");
 
   const missionApprovedState = await MissionState.findOne({ name: "Closed" });
   if (!missionApprovedState)
@@ -587,12 +584,9 @@ router.put("/:id", async (req, res) => {
       });
       if (vacations) {
         batchEmployee.details.vacations = 0;
-        batchEmployee.totalSalary = await Employee.findById(
-          employee._id
-        ).select("salaryInfo").salaryInfo.totalSalary;
         for (vacation of vacations) {
           batchEmployee.details.vacations +=
-            (vacation.duration * batchEmployee.totalSalary) / 30;
+            (vacation.duration * employee.salaryInfo.totalSalary) / 30;
           req.body.entries.vacations.push(vacation._id);
         }
       }
@@ -707,6 +701,14 @@ router.delete("/:id", validateObjectId, async (req, res) => {
       .status(500)
       .send("The approved state is missing from the server!");
 
+  const vacationApprovedState = await VacationState.findOne({
+    name: "Approved"
+  });
+  if (!approvedState)
+    return res
+      .status(500)
+      .send("The approved vacations state is missing from the server!");
+
   const installmentPendingState = await InstallmentState.findOne({
     name: "Pending"
   });
@@ -721,6 +723,12 @@ router.delete("/:id", validateObjectId, async (req, res) => {
 
   for (deduction of batch.entries.deductions) {
     await Deduction.findByIdAndUpdate(deduction._id, { state: approvedState });
+  }
+
+  for (vacation of batch.entries.vacations) {
+    await Vacation.findByIdAndUpdate(vacation._id, {
+      state: vacationApprovedState
+    });
   }
 
   for (installment of batch.entries.installments) {
