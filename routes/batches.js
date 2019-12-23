@@ -262,6 +262,11 @@ router.post("/", async (req, res) => {
     entries: req.body.entries
   });
 
+  if (batch.total == 0)
+    return res
+      .status(400)
+      .send("The batch contains no paid amount and thus can't be generated");
+
   await batch.save();
 
   //#region close entries
@@ -419,16 +424,16 @@ router.put("/:id", async (req, res) => {
     await Deduction.findByIdAndUpdate(deduction._id, { state: approvedState });
   }
 
-  for (installment of batch.entries.installments) {
-    const loan = await Loan.findOne({ "installments._id": installment._id });
-    loan.installments.id(installment._id).state = installmentPendingState;
-    await loan.save();
-  }
-
   for (vacation of req.body.entries.vacations) {
     await Vacation.findByIdAndUpdate(vacation._id, {
       state: vacationApprovedState
     });
+  }
+
+  for (installment of batch.entries.installments) {
+    const loan = await Loan.findOne({ "installments._id": installment._id });
+    loan.installments.id(installment._id).state = installmentPendingState;
+    await loan.save();
   }
 
   for (mission of req.body.entries.missions) {
@@ -621,6 +626,13 @@ router.put("/:id", async (req, res) => {
     employees: batchEmployees,
     entries: req.body.entries
   };
+
+  if (batch.total == 0) {
+    await Batch.findByIdAndDelete(batch._id);
+    return res
+      .status(400)
+      .send("The batch contains no paid amount and thus deleted");
+  }
 
   batch = await Batch.findByIdAndUpdate(req.params.id, batch, { new: true });
 
