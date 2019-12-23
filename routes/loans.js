@@ -124,19 +124,19 @@ router.put("/:id", validateObjectId, async (req, res) => {
 
   const installmentState = await InstallmentState.findOne({ name: "Pending" });
 
-  const paidInstallments = loan.installments.filter(
+  const closedInstallments = loan.installments.filter(
     i => i.state.name == "Closed"
   );
 
-  if (paidInstallments.length) {
-    req.body.installments = paidInstallments;
+  if (closedInstallments.length) {
+    req.body.installments = closedInstallments;
 
-    const totalPaid = paidInstallments.reduce(
+    const totalPaid = closedInstallments.reduce(
       (total, installment) => total + installment.amount,
       0
     );
     const remaining = req.body.amount - totalPaid;
-    const lastDate = paidInstallments[paidInstallments.length - 1].date;
+    const lastDate = closedInstallments[closedInstallments.length - 1].date;
 
     if (remaining < 0)
       return res
@@ -295,7 +295,7 @@ router.post("/revert/:id", async (req, res) => {
   let loan = await Loan.findById(req.params.id);
   if (loan.state.name != "Approved")
     return res.status(400).send("You can only revert approved loans");
-  if (loan.installments.find(i => i.state.name == "Paid"))
+  if (loan.installments.find(i => i.state.name == "Closed"))
     return res
       .status(400)
       .send("You can't revert a loan with a paid installment");
@@ -338,11 +338,11 @@ router.post("/installments/pay/:id", validateObjectId, async (req, res) => {
   const installment = loan.installments.find(i => i._id == req.params.id);
   const index = loan.installments.findIndex(i => i._id == req.params.id);
 
-  const state = await InstallmentState.findOne({ name: "Paid" });
+  const state = await InstallmentState.findOne({ name: "Closed" });
   if (!state)
     return res
       .status(500)
-      .send("The paid installment state is missing from the server!");
+      .send("The closed installment state is missing from the server!");
 
   installment.state = state;
 

@@ -292,7 +292,7 @@ router.post("/", async (req, res) => {
   if (batch.total == 0)
     return res
       .status(400)
-      .send("The batch contains no paid amount and thus can't be generated");
+      .send("The batch contains no amount and thus can't be generated");
 
   await batch.save();
 
@@ -309,8 +309,8 @@ router.post("/", async (req, res) => {
   if (!state)
     return res.status(500).send("The closed state is missing from the server!");
 
-  const installmentPaidState = await InstallmentState.findOne({
-    name: "Paid"
+  const installmentClosedState = await InstallmentState.findOne({
+    name: "Closed"
   });
   if (!state)
     return res.status(500).send("The closed state is missing from the server!");
@@ -325,7 +325,7 @@ router.post("/", async (req, res) => {
 
   for (installment of req.body.entries.installments) {
     const loan = await Loan.findOne({ "installments._id": installment._id });
-    loan.installments.id(installment._id).state = installmentPaidState;
+    loan.installments.id(installment._id).state = installmentClosedState;
     await loan.save();
   }
 
@@ -702,8 +702,8 @@ router.put("/:id", async (req, res) => {
   if (!state)
     return res.status(500).send("The closed state is missing from the server!");
 
-  const installmentPaidState = await InstallmentState.findOne({
-    name: "Paid"
+  const installmentClosedState = await InstallmentState.findOne({
+    name: "Closed"
   });
   if (!state)
     return res.status(500).send("The closed state is missing from the server!");
@@ -718,7 +718,7 @@ router.put("/:id", async (req, res) => {
 
   for (installment of req.body.entries.installments) {
     const loan = await Loan.findOne({ "installments._id": installment._id });
-    loan.installments.id(installment._id).state = installmentPaidState;
+    loan.installments.id(installment._id).state = installmentClosedState;
     await loan.save();
   }
 
