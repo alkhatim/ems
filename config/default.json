@@ -2,5 +2,8 @@
   "dbConnectionString": "mongodb://uvqnmqhjoxr63zbxddtd:jcLheqj9d3HbkHq6oFpP@bsarwlniw7uxw3u-mongodb.services.clever-cloud.com:27017/bsarwlniw7uxw3u",
   "jwtSecret": "hubbahubba",
   "overtimeFactor": 1.5,
-  "dailyHours": 8
+  "dailyHours": 8,
+  "vat": 0.15,
+  "employeeSocialInsurance": 0.08,
+  "companySocialInsurance": 0.17
 }

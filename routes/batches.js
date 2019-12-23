@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const ObjectId = require("mongoose").Types.ObjectId;
+const config = require("config");
 const moment = require("moment");
 const _ = require("lodash");
 const { Batch, validate } = require("../models/Batch");
@@ -128,6 +129,21 @@ router.post("/", async (req, res) => {
 
       batchEmployee.details.totalSalary =
         employee.salaryInfo.totalSalary * salaryRatio;
+
+      batchEmployee.details.vat =
+        employee.salaryInfo.totalSalary * config.get("vat");
+
+      const socialInsuranceEmployee = await Employee.findById(
+        employee._id
+      ).select("socialInsuranceInfo");
+      const registered = socialInsuranceEmployee.socialInsuranceInfo.registered;
+      const socialInsuranceSalary =
+        socialInsuranceEmployee.socialInsuranceInfo.socialInsuranceSalary ||
+        employee.salaryInfo.totalSalary;
+
+      batchEmployee.details.socialInsurance = registered
+        ? socialInsuranceSalary * config.get("employeeSocialInsurance")
+        : null;
       //#endregion
 
       //#region overtimes
@@ -200,7 +216,9 @@ router.post("/", async (req, res) => {
       //#endregion
 
       batchEmployee.details.total =
-        batchEmployee.details.totalSalary +
+        batchEmployee.details.totalSalary -
+        batchEmployee.details.socialInsurance -
+        batchEmployee.details.vat +
         (batchEmployee.details.overtimes || 0) -
         (batchEmployee.details.deductions || 0) -
         (batchEmployee.details.loans || 0);
