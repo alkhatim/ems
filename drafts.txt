@@ -1,5 +1,6 @@
 TODO:
 
+create lookups route with get methods
 auto calculate employee salary
 finish abscence permissions logic in batches router
 promotions router and model
