@@ -3,7 +3,7 @@ const config = require("config");
 
 module.exports = function(req, res, next) {
   const token = req.header("x-jwt");
-  if (!token) return res.status(401).send("Access denied");
+  if (!token) return res.status(401).send("You must be logged in first");
 
   try {
     const user = jwt.verify(token, config.get("jwtSecret"));
