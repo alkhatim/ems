@@ -125,6 +125,24 @@ const schema = new mongoose.Schema({
   }
 });
 
+schema.pre("update", function() {
+  this.totalSalary =
+    req.body.basicSalary +
+    (req.body.housingAllowance || 0) +
+    (req.body.livingExpenseAllowance || 0) +
+    (req.body.transportAllowance || 0) +
+    (req.body.foodAllowance || 0);
+});
+
+schema.pre("findOneAndUpdate", function() {
+  this.totalSalary =
+    req.body.basicSalary +
+    (req.body.housingAllowance || 0) +
+    (req.body.livingExpenseAllowance || 0) +
+    (req.body.transportAllowance || 0) +
+    (req.body.foodAllowance || 0);
+});
+
 const Employee = mongoose.model("Employee", schema);
 
 const validate = function(employee) {
