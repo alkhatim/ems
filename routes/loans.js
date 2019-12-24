@@ -4,7 +4,7 @@ const moment = require("moment");
 const _ = require("lodash");
 const { Loan, validate } = require("../models/Loan");
 const { Employee } = require("../models/Employee");
-const { State } = require("../models/State");
+const { LoanState: State } = require("../models/LoanState");
 const { InstallmentState } = require("../models/InstallmentState");
 const validateObjectId = require("../middleware/validateObjectId");
 
@@ -305,6 +305,36 @@ router.post("/revert/:id", async (req, res) => {
     return res
       .status(500)
       .send("The new loan state is missing from the server!");
+
+  loan = await Loan.findByIdAndUpdate(req.params.id, { state }, { new: true });
+  res.status(200).send(loan);
+});
+
+router.post("/freeze/:id", async (req, res) => {
+  let loan = await Loan.findById(req.params.id);
+  if (loan.state.name != "Approved")
+    return res.status(400).send("You can only freeze approved loans");
+
+  const state = await State.findOne({ name: "Frozen" });
+  if (!state)
+    return res
+      .status(500)
+      .send("The frozen loan state is missing from the server!");
+
+  loan = await Loan.findByIdAndUpdate(req.params.id, { state }, { new: true });
+  res.status(200).send(loan);
+});
+
+router.post("/unfreeze/:id", async (req, res) => {
+  let loan = await Loan.findById(req.params.id);
+  if (loan.state.name != "Frozen")
+    return res.status(400).send("You can only unfreeze frozen loans");
+
+  const state = await State.findOne({ name: "Approved" });
+  if (!state)
+    return res
+      .status(500)
+      .send("The approved loan state is missing from the server!");
 
   loan = await Loan.findByIdAndUpdate(req.params.id, { state }, { new: true });
   res.status(200).send(loan);

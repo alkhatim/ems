@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
 const { schema: installmentStateSchema } = require("./InstallmentState");
-const { schema: stateSchema } = require("./State");
+const { schema: stateSchema } = require("./LoanState");
+const { LoanState: State } = require("./LoanState");
 
 const schema = new mongoose.Schema({
   employee: {
@@ -50,6 +51,16 @@ const schema = new mongoose.Schema({
     ],
     required: true
   }
+});
+
+schema.pre("update", function(){
+  if (this.installments.filter(i => i.state.name == "Pending").length == 0)
+      this.state = await State.findOne({ name: "Closed" });
+});
+
+schema.pre("findOneAndUpdate", function(){
+  if (this.installments.filter(i => i.state.name == "Pending").length == 0)
+      this.state = await State.findOne({ name: "Closed" });
 });
 
 const Loan = mongoose.model("Loan", schema);

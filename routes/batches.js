@@ -344,6 +344,8 @@ router.post("/", async (req, res) => {
   for (installment of req.body.entries.installments) {
     const loan = await Loan.findOne({ "installments._id": installment._id });
     loan.installments.id(installment._id).state = installmentClosedState;
+    if (loan.installments.filter(i => i.state.name == "Pending").length == 0)
+      loan.state = await State.findOne({ name: "Closed" });
     await loan.save();
   }
 
@@ -478,6 +480,8 @@ router.put("/:id", async (req, res) => {
   for (installment of batch.entries.installments) {
     const loan = await Loan.findOne({ "installments._id": installment._id });
     loan.installments.id(installment._id).state = installmentPendingState;
+    if (loan.state.name == "Closed")
+      loan.state = await State.findOne({ name: "Approved" });
     await loan.save();
   }
 
@@ -737,6 +741,8 @@ router.put("/:id", async (req, res) => {
   for (installment of req.body.entries.installments) {
     const loan = await Loan.findOne({ "installments._id": installment._id });
     loan.installments.id(installment._id).state = installmentClosedState;
+    if (loan.installments.filter(i => i.state.name == "Pending").length == 0)
+      loan.state = await State.findOne({ name: "Closed" });
     await loan.save();
   }
 
@@ -823,6 +829,8 @@ router.delete("/:id", validateObjectId, async (req, res) => {
   for (installment of batch.entries.installments) {
     const loan = await Loan.findOne({ "installments._id": installment._id });
     loan.installments.id(installment._id).state = installmentPendingState;
+    if (loan.state.name == "Closed")
+      loan.state = await State.findOne({ name: "Approved" });
     await loan.save();
   }
 
