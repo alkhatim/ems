@@ -1,15 +1,25 @@
 TODO:
 
+auto calculate employee salary
 finish abscence permissions logic in batches router
-rename paid to closed in installments and batches and db
-freeze and reschedule loans
 promotions router and model
 vacation balance details
 vacation opening balances
+employee salary certificate
+create logins route
 add authorization for routes
 fix winston format
 
 ----------------------------------
+
+Test:
+
+loans pre update for state after installment state change
+freezing loans
+closing and reverting loans after batch generation
+auto calculate employee salary after update
+
+---------------------------------
 
 Jobs:
 
