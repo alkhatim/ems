@@ -3,6 +3,7 @@ const app = express();
 require("express-async-errors");
 const Joi = require("joi");
 Joi.objectId = require("joi-objectid")(Joi);
+const lookupsRouter = require("./routes/lookups");
 const usersRouter = require("./routes/users");
 const employeesRouter = require("./routes/employees");
 const overtimesRouter = require("./routes/overtimes");
@@ -19,6 +20,8 @@ require("./startup/db")();
 
 app.use(express.json());
 // app.use(auth);
+app.use("/api/lookups", lookupsRouter);
+app.use("/api/users", usersRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/employees", employeesRouter);
 app.use("/api/overtimes", overtimesRouter);

@@ -53,14 +53,14 @@ const schema = new mongoose.Schema({
   }
 });
 
-schema.pre("update", function(){
+schema.pre("update", async function() {
   if (this.installments.filter(i => i.state.name == "Pending").length == 0)
-      this.state = await State.findOne({ name: "Closed" });
+    this.state = await State.findOne({ name: "Closed" });
 });
 
-schema.pre("findOneAndUpdate", function(){
+schema.pre("findOneAndUpdate", async function() {
   if (this.installments.filter(i => i.state.name == "Pending").length == 0)
-      this.state = await State.findOne({ name: "Closed" });
+    this.state = await State.findOne({ name: "Closed" });
 });
 
 const Loan = mongoose.model("Loan", schema);
