@@ -14,9 +14,9 @@ fix winston format
 Test:
 
 loans pre update for state after installment state change
+auto calculate employee salary after update
 freezing loans
 closing and reverting loans after batch generation
-auto calculate employee salary after update
 
 ---------------------------------
 
