@@ -53,7 +53,17 @@ const schema = new mongoose.Schema({
   }
 });
 
+schema.pre("save", async function() {
+  if (this.installments.filter(i => i.state.name == "Pending").length == 0)
+    this.state = await State.findOne({ name: "Closed" });
+});
+
 schema.pre("update", async function() {
+  if (this.installments.filter(i => i.state.name == "Pending").length == 0)
+    this.state = await State.findOne({ name: "Closed" });
+});
+
+schema.pre("updateOne", async function() {
   if (this.installments.filter(i => i.state.name == "Pending").length == 0)
     this.state = await State.findOne({ name: "Closed" });
 });
