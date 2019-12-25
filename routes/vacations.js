@@ -52,6 +52,7 @@ router.post("/", async (req, res) => {
     await vacation.save();
 
     credit.remainingCredit -= req.body.duration;
+    credit.soldCredit += req.body.duration;
     await credit.save();
 
     res.status(201).send(vacation);
@@ -117,6 +118,7 @@ router.post("/", async (req, res) => {
     await vacation.save();
 
     credit.remainingCredit -= req.body.duration;
+    credit.consumedCredit += req.body.duration;
     await credit.save();
 
     res.status(201).send(vacation);
@@ -139,10 +141,9 @@ router.get("/:id", validateObjectId, async (req, res) => {
 router.put("/:id", validateObjectId, async (req, res) => {
   let vacation = await Vacation.findById(req.params.id);
   if (!vacation)
-    return res.status(404).send("There is no vacation with the given ID");
-
+    return res.status(404).send("There is no vacation with the given ID");
   if (vacation.state.name != "New")
-    return res.status(400).send("You can only modify new vacations");
+    return res.status(400).send("You can only modify new vacations");
 
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
@@ -153,75 +154,107 @@ router.put("/:id", validateObjectId, async (req, res) => {
   if (!employee)
     return res.status(404).send("There is no employee with the given ID");
 
-  req.body.endDate = moment(req.body.startDate)
-    .add(req.body.duration, "d")
-    .toDate();
-
-  const ongoingVacation = await Vacation.findOne({
-    "employee._id": req.body.employeeId,
-    _id: { $ne: vacation._id }
-  }).or([
-    {
-      startDate: { $lte: req.body.startDate },
-      endDate: { $gte: req.body.startDate }
-    },
-    {
-      startDate: { $lte: req.body.endDate },
-      endDate: { $gte: req.body.endDate }
-    }
-  ]);
-
-  if (ongoingVacation)
-    return res
-      .status(400)
-      .send(
-        "The dates coflict with an already scheduled vactaion for the same employee!"
-      );
-
-  const credit = await VacationCredit.findOne({
-    "employee._id": req.body.employeeId
-  });
-
-  if (credit == null || credit == undefined)
-    return res
-      .status(400)
-      .send("Register a vacations credit for this employee first");
-
-  credit.remainingCredit += vacation.duration;
-
-  if (credit.remainingCredit < req.body.duration)
-    return res
-      .status(400)
-      .send("The employee doesn't have enough vacations credit");
-
-  const state = vacation.state;
-
   const type = await VacationType.findById(req.body.typeId);
   if (!type) return res.status(400).send("There is no type with the given ID");
 
-  vacation = {
-    employee,
-    startDate: req.body.startDate,
-    endDate: req.body.endDate,
-    duration: req.body.duration,
-    notes: req.body.notes,
-    state,
-    type
-  };
+  if (type.name == "Purchase") {
+    const credit = await VacationCredit.findOne({
+      "employee._id": req.body.employeeId
+    });
 
-  if (req.body.replacementEmployeeId)
+    credit.remainingCredit += vacation.duration;
+    credit.soldCredit -= vacation.duration;
+
+    if (credit.remainingCredit < req.body.duration)
+      return res
+        .status(400)
+        .send("The employee doesn't have enough vacations credit");
+
+    vacation = {
+      employee,
+      duration: req.body.duration,
+      notes: req.body.notes,
+      state: vacation.state,
+      type
+    };
+
+    vacation = await vacation.findByIdAndUpdate(req.params.id, vacation, {
+      new: true
+    });
+
+    credit.remainingCredit -= req.body.duration;
+    credit.soldCredit += req.body.duration;
+    await credit.save();
+
+    res.status(200).send(vacation);
+  } else {
+    if (!req.body.startDate)
+      return res.status(400).send("You must provide a start date");
+
+    req.body.endDate = moment(req.body.startDate)
+      .add(req.body.duration, "d")
+      .toDate();
+
+    const ongoingVacation = await Vacation.findOne({
+      "employee._id": req.body.employeeId
+    }).or([
+      {
+        startDate: { $lte: req.body.startDate },
+        endDate: { $gte: req.body.startDate }
+      },
+      {
+        startDate: { $lte: req.body.endDate },
+        endDate: { $gte: req.body.endDate }
+      }
+    ]);
+
+    if (ongoingVacation)
+      return res
+        .status(400)
+        .send("The employee already has a vacation at the same time");
+
+    const credit = await VacationCredit.findOne({
+      "employee._id": req.body.employeeId
+    });
+
+    credit.remainingCredit += vacation.duration;
+    credit.consumedCredit -= vacation.duration;
+
+    if (credit.remainingCredit < req.body.duration)
+      return res
+        .status(400)
+        .send("The employee doesn't have enough vacations credit");
+
+    const state = await VacationState.findOne({ name: "New" });
+    if (!state)
+      return res
+        .status(500)
+        .send("The default vacation state is missing from the server!");
+
+    const vacation = {
+      employee,
+      startDate: req.body.startDate,
+      endDate: req.body.endDate,
+      duration: req.body.duration,
+      notes: req.body.notes,
+      state,
+      type
+    };
+
     vacation.replacementEmployee = await Employee.findById(
       req.body.replacementEmployeeId
     ).select("_id name");
 
-  vacation = await Vacation.findByIdAndUpdate(req.params.id, vacation, {
-    new: true
-  });
+    vacation = await Vacation.findByIdAndUpdate(req.params.id, vacation, {
+      new: true
+    });
 
-  credit.remainingCredit -= req.body.duration;
-  await credit.save();
+    credit.remainingCredit -= req.body.duration;
+    credit.consumedCredit += req.body.duration;
+    await credit.save();
 
-  res.status(200).send(vacation);
+    res.status(200).send(vacation);
+  }
 });
 
 router.delete("/:id", validateObjectId, async (req, res) => {
@@ -235,6 +268,21 @@ router.delete("/:id", validateObjectId, async (req, res) => {
   await Vacation.findByIdAndDelete(req.params.id);
 
   res.status(200).send(vacation);
+});
+
+//credit
+
+router.get("/credit/", async (req, res) => {
+  const credit = await VacationCredit.find(req.query);
+  res.status(200).send(credit);
+});
+
+router.get("/credit/:id", validateObjectId, async (req, res) => {
+  const credit = await VacationCredit.findById(req.params.id);
+  if (!credit)
+    return res.status(404).send("There is no credit for this employee");
+
+  res.status(200).send(credit);
 });
 
 //states

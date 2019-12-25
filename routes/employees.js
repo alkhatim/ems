@@ -93,7 +93,9 @@ router.post("/", async (req, res) => {
     const vacationCredit = new VacationCredit({
       employee: _.pick(employee, ["_id", "name"]),
       totalCredit: req.body.vacationDays,
-      remainingCredit: req.body.vacationDays
+      remainingCredit: req.body.vacationDays,
+      consumedCredit: 0,
+      soldCredit: 0
     });
     await vacationCredit.save();
   }

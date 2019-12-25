@@ -1,7 +1,6 @@
 TODO:
 
 add warning deduction type
-vacation credit details
 vacation opening balances
 employee salary certificate
 finish abscence permissions logic in batches router
@@ -13,6 +12,7 @@ fix winston format
 
 Test:
 
+vacations credit, vacation put method
 loans pre update for state after installment state change
 auto calculate employee salary after update
 freezing loans

@@ -17,6 +17,14 @@ const schema = new mongoose.Schema({
   remainingCredit: {
     type: Number,
     required: true
+  },
+  consumedCredit: {
+    type: Number,
+    required: true
+  },
+  soldCredit: {
+    type: Number,
+    required: true
   }
 });
 
