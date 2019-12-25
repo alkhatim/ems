@@ -13,6 +13,7 @@ const vacationsRouter = require("./routes/vacations");
 const missionsRouter = require("./routes/missions");
 const loansRouter = require("./routes/loans");
 const batchesRouter = require("./routes/batches");
+const promotionsRouter = require("./routes/promotions");
 const auth = require("./middleware/auth");
 const errors = require("./middleware/errors");
 
@@ -31,6 +32,7 @@ app.use("/api/vacations", vacationsRouter);
 app.use("/api/missions", missionsRouter);
 app.use("/api/loans", loansRouter);
 app.use("/api/batches", batchesRouter);
+app.use("/api/promotions", promotionsRouter);
 app.use(errors);
 
 const port = process.env.PORT || 3000;

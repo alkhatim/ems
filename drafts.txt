@@ -1,10 +1,10 @@
 TODO:
 
-finish abscence permissions logic in batches router
-promotions router and model
-vacation balance details
+add warning deduction type
+vacation credit details
 vacation opening balances
 employee salary certificate
+finish abscence permissions logic in batches router
 create logins route
 add authorization for routes
 fix winston format
