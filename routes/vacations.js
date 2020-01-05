@@ -8,6 +8,23 @@ const { VacationState } = require("../models/VacationState");
 const { VacationCredit } = require("../models/VacationCredit");
 const validateObjectId = require("../middleware/validateObjectId");
 
+//credits
+router.get("/credits/", async (req, res) => {
+  const credit = await VacationCredit.find(req.query);
+  res.status(200).send(credit);
+});
+
+router.get("/credits/:id", validateObjectId, async (req, res) => {
+  const credit = await VacationCredit.findOne({
+    "employee._id": req.params.id
+  });
+  if (!credit)
+    return res.status(404).send("There is no credit for this employee");
+
+  res.status(200).send(credit);
+});
+
+//vacations
 router.post("/", async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
@@ -270,24 +287,9 @@ router.delete("/:id", validateObjectId, async (req, res) => {
   res.status(200).send(vacation);
 });
 
-//credit
-
-router.get("/credit/", async (req, res) => {
-  const credit = await VacationCredit.find(req.query);
-  res.status(200).send(credit);
-});
-
-router.get("/credit/:id", validateObjectId, async (req, res) => {
-  const credit = await VacationCredit.findById(req.params.id);
-  if (!credit)
-    return res.status(404).send("There is no credit for this employee");
-
-  res.status(200).send(credit);
-});
-
 //states
 router.post("/approve/:id", async (req, res) => {
-  let vacation = await Vacation.findById(req.params.id);
+  let vacation = await Vacation.find(req.params.id);
   if (vacation.state.name != "New")
     return res.status(400).send("You can only approve new vacations");
 

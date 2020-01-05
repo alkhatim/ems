@@ -1,6 +1,5 @@
 TODO:
 
-vacation opening balances
 employee salary certificate
 create logins route
 add authorization for routes
