@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const admin = require("../middleware/admin");
 const { AbsencePermission, validate } = require("../models/AbsencePermission");
 const { Employee } = require("../models/Employee");
 const { State } = require("../models/State");
@@ -89,7 +90,7 @@ router.put("/:id", async (req, res) => {
   res.status(200).send(absencePermission);
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", admin, async (req, res) => {
   const absencePermission = await AbsencePermission.findById(
     req.params.id
   ).select("state");
@@ -107,7 +108,7 @@ router.delete("/:id", async (req, res) => {
 });
 
 //states
-router.post("/approve/:id", async (req, res) => {
+router.post("/approve/:id", admin, async (req, res) => {
   let absencePermission = await AbsencePermission.findById(req.params.id);
   if (absencePermission.state.name != "New")
     return res.status(400).send("You can only approve new permissions");
@@ -126,7 +127,7 @@ router.post("/approve/:id", async (req, res) => {
   res.status(200).send(absencePermission);
 });
 
-router.post("/revert/:id", async (req, res) => {
+router.post("/revert/:id", admin, async (req, res) => {
   let absencePermission = await AbsencePermission.findById(req.params.id);
   if (absencePermission.state.name != "Approved")
     return res.status(400).send("You can only revert approved permissions");
@@ -145,7 +146,7 @@ router.post("/revert/:id", async (req, res) => {
   res.status(200).send(absencePermission);
 });
 
-router.post("/cancel/:id", async (req, res) => {
+router.post("/cancel/:id", admin, async (req, res) => {
   let absencePermission = await AbsencePermission.findById(req.params.id);
   if (absencePermission.state.name == "Closed")
     return res.status(400).send("You can't cancel closed permissions");

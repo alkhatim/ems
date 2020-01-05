@@ -1,8 +1,7 @@
 TODO:
 
+add put ot promotions router
 employee salary certificate
-create logins route
-add authorization for routes
 modify winston format
 
 ----------------------------------

@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
+const admin = require("../middleware/admin");
 const { Mission, validate } = require("../models/Mission");
 const { Employee } = require("../models/Employee");
 const { MissionState } = require("../models/MissionState");
@@ -113,7 +114,7 @@ router.put("/:id", validateObjectId, async (req, res) => {
   res.status(200).send(mission);
 });
 
-router.delete("/:id", validateObjectId, async (req, res) => {
+router.delete("/:id", admin, validateObjectId, async (req, res) => {
   const mission = await Mission.findById(req.params.id.select("state"));
   if (!mission)
     return res.status(404).send("There is no mission with the given ID");
@@ -127,7 +128,7 @@ router.delete("/:id", validateObjectId, async (req, res) => {
 });
 
 // states
-router.post("/approve/:id", async (req, res) => {
+router.post("/approve/:id", admin, async (req, res) => {
   let mission = await Mission.findById(req.params.id);
   if (mission.state.name != "New")
     return res.status(400).send("You can only approve new missions");
@@ -148,7 +149,7 @@ router.post("/approve/:id", async (req, res) => {
   res.status(200).send(mission);
 });
 
-router.post("/revert/:id", async (req, res) => {
+router.post("/revert/:id", admin, async (req, res) => {
   let mission = await Mission.findById(req.params.id);
   if (mission.state.name != "Approved")
     return res.status(400).send("You can only revert apporved missions");
@@ -167,12 +168,13 @@ router.post("/revert/:id", async (req, res) => {
   res.status(200).send(mission);
 });
 
-router.post("/finish/:id", async (req, res) => {
+router.post("/finish/:id", admin, async (req, res) => {
   let mission = await Mission.findById(req.params.id);
   if (mission.state.name != "Approved")
     return res.status(400).send("You can only finish apporved missions");
 
-  if (req.body.actualEndDate < mission.startDate) return res.status(400).send("The end date can't be before the start date");
+  if (req.body.actualEndDate < mission.startDate)
+    return res.status(400).send("The end date can't be before the start date");
 
   const state = await MissionState.findOne({ name: "Finished" });
   if (!state)
@@ -192,7 +194,7 @@ router.post("/finish/:id", async (req, res) => {
   res.status(200).send(mission);
 });
 
-router.post("/cancel/:id", async (req, res) => {
+router.post("/cancel/:id", admin, async (req, res) => {
   let mission = await Mission.findById(req.params.id);
   if (mission.state.name == "Closed" || mission.state.name == "Finished")
     return res.status(400).send("You can't cancel closed or finished missions");

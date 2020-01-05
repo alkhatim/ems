@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const _ = require("lodash");
+const admin = require("../middleware/admin");
 const bcrypt = require("bcrypt");
 const { User, validate } = require("../models/User");
 const validateObjectId = require("../middleware/validateObjectId");
@@ -34,7 +35,7 @@ router.post("/", async (req, res) => {
     .send(_.pick(user, ["_id", "username"]));
 });
 
-router.put("/:id", validateObjectId, async (req, res) => {
+router.put("/:id", admin, validateObjectId, async (req, res) => {
   let user = await User.findById(req.params.id);
   if (!user) return res.status(404).send("There is no user with the given ID");
 
@@ -73,7 +74,7 @@ router.put("/:id", validateObjectId, async (req, res) => {
     .send(_.pick(user, ["_id", "username"]));
 });
 
-router.delete("/:id", validateObjectId, async (req, res) => {
+router.delete("/:id", [admin, validateObjectId], async (req, res) => {
   const user = await User.findByIdAndDelete(req.params.id);
   if (!user) return res.status(404).send("There is no user with the given ID");
   res.status(200).send(_.pick(user, ["_id", "username"]));

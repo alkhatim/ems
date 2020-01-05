@@ -21,11 +21,10 @@ const errors = require("./middleware/errors");
 require("./startup/db")();
 
 app.use(express.json());
-// app.use(auth);
-app.use("/api/lookups", lookupsRouter);
 app.use("/api/login", loginsRouter);
 app.use("/api/users", usersRouter);
-app.use("/api/users", usersRouter);
+app.use(auth);
+app.use("/api/lookups", lookupsRouter);
 app.use("/api/employees", employeesRouter);
 app.use("/api/overtimes", overtimesRouter);
 app.use("/api/deductions", deductionsRouter);

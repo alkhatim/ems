@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const _ = require("lodash");
 const config = require("config");
+const admin = require("../middleware/admin");
 const { Overtime, validate } = require("../models/Overtime");
 const { OvertimeType } = require("../models/OvertimeType");
 const { Employee } = require("../models/Employee");
@@ -123,7 +124,7 @@ router.put("/:id", async (req, res) => {
   res.status(200).send(overtime);
 });
 
-router.delete("/:id", validateObjectId, async (req, res) => {
+router.delete("/:id", admin, validateObjectId, async (req, res) => {
   const overtime = await Overtime.findById(req.params.id).select("state");
   if (!overtime)
     return res.status(404).send("There is no overtime with the given ID");
@@ -137,7 +138,7 @@ router.delete("/:id", validateObjectId, async (req, res) => {
 });
 
 //states
-router.post("/approve/:id", async (req, res) => {
+router.post("/approve/:id", admin, async (req, res) => {
   let overtime = await Overtime.findById(req.params.id);
   if (overtime.state.name != "New")
     return res.status(400).send("You can only approve new overtimes");
@@ -156,7 +157,7 @@ router.post("/approve/:id", async (req, res) => {
   res.status(200).send(overtime);
 });
 
-router.post("/revert/:id", async (req, res) => {
+router.post("/revert/:id", admin, async (req, res) => {
   let overtime = await Overtime.findById(req.params.id);
   if (overtime.state.name != "Approved")
     return res.status(400).send("You can only revert approved overtimes");
@@ -175,7 +176,7 @@ router.post("/revert/:id", async (req, res) => {
   res.status(200).send(overtime);
 });
 
-router.post("/cancel/:id", async (req, res) => {
+router.post("/cancel/:id", admin, async (req, res) => {
   let overtime = await Overtime.findById(req.params.id);
   if (overtime.state.name == "Closed")
     return res.status(400).send("You can't cancel closed overtimes");

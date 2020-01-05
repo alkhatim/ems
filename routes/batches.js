@@ -4,6 +4,7 @@ const ObjectId = require("mongoose").Types.ObjectId;
 const config = require("config");
 const moment = require("moment");
 const _ = require("lodash");
+const admin = require("../middleware/admin");
 const { Batch, validate } = require("../models/Batch");
 const { Employee } = require("../models/Employee");
 const { BatchType } = require("../models/BatchType");
@@ -774,7 +775,7 @@ router.get("/:id", validateObjectId, async (req, res) => {
   res.status(200).send(batch);
 });
 
-router.delete("/:id", validateObjectId, async (req, res) => {
+router.delete("/:id", admin, validateObjectId, async (req, res) => {
   const batch = await Batch.findById(req.params.id);
   if (!batch)
     return res.status(404).send("There is no batch with the given ID");
@@ -848,7 +849,7 @@ router.delete("/:id", validateObjectId, async (req, res) => {
 });
 
 //states
-router.post("/approve/:id", async (req, res) => {
+router.post("/approve/:id", admin, async (req, res) => {
   let batch = await Batch.findById(req.params.id);
   if (batch.state.name != "New")
     return res.status(400).send("You can only approve new batches");
@@ -868,7 +869,7 @@ router.post("/approve/:id", async (req, res) => {
   res.status(200).send(batch);
 });
 
-router.post("/revert/:id", async (req, res) => {
+router.post("/revert/:id", admin, async (req, res) => {
   let batch = await Batch.findById(req.params.id);
   if (batch.state.name != "Approved")
     return res.status(400).send("You can only revert approved batches");
@@ -887,7 +888,7 @@ router.post("/revert/:id", async (req, res) => {
   res.status(200).send(batch);
 });
 
-router.post("/cancel/:id", async (req, res) => {
+router.post("/cancel/:id", admin, async (req, res) => {
   let batch = await Batch.findById(req.params.id);
   if (batch.state.name == "Closed")
     return res.status(400).send("You can't cancel closed batches");

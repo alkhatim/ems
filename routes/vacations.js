@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const moment = require("moment");
+const admin = require("../middleware/admin");
 const { Vacation, validate } = require("../models/Vacation");
 const { Employee } = require("../models/Employee");
 const { VacationType } = require("../models/VacationType");
@@ -274,7 +275,7 @@ router.put("/:id", validateObjectId, async (req, res) => {
   }
 });
 
-router.delete("/:id", validateObjectId, async (req, res) => {
+router.delete("/:id", admin, validateObjectId, async (req, res) => {
   const vacation = await Vacation.findById(req.params.id).select("state");
   if (!vacation)
     return res.status(404).send("There is no vacation with the given ID");
@@ -288,7 +289,7 @@ router.delete("/:id", validateObjectId, async (req, res) => {
 });
 
 //states
-router.post("/approve/:id", async (req, res) => {
+router.post("/approve/:id", admin, async (req, res) => {
   let vacation = await Vacation.find(req.params.id);
   if (vacation.state.name != "New")
     return res.status(400).send("You can only approve new vacations");
@@ -309,7 +310,7 @@ router.post("/approve/:id", async (req, res) => {
   res.status(200).send(vacation);
 });
 
-router.post("/revert/:id", async (req, res) => {
+router.post("/revert/:id", admin, async (req, res) => {
   let vacation = await Vacation.findById(req.params.id);
   if (vacation.state.name != "Approved")
     return res.status(400).send("You can only revert apporved vacations");
@@ -328,7 +329,7 @@ router.post("/revert/:id", async (req, res) => {
   res.status(200).send(vacation);
 });
 
-router.post("/cutoff/:id", async (req, res) => {
+router.post("/cutoff/:id", admin, async (req, res) => {
   let vacation = await Vacation.findById(req.params.id);
   if (vacation.state.name != "Ongoing")
     return res.status(400).send("You can only cutoff ongoing vacations");
@@ -367,7 +368,7 @@ router.post("/cutoff/:id", async (req, res) => {
   res.status(200).send(vacation);
 });
 
-router.post("/cancel/:id", async (req, res) => {
+router.post("/cancel/:id", admin, async (req, res) => {
   let vacation = await Vacation.findById(req.params.id);
   if (vacation.state.name == "Ongoing")
     return res.status(400).send("You can't cancel ongoing vacations");

@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const _ = require("lodash");
+const admin = require("../middleware/admin");
 const { Employee, validate } = require("../models/Employee");
 const { EmployeeStatus } = require("../models/EmployeeStatus");
 const { TerminatedEmployee } = require("../models/TerminatedEmployee");
@@ -231,7 +232,7 @@ router.put("/:id", validateObjectId, async (req, res) => {
   res.status(200).send(employee);
 });
 
-router.delete("/:id", validateObjectId, async (req, res) => {
+router.delete("/:id", admin, validateObjectId, async (req, res) => {
   if (
     await Loan.findOne({
       "employee._id": req.params.id,
@@ -249,7 +250,7 @@ router.delete("/:id", validateObjectId, async (req, res) => {
 });
 
 // status
-router.post("/terminate/:id", async (req, res) => {
+router.post("/terminate/:id", admin, async (req, res) => {
   const employee = await Employee.findById(req.params.id);
   if (employee.status.name == "Terminated")
     return res.status(400).send("This employee is already terminated");
@@ -273,7 +274,7 @@ router.post("/terminate/:id", async (req, res) => {
   res.status(200).send(employee);
 });
 
-router.post("/unterminate/:id", async (req, res) => {
+router.post("/unterminate/:id", admin, async (req, res) => {
   const terminatedEmployee = await TerminatedEmployee.findById(req.params.id);
 
   const status = await EmployeeStatus.findOne({ name: "Normal" });

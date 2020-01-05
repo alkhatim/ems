@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const moment = require("moment");
 const _ = require("lodash");
+const admin = require("../middleware/admin");
 const { Loan, validate } = require("../models/Loan");
 const { Employee } = require("../models/Employee");
 const { LoanState: State } = require("../models/LoanState");
@@ -254,7 +255,7 @@ router.put("/:id", validateObjectId, async (req, res) => {
   res.status(200).send(loan);
 });
 
-router.delete("/:id", validateObjectId, async (req, res) => {
+router.delete("/:id", admin, validateObjectId, async (req, res) => {
   const loan = await Loan.findById(req.params.id).select("installments");
 
   if (loan.installments.filter(i => i.state.name != "Pending") == true)
@@ -276,7 +277,7 @@ router.get("/installments/:id", validateObjectId, async (req, res) => {
 });
 
 //states
-router.post("/approve/:id", async (req, res) => {
+router.post("/approve/:id", admin, async (req, res) => {
   let loan = await Loan.findById(req.params.id);
   if (loan.state.name != "New")
     return res.status(400).send("You can only approve new loans");
@@ -291,7 +292,7 @@ router.post("/approve/:id", async (req, res) => {
   res.status(200).send(loan);
 });
 
-router.post("/revert/:id", async (req, res) => {
+router.post("/revert/:id", admin, async (req, res) => {
   let loan = await Loan.findById(req.params.id);
   if (loan.state.name != "Approved")
     return res.status(400).send("You can only revert approved loans");
@@ -310,7 +311,7 @@ router.post("/revert/:id", async (req, res) => {
   res.status(200).send(loan);
 });
 
-router.post("/freeze/:id", async (req, res) => {
+router.post("/freeze/:id", admin, async (req, res) => {
   let loan = await Loan.findById(req.params.id);
   if (loan.state.name != "Approved")
     return res.status(400).send("You can only freeze approved loans");
@@ -325,7 +326,7 @@ router.post("/freeze/:id", async (req, res) => {
   res.status(200).send(loan);
 });
 
-router.post("/unfreeze/:id", async (req, res) => {
+router.post("/unfreeze/:id", admin, async (req, res) => {
   let loan = await Loan.findById(req.params.id);
   if (loan.state.name != "Frozen")
     return res.status(400).send("You can only unfreeze frozen loans");
@@ -340,7 +341,7 @@ router.post("/unfreeze/:id", async (req, res) => {
   res.status(200).send(loan);
 });
 
-router.post("/cancel/:id", async (req, res) => {
+router.post("/cancel/:id", admin, async (req, res) => {
   let loan = await Loan.findById(req.params.id);
   if (loan.state.name == "Closed")
     return res.status(400).send("You can't cancel closed loans");
@@ -356,31 +357,35 @@ router.post("/cancel/:id", async (req, res) => {
 });
 
 //installment state
-router.post("/installments/pay/:id", validateObjectId, async (req, res) => {
-  const loan = await Loan.findOne({ "installments._id": req.params.id });
-  if (!loan)
-    return res.status(404).send("There is no installment with the given ID");
-  if (loan.state.name != "Approved")
-    return res
-      .status(400)
-      .send("You can only pay installments for approved loans");
+router.post(
+  "/installments/pay/:id",
+  [admin, validateObjectId],
+  async (req, res) => {
+    const loan = await Loan.findOne({ "installments._id": req.params.id });
+    if (!loan)
+      return res.status(404).send("There is no installment with the given ID");
+    if (loan.state.name != "Approved")
+      return res
+        .status(400)
+        .send("You can only pay installments for approved loans");
 
-  const installment = loan.installments.find(i => i._id == req.params.id);
-  const index = loan.installments.findIndex(i => i._id == req.params.id);
+    const installment = loan.installments.find(i => i._id == req.params.id);
+    const index = loan.installments.findIndex(i => i._id == req.params.id);
 
-  const state = await InstallmentState.findOne({ name: "Closed" });
-  if (!state)
-    return res
-      .status(500)
-      .send("The closed installment state is missing from the server!");
+    const state = await InstallmentState.findOne({ name: "Closed" });
+    if (!state)
+      return res
+        .status(500)
+        .send("The closed installment state is missing from the server!");
 
-  installment.state = state;
+    installment.state = state;
 
-  loan.installments[index] = installment;
-  if (loan.installments.filter(i => i.state.name == "Pending").length == 0)
-    loan.state = await State.findOne({ name: "Closed" });
-  await loan.save();
-  res.status(200).send(installment);
-});
+    loan.installments[index] = installment;
+    if (loan.installments.filter(i => i.state.name == "Pending").length == 0)
+      loan.state = await State.findOne({ name: "Closed" });
+    await loan.save();
+    res.status(200).send(installment);
+  }
+);
 
 module.exports = router;
