@@ -1,6 +1,5 @@
 TODO:
 
-add put ot promotions router
 employee salary certificate
 modify winston format
 
