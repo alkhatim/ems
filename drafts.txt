@@ -19,3 +19,10 @@ Jobs:
 
 start of year => calculate new vacation credits
 start of day => change vacation states, mission states and employee status
+
+
+----------------------------------
+
+seeding:
+
+mongoimport --host bsarwlniw7uxw3u-mongodb.services.clever-cloud.com --db bsarwlniw7uxw3u --collection genders --type json --file genders.json --jsonArray --authenticationDatabase bsarwlniw7uxw3u --ssl --username uvqnmqhjoxr63zbxddtd --password jcLheqj9d3HbkHq6oFpP
