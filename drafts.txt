@@ -1,12 +1,10 @@
 TODO:
 
-add warning deduction type
 vacation opening balances
 employee salary certificate
-finish abscence permissions logic in batches router
 create logins route
 add authorization for routes
-fix winston format
+modify winston format
 
 ----------------------------------
 

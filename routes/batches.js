@@ -165,6 +165,7 @@ router.post("/", async (req, res) => {
       const deductions = await Deduction.find({
         "employee._id": employee._id,
         date: { $lte: req.body.date },
+        "type.name": { $ne: "Warning" },
         "state.name": "Approved"
       });
       if (deductions) {

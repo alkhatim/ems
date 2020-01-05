@@ -37,6 +37,8 @@ router.post("/", async (req, res) => {
     case "Absence":
       req.body.total = req.body.amount * (employee.salaryInfo.totalSalary / 30);
       break;
+    default:
+      req.body.total = 0;
   }
 
   const deduction = new Deduction({
@@ -96,6 +98,8 @@ router.put("/:id", async (req, res) => {
     case "Absence":
       req.body.total = req.body.amount * (employee.salaryInfo.totalSalary / 30);
       break;
+    default:
+      req.body.total = 0;
   }
 
   deduction = {
