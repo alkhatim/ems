@@ -5,14 +5,12 @@ const { Loan } = require("../models/Loan");
 
 const calculateSalary = function(employeeId, date) {
   //#region declarations
-  const employees = [];
   const employee = await Employee.findById(employeeId).select("salaryInfo socialInsuranceInfo");
-  //#endregion
-
   const batchEmployee = {};
   batchEmployee._id = employee._id;
   batchEmployee.name = employee.name;
   batchEmployee.details = {};
+  //#endregion
 
   //#region salary
       const salaryRatio =
