@@ -52,7 +52,9 @@ router.post("/", async (req, res) => {
     for (id of req.body.employees) {
       if (!ObjectId.isValid(id))
         return res.status(404).send("One of the given Ids is not valdid");
-      const employee = await Employee.findById(id).select("name salaryInfo");
+      const employee = await Employee.findById(id).select(
+        "name salaryInfo socialInsuranceInfo"
+      );
       if (employee) employees.push(employee);
     }
   }
@@ -62,7 +64,7 @@ router.post("/", async (req, res) => {
   if (req.body.departmentId) {
     const departmentEmployees = await Employee.find({
       "jobInfo.department._id": req.body.departmentId
-    }).select("name salaryInfo");
+    }).select("name salaryInfo socialInsuranceInfo");
     departmentEmployees.forEach(employee => {
       if (!employees.includes(employee)) employees.push(employee);
     });
@@ -73,17 +75,19 @@ router.post("/", async (req, res) => {
   if (req.body.locationId) {
     const locationEmployees = await Employee.find({
       "jobInfo.location._id": req.body.locationId
-    }).select("name salaryInfo");
+    }).select("name salaryInfo socialInsuranceInfo");
     locationEmployees.forEach(employee => {
       if (!employees.includes(employee)) employees.push(employee);
     });
   }
   //#endregion
 
+  //TODO: add all employees if none is present
   if (employees.length == 0)
     return res.status(400).send("There is no employees in this batch");
 
   if (type.name == "Salaries") {
+    //TODO: use calculateSalary service
     for (employee of employees) {
       const batchEmployee = {};
       batchEmployee._id = employee._id;
@@ -134,12 +138,9 @@ router.post("/", async (req, res) => {
       batchEmployee.details.vat =
         employee.salaryInfo.totalSalary * config.get("vat");
 
-      const socialInsuranceEmployee = await Employee.findById(
-        employee._id
-      ).select("socialInsuranceInfo");
-      const registered = socialInsuranceEmployee.socialInsuranceInfo.registered;
+      const registered = employee.socialInsuranceInfo.registered;
       const socialInsuranceSalary =
-        socialInsuranceEmployee.socialInsuranceInfo.socialInsuranceSalary ||
+        employee.socialInsuranceInfo.socialInsuranceSalary ||
         employee.salaryInfo.totalSalary;
 
       batchEmployee.details.socialInsurance = registered
@@ -432,7 +433,6 @@ router.put("/:id", async (req, res) => {
   }
   //#endregion
 
-  //TODO: add all employees if none is present
   if (employees.length == 0)
     return res.status(400).send("There is no employees in this batch");
 

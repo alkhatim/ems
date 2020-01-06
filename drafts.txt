@@ -1,12 +1,13 @@
+
 TODO:
 
-employee salary certificate
 modify winston format
 
 ----------------------------------
 
 Test:
 
+employee salary certificate
 vacations credit, vacation put method
 loans pre update for state after installment state change
 auto calculate employee salary after update
