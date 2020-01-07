@@ -308,6 +308,16 @@ router.post("/approve/:id", admin, async (req, res) => {
       new: true
     }
   );
+
+  if (vacation.startDate <= new Date()) {
+    const employeeNormalStatus = await EmployeeStatus.findOne({
+      name: "Normal"
+    });
+    await Employee.findByIdAndUpdate(vacation.employee._id, {
+      status: employeeNormalStatus
+    });
+  }
+
   res.status(200).send(vacation);
 });
 

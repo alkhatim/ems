@@ -53,9 +53,11 @@ const missionStates = async function() {
 
   for (mission of ongoingMissions) {
     await Mission.findByIdAndUpdate(mission._id, { state: ongoingState });
-    await Employee.findByIdAndUpdate(mission.employee._id, {
-      status: employeeMissionStatus
-    });
+    for (employee of mission.employees) {
+      await Employee.findByIdAndUpdate(employee._id, {
+        status: employeeMissionStatus
+      });
+    }
   }
 };
 

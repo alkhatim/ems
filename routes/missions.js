@@ -149,6 +149,18 @@ router.post("/approve/:id", admin, async (req, res) => {
       new: true
     }
   );
+
+  if (mission.startDate <= new Date()) {
+    const employeeMissionStatus = await EmployeeStatus.findOne({
+      name: "Mission"
+    });
+    for (employee of mission.employees) {
+      await Employee.findByIdAndUpdate(employee._id, {
+        status: employeeMissionStatus
+      });
+    }
+  }
+
   res.status(200).send(mission);
 });
 
