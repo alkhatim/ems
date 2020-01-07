@@ -291,7 +291,7 @@ router.delete("/:id", admin, validateObjectId, async (req, res) => {
 
 //states
 router.post("/approve/:id", admin, async (req, res) => {
-  let vacation = await Vacation.find(req.params.id);
+  let vacation = await Vacation.findById(req.params.id);
   if (vacation.state.name != "New")
     return res.status(400).send("You can only approve new vacations");
 
@@ -310,11 +310,11 @@ router.post("/approve/:id", admin, async (req, res) => {
   );
 
   if (vacation.startDate <= new Date()) {
-    const employeeNormalStatus = await EmployeeStatus.findOne({
-      name: "Normal"
+    const employeeVacationStatus = await EmployeeStatus.findOne({
+      name: "Vacation"
     });
     await Employee.findByIdAndUpdate(vacation.employee._id, {
-      status: employeeNormalStatus
+      status: employeeVacationStatus
     });
   }
 
