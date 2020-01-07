@@ -13,6 +13,7 @@ const { Department } = require("../models/Department");
 const { Location } = require("../models/Location");
 const { Loan } = require("../models/Loan");
 const { VacationCredit } = require("../models/VacationCredit");
+const calculateSalary = require("../services/calculateSalary");
 const validateObjectId = require("../middleware/validateObjectId");
 
 router.post("/", async (req, res) => {
@@ -294,6 +295,12 @@ router.post("/unterminate/:id", admin, async (req, res) => {
   terminatedEmployee.remove();
 
   res.status(200).send(terminatedEmployee);
+});
+
+//salary certificate
+router.get("/certificate/:id/:date", validateObjectId, async (req, res) => {
+  const employee = await calculateSalary(req.params.id, req.params.date);
+  res.status(200).send(employee);
 });
 
 module.exports = router;
