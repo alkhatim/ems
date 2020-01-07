@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const admin = require("../middleware/admin");
 const { Mission, validate } = require("../models/Mission");
 const { Employee } = require("../models/Employee");
+const { EmployeeStatus } = require("../models/EmployeeStatus");
 const { MissionState } = require("../models/MissionState");
 const validateObjectId = require("../middleware/validateObjectId");
 
@@ -49,6 +50,17 @@ router.post("/", async (req, res) => {
   });
 
   await mission.save();
+
+  if (mission.startDate <= new Date()) {
+    const employeeMissionStatus = await EmployeeStatus.findOne({
+      name: "Mission"
+    });
+    for (employee in mission.employees) {
+      await Employee.findByIdAndUpdate(employee._id, {
+        status: employeeMissionStatus
+      });
+    }
+  }
   res.status(201).send(mission);
 });
 
@@ -98,6 +110,15 @@ router.put("/:id", validateObjectId, async (req, res) => {
 
   const state = mission.state;
 
+  const employeeNormalStatus = await EmployeeStatus.findOne({
+    name: "Normal"
+  });
+  for (employee in mission.employees) {
+    await Employee.findByIdAndUpdate(employee._id, {
+      status: employeeNormalStatus
+    });
+  }
+
   mission = {
     destination: req.body.destination,
     notes: req.body.notes,
@@ -111,6 +132,18 @@ router.put("/:id", validateObjectId, async (req, res) => {
   mission = await Mission.findByIdAndUpdate(req.params.id, mission, {
     new: true
   });
+
+  if (mission.startDate <= new Date()) {
+    const employeeMissionStatus = await EmployeeStatus.findOne({
+      name: "Mission"
+    });
+    for (employee in mission.employees) {
+      await Employee.findByIdAndUpdate(employee._id, {
+        status: employeeMissionStatus
+      });
+    }
+  }
+
   res.status(200).send(mission);
 });
 
@@ -170,8 +203,8 @@ router.post("/revert/:id", admin, async (req, res) => {
 
 router.post("/finish/:id", admin, async (req, res) => {
   let mission = await Mission.findById(req.params.id);
-  if (mission.state.name != "Approved")
-    return res.status(400).send("You can only finish apporved missions");
+  if (mission.state.name != "Ongoing")
+    return res.status(400).send("You can only finish ongoing missions");
 
   if (req.body.actualEndDate < mission.startDate)
     return res.status(400).send("The end date can't be before the start date");
@@ -191,6 +224,16 @@ router.post("/finish/:id", admin, async (req, res) => {
     },
     { new: true }
   );
+
+  const employeeNormalStatus = await EmployeeStatus.findOne({
+    name: "Normal"
+  });
+  for (employee in mission.employees) {
+    await Employee.findByIdAndUpdate(employee._id, {
+      status: employeeNormalStatus
+    });
+  }
+
   res.status(200).send(mission);
 });
 
