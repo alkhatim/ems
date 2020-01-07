@@ -1,8 +1,9 @@
-const moment = require("moment");
+const _ = require("lodash");
 const { Employee } = require("../models/Employee");
 const { EmployeeStatus } = require("../models/EmployeeStatus");
 const { Vacation } = require("../models/Vacation");
 const { VacationState } = require("../models/VacationState");
+const { VacationCredit } = require("../models/VacationCredit");
 const { Mission } = require("../models/Mission");
 const { MissionState } = require("../models/MissionState");
 
@@ -55,5 +56,29 @@ const missionStates = async function() {
     await Employee.findByIdAndUpdate(mission.employee._id, {
       status: employeeMissionStatus
     });
+  }
+};
+
+const vacationBalances = async function() {
+  if (new Date().getDate() == 1 && new Date().getMonth() == 1) {
+    const employees = await Employee.find().select("_id name vacationInfo");
+    for (employee of employees) {
+      const credit = await VacationCredit.findOne({
+        "employee._id": employee._id
+      });
+      if (credit) {
+        credit.totalCredit += employee.vacationInfo.vacationDays;
+        await credit.save();
+      } else if (employee.vacationInfo.vacationDays) {
+        const vacationCredit = new VacationCredit({
+          employee: _.pick(employee, ["_id", "name"]),
+          totalCredit: employee.vacationInfo.vacationDays,
+          remainingCredit: employee.vacationInfo.vacationDays,
+          consumedCredit: 0,
+          soldCredit: 0
+        });
+        await vacationCredit.save();
+      }
+    }
   }
 };
