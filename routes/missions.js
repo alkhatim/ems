@@ -51,16 +51,6 @@ router.post("/", async (req, res) => {
 
   await mission.save();
 
-  if (mission.startDate <= new Date()) {
-    const employeeMissionStatus = await EmployeeStatus.findOne({
-      name: "Mission"
-    });
-    for (employee in mission.employees) {
-      await Employee.findByIdAndUpdate(employee._id, {
-        status: employeeMissionStatus
-      });
-    }
-  }
   res.status(201).send(mission);
 });
 
@@ -110,15 +100,6 @@ router.put("/:id", validateObjectId, async (req, res) => {
 
   const state = mission.state;
 
-  const employeeNormalStatus = await EmployeeStatus.findOne({
-    name: "Normal"
-  });
-  for (employee in mission.employees) {
-    await Employee.findByIdAndUpdate(employee._id, {
-      status: employeeNormalStatus
-    });
-  }
-
   mission = {
     destination: req.body.destination,
     notes: req.body.notes,
@@ -132,17 +113,6 @@ router.put("/:id", validateObjectId, async (req, res) => {
   mission = await Mission.findByIdAndUpdate(req.params.id, mission, {
     new: true
   });
-
-  if (mission.startDate <= new Date()) {
-    const employeeMissionStatus = await EmployeeStatus.findOne({
-      name: "Mission"
-    });
-    for (employee in mission.employees) {
-      await Employee.findByIdAndUpdate(employee._id, {
-        status: employeeMissionStatus
-      });
-    }
-  }
 
   res.status(200).send(mission);
 });

@@ -140,15 +140,6 @@ router.post("/", async (req, res) => {
     credit.consumedCredit += req.body.duration;
     await credit.save();
 
-    if (vacation.startDate <= new Date()) {
-      const employeeVacationStatus = await EmployeeStatus.findOne({
-        name: "Vacation"
-      });
-      await Employee.findByIdAndUpdate(vacation.employee._id, {
-        status: employeeVacationStatus
-      });
-    }
-
     res.status(201).send(vacation);
   }
 });
@@ -259,13 +250,6 @@ router.put("/:id", validateObjectId, async (req, res) => {
         .status(500)
         .send("The default vacation state is missing from the server!");
 
-    const employeeNormalStatus = await EmployeeStatus.findOne({
-      name: "Normal"
-    });
-    await Employee.findByIdAndUpdate(vacation.employee._id, {
-      status: employeeNormalStatus
-    });
-
     const vacation = {
       employee,
       startDate: req.body.startDate,
@@ -287,15 +271,6 @@ router.put("/:id", validateObjectId, async (req, res) => {
     credit.remainingCredit -= req.body.duration;
     credit.consumedCredit += req.body.duration;
     await credit.save();
-
-    if (vacation.startDate <= new Date()) {
-      const employeeVacationStatus = await EmployeeStatus.findOne({
-        name: "Vacation"
-      });
-      await Employee.findByIdAndUpdate(vacation.employee._id, {
-        status: employeeVacationStatus
-      });
-    }
 
     res.status(200).send(vacation);
   }
