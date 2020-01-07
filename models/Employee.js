@@ -126,39 +126,47 @@ const schema = new mongoose.Schema({
 });
 
 schema.pre("save", function() {
-  this.totalSalary =
-    req.body.basicSalary +
-    (req.body.housingAllowance || 0) +
-    (req.body.livingExpenseAllowance || 0) +
-    (req.body.transportAllowance || 0) +
-    (req.body.foodAllowance || 0);
+  if (this.salaryInfo) {
+    this.salaryInfo.totalSalary =
+      this.salaryInfo.basicSalary +
+      (this.salaryInfo.housingAllowance || 0) +
+      (this.salaryInfo.livingExpenseAllowance || 0) +
+      (this.salaryInfo.transportAllowance || 0) +
+      (this.salaryInfo.foodAllowance || 0);
+  }
 });
 
 schema.pre("update", function() {
-  this.totalSalary =
-    req.body.basicSalary +
-    (req.body.housingAllowance || 0) +
-    (req.body.livingExpenseAllowance || 0) +
-    (req.body.transportAllowance || 0) +
-    (req.body.foodAllowance || 0);
+  if (this.salaryInfo) {
+    this.salaryInfo.totalSalary =
+      this.salaryInfo.basicSalary +
+      (this.salaryInfo.housingAllowance || 0) +
+      (this.salaryInfo.livingExpenseAllowance || 0) +
+      (this.salaryInfo.transportAllowance || 0) +
+      (this.salaryInfo.foodAllowance || 0);
+  }
 });
 
 schema.pre("updateOne", function() {
-  this.totalSalary =
-    req.body.basicSalary +
-    (req.body.housingAllowance || 0) +
-    (req.body.livingExpenseAllowance || 0) +
-    (req.body.transportAllowance || 0) +
-    (req.body.foodAllowance || 0);
+  if (this.salaryInfo) {
+    this.salaryInfo.totalSalary =
+      this.salaryInfo.basicSalary +
+      (this.salaryInfo.housingAllowance || 0) +
+      (this.salaryInfo.livingExpenseAllowance || 0) +
+      (this.salaryInfo.transportAllowance || 0) +
+      (this.salaryInfo.foodAllowance || 0);
+  }
 });
 
 schema.pre("findOneAndUpdate", function() {
-  this.totalSalary =
-    req.body.basicSalary +
-    (req.body.housingAllowance || 0) +
-    (req.body.livingExpenseAllowance || 0) +
-    (req.body.transportAllowance || 0) +
-    (req.body.foodAllowance || 0);
+  if (this.salaryInfo) {
+    this.salaryInfo.totalSalary =
+      this.salaryInfo.basicSalary +
+      (this.salaryInfo.housingAllowance || 0) +
+      (this.salaryInfo.livingExpenseAllowance || 0) +
+      (this.salaryInfo.transportAllowance || 0) +
+      (this.salaryInfo.foodAllowance || 0);
+  }
 });
 
 const Employee = mongoose.model("Employee", schema);
