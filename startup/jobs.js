@@ -82,3 +82,9 @@ const vacationBalances = async function() {
     }
   }
 };
+
+module.exports = async function() {
+  await vacationStates();
+  await missionStates();
+  await vacationBalances();
+};

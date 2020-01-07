@@ -19,6 +19,7 @@ const auth = require("./middleware/auth");
 const errors = require("./middleware/errors");
 
 require("./startup/db")();
+require("./startup/jobs")();
 
 app.use(express.json());
 app.use("/api/login", loginsRouter);
