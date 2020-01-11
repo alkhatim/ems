@@ -5,7 +5,8 @@ export const Navbar = () => {
     <nav className="navbar bg-dark">
       <h1>
         <a href="index.html">
-          <i className="fas fa-code"></i> EMS
+          <i className="far fa-id-badge" />
+          <span style={{ marginLeft: 7.5, fontSize: 25 }}>EMS</span>
         </a>
       </h1>
       <ul>

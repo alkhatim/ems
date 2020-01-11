@@ -46,7 +46,7 @@ img {
 
 /* Text Styles*/
 .x-large {
-  font-size: 4rem;
+  font-size: 6rem;
   line-height: 1.2;
   margin-bottom: 1rem;
 }
@@ -308,7 +308,6 @@ button {
   z-index: 1;
   width: 100%;
   top: 0;
-  border-bottom: solid 1px var(--primary-color);
   opacity: 0.9;
 }
 
@@ -320,6 +319,11 @@ button {
   color: #fff;
   padding: 0.45rem;
   margin: 0 0.25rem;
+  font-size: 1.25rem;
+}
+
+.navbar h1 {
+  font-size: 3rem;
 }
 
 .navbar a:hover {
