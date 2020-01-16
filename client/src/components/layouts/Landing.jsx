@@ -3,17 +3,25 @@ import React from "react";
 export const Landing = () => {
   return (
     <section className="landing">
-      <div className="dark-overlay">
-        <div className="landing-inner">
-          <h1 className="x-large">EMS</h1>
-          <p className="lead">Manage employees' data and salaries</p>
-          <div className="buttons">
-            <a href="register.html" className="btn btn-primary">
-              Sign Up
-            </a>
-            <a href="login.html" className="btn btn-light">
-              Login
-            </a>
+      <div className="dark-overlay white-text">
+        <div className="container">
+          <div className="row center">
+            <div className="col s12">
+              <h1>EMS</h1>
+              <p className="flow-text">Manage employees' data and salaries</p>
+            </div>
+          </div>
+          <div className="row center ">
+            <div className="col s6">
+              <a href="#!" className="btn teal darken-2 waves-effect">
+                Sign Up
+              </a>
+            </div>
+            <div className="col s6">
+              <a href="#!" className="btn teal darken-2 waves-effect">
+                Login
+              </a>
+            </div>
           </div>
         </div>
       </div>
