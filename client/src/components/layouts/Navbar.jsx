@@ -12,22 +12,22 @@ export const Navbar = () => {
       <div className="navbar-fixed">
         <nav className="teal darken-3">
           <div className="nav-wrapper mx-4">
-            <a href="#!" className="brand-logo">
+            <a href="!#" className="brand-logo">
               <i className="far fa-id-badge" />
               EMS
             </a>
-            <a href="#!" className="sidenav-trigger" data-target="mobile-nav">
+            <a href="!#" className="sidenav-trigger" data-target="mobile-nav">
               <i className="material-icons">menu</i>
             </a>
             <ul className="right hide-on-med-and-down">
               <li>
-                <a href="profiles.html">Settings</a>
+                <a href="!#">Settings</a>
               </li>
               <li>
-                <a href="register.html">Register</a>
+                <a href="!#">Register</a>
               </li>
               <li>
-                <a href="login.html">Login</a>
+                <a href="!#">Login</a>
               </li>
             </ul>
           </div>
@@ -40,17 +40,17 @@ export const Navbar = () => {
           <div className="divider blue-grey darken-2"></div>
         </li>
         <li>
-          <a href="profiles.html" className="white-text">
+          <a href="!#" className="white-text">
             Settings
           </a>
         </li>
         <li>
-          <a href="register.html" className="white-text">
+          <a href="!#" className="white-text">
             Register
           </a>
         </li>
         <li>
-          <a href="login.html" className="white-text">
+          <a href="!#" className="white-text">
             Login
           </a>
         </li>

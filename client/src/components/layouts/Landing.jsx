@@ -12,12 +12,12 @@ export const Landing = () => {
             <h1>EMS</h1>
             <p className="flow-text">Manage employees' data and salaries</p>
             <a
-              href="#!"
+              href="!#"
               className="btn btn-large teal darken-3 waves-effect mr-1"
             >
               Sign Up
             </a>
-            <a href="#!" className="btn btn-large teal darken-1 waves-effect">
+            <a href="!#" className="btn btn-large teal darken-1 waves-effect">
               Login
             </a>
           </div>
