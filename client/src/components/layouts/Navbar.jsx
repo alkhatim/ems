@@ -3,11 +3,8 @@ import M from "materialize-css/dist/js/materialize.min.js";
 
 export const Navbar = () => {
   useEffect(() => {
-    M.AutoInit();
-    // document.addEventListener("DOMContentLoaded", function() {
-    //   var sidenav = document.querySelectorAll(".sidenav");
-    //   M.Sidenav.init(sidenav, {});
-    // });
+    var sidenav = document.querySelectorAll(".sidenav");
+    M.Sidenav.init(sidenav, {});
   }, []);
 
   return (
