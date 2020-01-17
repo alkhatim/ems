@@ -10,7 +10,7 @@ export const Navbar = () => {
   return (
     <Fragment>
       <div className="navbar-fixed">
-        <nav className="teal darken-3">
+        <nav className="teal darken-3 z-depth-3">
           <div className="nav-wrapper mx-4">
             <a href="!#" className="brand-logo">
               <i className="far fa-id-badge" />

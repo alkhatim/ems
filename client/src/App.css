@@ -5,6 +5,10 @@
   height: 100vh;
 }
 
+.landing-inner {
+  min-height: 100vh;
+}
+
 /* Overlay */
 .dark-overlay {
   background-color: rgba(0, 0, 0, 0.7);
@@ -13,4 +17,9 @@
   left: 0;
   width: 100%;
   height: 100%;
+}
+
+footer h5 {
+  font-weight: 600;
+  font-size: large;
 }
