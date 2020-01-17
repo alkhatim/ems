@@ -8,7 +8,8 @@ module.exports = function() {
   mongoose
     .connect(dbConnectionString, {
       useNewUrlParser: true,
-      useFindAndModify: false
+      useFindAndModify: false,
+      useUnifiedTopology: true
     })
     .then(() => console.log("connected to database"))
     .catch(e => logger.error(e));
