@@ -1,4 +1,5 @@
 import React, { Fragment, useEffect } from "react";
+import { Link } from "react-router-dom";
 import M from "materialize-css/dist/js/materialize.min.js";
 
 export const Navbar = () => {
@@ -12,47 +13,47 @@ export const Navbar = () => {
       <div className="navbar-fixed">
         <nav className="teal darken-3 z-depth-3">
           <div className="nav-wrapper mx-4">
-            <a href="!#" className="brand-logo">
+            <Link to="/" className="brand-logo">
               <i className="far fa-id-badge" />
               EMS
-            </a>
+            </Link>
             <a href="!#" className="sidenav-trigger" data-target="mobile-nav">
               <i className="material-icons">menu</i>
             </a>
             <ul className="right hide-on-med-and-down">
               <li>
-                <a href="!#">Settings</a>
+                <Link to="/settings">Settings</Link>
               </li>
               <li>
-                <a href="!#">Register</a>
+                <Link to="/register">Sign Up</Link>
               </li>
               <li>
-                <a href="!#">Login</a>
+                <Link to="/login">Login</Link>
               </li>
             </ul>
           </div>
         </nav>
       </div>
 
-      <ul className="sidenav blue-grey darken-4" id="mobile-nav">
-        <h3 className="teal-text ml-2">EMS</h3>
-        <li>
+      <ul className="sidenav sidenav-close blue-grey darken-4" id="mobile-nav">
+        <h3 className="teal-text ml-1 mb-2">EMS</h3>
+        <li className="mb-1">
           <div className="divider blue-grey darken-2"></div>
         </li>
         <li>
-          <a href="!#" className="white-text">
+          <Link to="/settings" className="white-text">
             Settings
-          </a>
+          </Link>
         </li>
         <li>
-          <a href="!#" className="white-text">
-            Register
-          </a>
+          <Link to="/register" className="white-text">
+            Sign Up
+          </Link>
         </li>
         <li>
-          <a href="!#" className="white-text">
+          <Link to="/login" className="white-text">
             Login
-          </a>
+          </Link>
         </li>
       </ul>
     </Fragment>

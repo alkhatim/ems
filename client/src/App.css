@@ -6,7 +6,7 @@
 }
 
 .landing-inner {
-  min-height: 100vh;
+  min-height: 95vh;
 }
 
 /* Overlay */
@@ -24,6 +24,10 @@ footer .row {
 }
 
 footer h5 {
-  font-weight: 600;
+  font-weight: 500;
   font-size: large;
+}
+
+footer span {
+  font-weight: 500;
 }
