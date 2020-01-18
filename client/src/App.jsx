@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 import { Navbar } from "./components/layouts/Navbar";
 import { Landing } from "./components/layouts/Landing";
 import { Footer } from "./components/layouts/Footer";
