@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
-import { login } from "../../services/authService";
+import { toast } from "react-toastify";
 
 export const Login = () => {
   const [formData, setformData] = useState({
@@ -17,10 +17,15 @@ export const Login = () => {
   const onSubmit = async e => {
     e.preventDefault();
     try {
-      await login(username, password);
-      console.log("Success");
+      toast.success("Done", {
+        position: toast.POSITION.BOTTOM_RIGHT,
+        autoClose: 5000
+      });
     } catch (error) {
-      console.log(error);
+      toast.error("Failed!", {
+        position: toast.POSITION.BOTTOM_RIGHT,
+        autoClose: 5000
+      });
     }
   };
 

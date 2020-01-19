@@ -1,5 +1,6 @@
 import React, { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export const Register = () => {
   const [formData, setformData] = useState({
@@ -17,9 +18,15 @@ export const Register = () => {
   const onSubmit = async e => {
     e.preventDefault();
     try {
-      console.log("Success");
+      toast.success("Done", {
+        position: toast.POSITION.BOTTOM_RIGHT,
+        autoClose: 5000
+      });
     } catch (error) {
-      console.log(error);
+      toast.success("Done", {
+        position: toast.POSITION.BOTTOM_RIGHT,
+        autoClose: 5000
+      });
     }
   };
 
