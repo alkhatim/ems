@@ -18,7 +18,12 @@ const schema = new mongoose.Schema({
     minlength: 6,
     maxlength: 255
   },
-  roles: [String]
+  roles: [
+    {
+      type: String,
+      enum: ["user", "admin"]
+    }
+  ]
 });
 
 schema.methods.genJwt = function() {
@@ -49,7 +54,7 @@ const validate = function(user) {
       requirmentCount: 3
     }),
     roles: Joi.array()
-      .items(Joi.string())
+      .items(Joi.string().valid("user", "admin"))
       .unique()
   };
 
