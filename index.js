@@ -37,5 +37,5 @@ app.use("/api/batches", batchesRouter);
 app.use("/api/promotions", promotionsRouter);
 app.use(errors);
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 3000;
 app.listen(port, () => console.log("listening on port", port));
