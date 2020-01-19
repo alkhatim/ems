@@ -2,7 +2,6 @@ html * {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* Landing Page */
 .landing {
   position: relative;
   background: url("./img/showcase.jpg") no-repeat center center/cover;
@@ -10,10 +9,9 @@ html * {
 }
 
 .landing-inner {
-  height: 95vh;
+  height: 100vh;
 }
 
-/* Overlay */
 .dark-overlay {
   background-color: rgba(0, 0, 0, 0.7);
   position: absolute;
@@ -28,10 +26,19 @@ footer .row {
 }
 
 footer h5 {
-  font-weight: 500;
+  font-weight: medium;
   font-size: large;
 }
 
 footer span {
-  font-weight: 500;
+  font-weight: medium;
+}
+
+.page-footer {
+  padding: 0 !important;
+}
+
+footer .col {
+  margin-top: 0.8rem;
+  margin-bottom: 0.6rem;
 }
