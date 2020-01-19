@@ -28,9 +28,10 @@ export const Login = () => {
     <Fragment>
       <div className="container">
         <div className="row center">
-          <h1 className="center teal-text">Login</h1>
-          <p className="flow-text">
-            <i className="fas fa-sign-in-alt mr-1"></i>Sign Into Your Account
+          <h1 className="center teal-text mt-4 mb-2">Login</h1>
+          <p className="flow-text teal-text">
+            <i className="fas fa-sign-in-alt mr-1 mb-1"></i>Sign Into Your
+            Account
           </p>
           <div className="col s6 offset-s3 card">
             <div className="card-content">
@@ -64,7 +65,7 @@ export const Login = () => {
                 </div>
               </form>
               <p>
-                Don't have an account?{" "}
+                Don't have an account ? &nbsp;
                 <Link to="/register" className="teal-text text-darken-2">
                   Register
                 </Link>

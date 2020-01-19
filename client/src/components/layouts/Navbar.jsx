@@ -35,8 +35,14 @@ export const Navbar = () => {
         </nav>
       </div>
 
+      {/* Mobile SideNav */}
+
       <ul className="sidenav sidenav-close blue-grey darken-4" id="mobile-nav">
-        <h3 className="teal-text ml-1 mb-2">EMS</h3>
+        <h3 className="mb-3 center">
+          <Link to="/" className="teal-text ">
+            EMS
+          </Link>
+        </h3>
         <li className="mb-1">
           <div className="divider blue-grey darken-2"></div>
         </li>
