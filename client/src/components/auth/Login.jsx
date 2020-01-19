@@ -1,19 +1,47 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
+import { Link } from "react-router-dom";
+import { login } from "../../services/authService";
 
 export const Login = () => {
+  const [formData, setformData] = useState({
+    username: "",
+    password: ""
+  });
+
+  const { username, password } = formData;
+
+  const onChange = e => {
+    setformData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const onSubmit = async e => {
+    e.preventDefault();
+    try {
+      await login(username, password);
+      console.log("Success");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <Fragment>
       <div className="container">
-        <div className="row">
+        <div className="row center">
           <h1 className="center teal-text">Login</h1>
+          <p className="flow-text">
+            <i className="fas fa-sign-in-alt mr-1"></i>Sign Into Your Account
+          </p>
           <div className="col s6 offset-s3 card">
             <div className="card-content">
-              <form>
+              <form onSubmit={e => onSubmit(e)}>
                 <div className="input-field">
                   <input
                     type="text"
                     name="username"
                     id="name"
+                    value={username}
+                    onChange={e => onChange(e)}
                     className="validtae"
                   />
                   <label for="username">Usernmae</label>
@@ -23,16 +51,24 @@ export const Login = () => {
                     type="password"
                     name="password"
                     id="password"
+                    value={password}
+                    onChange={e => onChange(e)}
                     className="validtae"
                   />
                   <label for="password">Password</label>
                 </div>
                 <div className="input-field center">
                   <button type="submit" className="btn btn-large">
-                    Log In
+                    Login
                   </button>
                 </div>
               </form>
+              <p>
+                Don't have an account?{" "}
+                <Link to="/register" className="teal-text text-darken-2">
+                  Register
+                </Link>
+              </p>
             </div>
           </div>
         </div>
