@@ -30,7 +30,8 @@ router.get("/", async (req, res) => {
   if (!token) return res.status(401).send();
 
   try {
-    const user = jwt.verify(token, config.get("jwtSecret"));
+    const tokenUser = jwt.verify(token, config.get("jwtSecret"));
+    const user = await User.findById(tokenUser._id).select("-password");
     res.status(200).send(user);
   } catch (error) {
     res.status(401).send();
