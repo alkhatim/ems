@@ -22,7 +22,7 @@ require("./startup/db")();
 require("./startup/jobs")();
 
 app.use(express.json());
-app.use("/api/login", loginsRouter);
+app.use("/api/logins", loginsRouter);
 app.use("/api/users", usersRouter);
 app.use(auth);
 app.use("/api/lookups", lookupsRouter);

@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const _ = require("lodash");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const config = require("config");
 const { User } = require("../models/User");
 
 router.post("/", async (req, res) => {
@@ -20,7 +22,19 @@ router.post("/", async (req, res) => {
     .status(200)
     .header("access-control-expose-headers", "x-jwt")
     .header("x-jwt", token)
-    .send(_.pick(user, ["_id", "username"]));
+    .send(_.pick(user, ["_id", "username", "role"]));
+});
+
+router.get("/", async (req, res) => {
+  const token = req.header("x-jwt");
+  if (!token) return res.status(401).send();
+
+  try {
+    const user = jwt.verify(token, config.get("jwtSecret"));
+    res.status(200).send(user);
+  } catch (error) {
+    res.status(401).send();
+  }
 });
 
 module.exports = router;
