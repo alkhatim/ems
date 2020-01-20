@@ -9,6 +9,7 @@ const initialState = {
 
 export default function(state = initialState, action) {
   const { type, payload } = action;
+
   switch (type) {
     case LOGIN_SUCCESS:
       localStorage.setItem("jwt", payload.token);
@@ -19,6 +20,7 @@ export default function(state = initialState, action) {
         token: payload.token,
         isLoggedIn: true
       };
+
     case LOGIN_FAIL:
       localStorage.removeItem("jwt");
       http.removeToken();
@@ -28,6 +30,7 @@ export default function(state = initialState, action) {
         user: null,
         isLoggedIn: false
       };
+
     default:
       return state;
   }

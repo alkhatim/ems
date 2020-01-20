@@ -1,10 +1,12 @@
 import React, { Fragment, useState } from "react";
-import { connect } from "react-redux";
-import { login } from "../../actions/authActions";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import { LOGIN_SUCCESS, LOGIN_FAIL } from "../../actions/types";
+import http from "../../utils/http";
 import PropTypes from "prop-types";
 
-const Login = ({ login }) => {
+export const Login = () => {
   const [formData, setformData] = useState({
     username: "",
     password: ""
@@ -12,13 +14,36 @@ const Login = ({ login }) => {
 
   const { username, password } = formData;
 
+  const dispatch = useDispatch();
+
   const onChange = e => {
     setformData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const onSubmit = async e => {
     e.preventDefault();
-    login(username, password);
+    try {
+      const res = await http.post("/api/login", { username, password });
+      const user = res.data;
+      const token = res.headers["x-jwt"];
+      dispatch({
+        type: LOGIN_SUCCESS,
+        payload: {
+          token,
+          user
+        }
+      });
+    } catch (error) {
+      if (error.response.data) {
+        toast.error(error.response.data, {
+          position: toast.POSITION.BOTTOM_RIGHT,
+          autoClose: 5000
+        });
+      }
+      dispatch({
+        type: LOGIN_FAIL
+      });
+    }
   };
 
   return (
@@ -80,7 +105,3 @@ const Login = ({ login }) => {
 Login.propTypes = {
   login: PropTypes.func.isRequired
 };
-
-export default connect(null, {
-  login
-})(Login);
