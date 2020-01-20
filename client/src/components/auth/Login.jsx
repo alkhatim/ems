@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { LOGIN_SUCCESS, LOGIN_FAIL } from "../../actions/types";
 import http from "../../utils/http";
-import PropTypes from "prop-types";
 
 export const Login = () => {
   const [formData, setformData] = useState({
@@ -23,7 +22,7 @@ export const Login = () => {
   const onSubmit = async e => {
     e.preventDefault();
     try {
-      const res = await http.post("/api/login", { username, password });
+      const res = await http.post("/api/logins", { username, password });
       const user = res.data;
       const token = res.headers["x-jwt"];
       dispatch({
@@ -100,8 +99,4 @@ export const Login = () => {
       </div>
     </Fragment>
   );
-};
-
-Login.propTypes = {
-  login: PropTypes.func.isRequired
 };

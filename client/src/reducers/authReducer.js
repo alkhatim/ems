@@ -1,8 +1,23 @@
 import http from "../utils/http";
 import { LOGIN_SUCCESS, LOGIN_FAIL } from "../actions/types";
 
+const token = localStorage.getItem("jwt");
+
+const getUser = async () => {
+  if (!token) return null;
+
+  http.setToken(token);
+  try {
+    const res = await http.get("/api/logins");
+    console.log(res);
+    return res.data;
+  } catch (error) {
+    return null;
+  }
+};
+
 const initialState = {
-  token: localStorage.getItem("jwt"),
+  token: null,
   user: null,
   isLoggedIn: false
 };

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { toast } from "react-toastify";
 
 axios.interceptors.response.use(null, error => {
   const expectedError =
@@ -7,7 +8,10 @@ axios.interceptors.response.use(null, error => {
     error.response.status < 500;
 
   if (!expectedError) {
-    console.log(error);
+    toast.error("Somthing failed on the server! Try again later", {
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 5000
+    });
   }
   return Promise.reject(error);
 });
