@@ -250,7 +250,7 @@ router.put("/:id", validateObjectId, async (req, res) => {
         .status(500)
         .send("The default vacation state is missing from the server!");
 
-    const vacation = {
+    vacation = {
       employee,
       startDate: req.body.startDate,
       endDate: req.body.endDate,
