@@ -1,8 +1,10 @@
 import React, { Fragment, useState } from "react";
+import { connect } from "react-redux";
+import { login } from "../../actions/authActions";
 import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
+import PropTypes from "prop-types";
 
-export const Login = () => {
+const Login = ({ login }) => {
   const [formData, setformData] = useState({
     username: "",
     password: ""
@@ -16,17 +18,7 @@ export const Login = () => {
 
   const onSubmit = async e => {
     e.preventDefault();
-    try {
-      toast.success("Done", {
-        position: toast.POSITION.BOTTOM_RIGHT,
-        autoClose: 5000
-      });
-    } catch (error) {
-      toast.error("Failed!", {
-        position: toast.POSITION.BOTTOM_RIGHT,
-        autoClose: 5000
-      });
-    }
+    login(username, password);
   };
 
   return (
@@ -48,9 +40,10 @@ export const Login = () => {
                     id="name"
                     value={username}
                     onChange={e => onChange(e)}
-                    className="validtae"
+                    className="validate"
+                    required
                   />
-                  <label for="username">Usernmae</label>
+                  <label htmlFor="username">Usernmae</label>
                 </div>
                 <div className="input-field">
                   <input
@@ -59,9 +52,10 @@ export const Login = () => {
                     id="password"
                     value={password}
                     onChange={e => onChange(e)}
-                    className="validtae"
+                    className="validate"
+                    required
                   />
-                  <label for="password">Password</label>
+                  <label htmlFor="password">Password</label>
                 </div>
                 <div className="input-field center">
                   <button type="submit" className="btn btn-large">
@@ -82,3 +76,11 @@ export const Login = () => {
     </Fragment>
   );
 };
+
+Login.propTypes = {
+  login: PropTypes.func.isRequired
+};
+
+export default connect(null, {
+  login
+})(Login);

@@ -49,9 +49,10 @@ export const Register = () => {
                     id="name"
                     value={username}
                     onChange={e => onChange(e)}
-                    className="validtae"
+                    className="validate"
+                    required
                   />
-                  <label for="username">Usernmae</label>
+                  <label htmlFor="username">Usernmae</label>
                 </div>
                 <div className="input-field">
                   <input
@@ -60,9 +61,10 @@ export const Register = () => {
                     id="password"
                     value={password}
                     onChange={e => onChange(e)}
-                    className="validtae"
+                    className="validate"
+                    required
                   />
-                  <label for="password">Password</label>
+                  <label htmlFor="password">Password</label>
                 </div>
                 <div className="input-field">
                   <input
@@ -71,9 +73,10 @@ export const Register = () => {
                     id="password2"
                     value={password2}
                     onChange={e => onChange(e)}
-                    className="validtae"
+                    className="validate"
+                    required
                   />
-                  <label for="password">Confirm Password</label>
+                  <label htmlFor="password">Confirm Password</label>
                 </div>
                 <div className="input-field center">
                   <button type="submit" className="btn btn-large">

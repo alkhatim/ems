@@ -1,7 +1,7 @@
 import React from "react";
 import { Navbar } from "./components/layouts/Navbar";
 import { Landing } from "./components/layouts/Landing";
-import { Login } from "./components/auth/Login";
+import Login from "./components/auth/Login";
 import { Register } from "./components/auth/Register";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { ToastContainer } from "react-toastify";

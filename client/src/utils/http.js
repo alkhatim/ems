@@ -16,10 +16,15 @@ function setToken(token) {
   axios.defaults.headers.common["x-jwt"] = token;
 }
 
+function removeToken() {
+  delete axios.defaults.headers.common["x-jwt"];
+}
+
 export default {
   get: axios.get,
   post: axios.post,
   put: axios.put,
   delete: axios.delete,
-  setToken
+  setToken,
+  removeToken
 };
