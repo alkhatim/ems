@@ -46,7 +46,7 @@ export const Register = () => {
                   <input
                     type="text"
                     name="username"
-                    id="name"
+                    id="username"
                     value={username}
                     onChange={e => onChange(e)}
                     className="validate"
