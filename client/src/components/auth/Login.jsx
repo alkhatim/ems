@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
+import messages from "../../helpers/messages";
 import { LOGIN_SUCCESS, LOGIN_FAIL } from "../../actions/types";
 import http from "../../helpers/http";
 
@@ -33,12 +33,7 @@ export const Login = () => {
         }
       });
     } catch (error) {
-      if (error.response.data) {
-        toast.error(error.response.data, {
-          position: toast.POSITION.BOTTOM_RIGHT,
-          autoClose: 5000
-        });
-      }
+      messages.error(error);
       dispatch({
         type: LOGIN_FAIL
       });
