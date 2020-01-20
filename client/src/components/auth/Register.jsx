@@ -1,6 +1,9 @@
 import React, { Fragment, useState } from "react";
-import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { REGISTER_SUCCESS, REGISTER_FAIL } from "../../actions/types";
+import http from "../../helpers/http";
+import messages from "../../helpers/messages";
+import { Link, Redirect } from "react-router-dom";
 
 export const Register = () => {
   const [formData, setformData] = useState({
@@ -11,6 +14,10 @@ export const Register = () => {
 
   const { username, password, password2 } = formData;
 
+  const dispatch = useDispatch();
+
+  const isLoggedIn = useSelector(state => state.authReducer.isLoggedIn);
+
   const onChange = e => {
     setformData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -18,17 +25,27 @@ export const Register = () => {
   const onSubmit = async e => {
     e.preventDefault();
     try {
-      toast.success("Done", {
-        position: toast.POSITION.BOTTOM_RIGHT,
-        autoClose: 5000
+      const res = await http.post("/api/users", { username, password });
+      const user = res.data;
+      const token = res.headers["x-jwt"];
+      dispatch({
+        type: REGISTER_SUCCESS,
+        payload: {
+          token,
+          user
+        }
       });
     } catch (error) {
-      toast.success("Done", {
-        position: toast.POSITION.BOTTOM_RIGHT,
-        autoClose: 5000
+      dispatch({
+        type: REGISTER_FAIL
       });
+      messages.error(error);
     }
   };
+
+  if (isLoggedIn) {
+    return <Redirect to="/" />;
+  }
 
   return (
     <Fragment>

@@ -1,9 +1,9 @@
 import React, { Fragment, useState } from "react";
-import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
-import messages from "../../helpers/messages";
+import { useDispatch, useSelector } from "react-redux";
 import { LOGIN_SUCCESS, LOGIN_FAIL } from "../../actions/types";
 import http from "../../helpers/http";
+import messages from "../../helpers/messages";
+import { Link, Redirect } from "react-router-dom";
 
 export const Login = () => {
   const [formData, setformData] = useState({
@@ -14,6 +14,8 @@ export const Login = () => {
   const { username, password } = formData;
 
   const dispatch = useDispatch();
+
+  const isLoggedIn = useSelector(state => state.authReducer.isLoggedIn);
 
   const onChange = e => {
     setformData({ ...formData, [e.target.name]: e.target.value });
@@ -39,6 +41,10 @@ export const Login = () => {
       });
     }
   };
+
+  if (isLoggedIn) {
+    return <Redirect to="/" />;
+  }
 
   return (
     <Fragment>
