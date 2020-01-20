@@ -37,7 +37,7 @@ const Login = ({ login }) => {
                   <input
                     type="text"
                     name="username"
-                    id="name"
+                    id="username"
                     value={username}
                     onChange={e => onChange(e)}
                     className="validate"
