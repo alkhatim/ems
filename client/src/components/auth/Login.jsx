@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { LOGIN_SUCCESS, LOGIN_FAIL } from "../../actions/types";
-import http from "../../utils/http";
+import http from "../../helpers/http";
 
 export const Login = () => {
   const [formData, setformData] = useState({

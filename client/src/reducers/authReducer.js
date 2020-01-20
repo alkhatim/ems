@@ -1,4 +1,4 @@
-import http from "../utils/http";
+import http from "../helpers/http";
 import { LOGIN_SUCCESS, LOGIN_FAIL } from "../actions/types";
 
 const token = localStorage.getItem("jwt");

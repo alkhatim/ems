@@ -17,7 +17,9 @@ axios.interceptors.response.use(null, error => {
 });
 
 function setToken(token) {
-  axios.defaults.headers.common["x-jwt"] = token;
+  if (token) {
+    axios.defaults.headers.common["x-jwt"] = token;
+  } else delete axios.defaults.headers.common["x-jwt"];
 }
 
 function removeToken() {
