@@ -12,7 +12,7 @@ router.post("/", async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  if (req.body.employees.filter(e => e.isHead == true).length != 1)
+  if (req.body.employees.filter(e => e.isHead == true).length !== 1)
     return res
       .status(400)
       .send("You must choose one employee to head the mission");
@@ -71,13 +71,13 @@ router.put("/:id", validateObjectId, async (req, res) => {
   if (!mission)
     return res.status(404).send("There is no mission with the given ID");
 
-  if (mission.state.name != "New")
+  if (mission.state.name !== "New")
     return res.status(400).send("You can only modify new missions");
 
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  if (req.body.employees.filter(e => e.isHead == true).length != 1)
+  if (req.body.employees.filter(e => e.isHead == true).length !== 1)
     return res
       .status(400)
       .send("You must choose one employee to head the mission");
@@ -133,7 +133,7 @@ router.delete("/:id", admin, validateObjectId, async (req, res) => {
 // states
 router.post("/approve/:id", admin, async (req, res) => {
   let mission = await Mission.findById(req.params.id);
-  if (mission.state.name != "New")
+  if (mission.state.name !== "New")
     return res.status(400).send("You can only approve new missions");
 
   const state = await MissionState.findOne({ name: "Approved" });
@@ -166,7 +166,7 @@ router.post("/approve/:id", admin, async (req, res) => {
 
 router.post("/revert/:id", admin, async (req, res) => {
   let mission = await Mission.findById(req.params.id);
-  if (mission.state.name != "Approved")
+  if (mission.state.name !== "Approved")
     return res.status(400).send("You can only revert apporved missions");
 
   const state = await MissionState.findOne({ name: "New" });
@@ -185,7 +185,7 @@ router.post("/revert/:id", admin, async (req, res) => {
 
 router.post("/finish/:id", admin, async (req, res) => {
   let mission = await Mission.findById(req.params.id);
-  if (mission.state.name != "Ongoing")
+  if (mission.state.name !== "Ongoing")
     return res.status(400).send("You can only finish ongoing missions");
 
   if (req.body.actualEndDate < mission.startDate)

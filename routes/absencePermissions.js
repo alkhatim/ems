@@ -57,7 +57,7 @@ router.put("/:id", async (req, res) => {
   if (!absencePermission)
     return res.status(404).send("There is no permission with the given ID");
 
-  if (absencePermission.state.name != "New")
+  if (absencePermission.state.name !== "New")
     return res.status(400).send("You can only modify new permissions");
 
   const { error } = validate(req.body);
@@ -110,7 +110,7 @@ router.delete("/:id", admin, async (req, res) => {
 //states
 router.post("/approve/:id", admin, async (req, res) => {
   let absencePermission = await AbsencePermission.findById(req.params.id);
-  if (absencePermission.state.name != "New")
+  if (absencePermission.state.name !== "New")
     return res.status(400).send("You can only approve new permissions");
 
   const state = await State.findOne({ name: "Approved" });
@@ -129,7 +129,7 @@ router.post("/approve/:id", admin, async (req, res) => {
 
 router.post("/revert/:id", admin, async (req, res) => {
   let absencePermission = await AbsencePermission.findById(req.params.id);
-  if (absencePermission.state.name != "Approved")
+  if (absencePermission.state.name !== "Approved")
     return res.status(400).send("You can only revert approved permissions");
 
   const state = await State.findOne({ name: "New" });

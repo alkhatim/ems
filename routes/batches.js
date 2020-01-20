@@ -371,7 +371,7 @@ router.put("/:id", async (req, res) => {
   if (!batch)
     return res.status(404).send("There is no batch with the given ID");
 
-  if (batch.state.name != "New")
+  if (batch.state.name !== "New")
     return res.status(400).send("You can only modify new batches");
 
   const { error } = validate(req.body);
@@ -780,7 +780,7 @@ router.delete("/:id", admin, validateObjectId, async (req, res) => {
   if (!batch)
     return res.status(404).send("There is no batch with the given ID");
 
-  if (batch.state.name != "New")
+  if (batch.state.name !== "New")
     return res
       .status(400)
       .send("You can't delete a closed or an approved batch");
@@ -851,7 +851,7 @@ router.delete("/:id", admin, validateObjectId, async (req, res) => {
 //states
 router.post("/approve/:id", admin, async (req, res) => {
   let batch = await Batch.findById(req.params.id);
-  if (batch.state.name != "New")
+  if (batch.state.name !== "New")
     return res.status(400).send("You can only approve new batches");
 
   const state = await State.findOne({ name: "Approved" });
@@ -871,7 +871,7 @@ router.post("/approve/:id", admin, async (req, res) => {
 
 router.post("/revert/:id", admin, async (req, res) => {
   let batch = await Batch.findById(req.params.id);
-  if (batch.state.name != "Approved")
+  if (batch.state.name !== "Approved")
     return res.status(400).send("You can only revert approved batches");
 
   const state = await State.findOne({ name: "New" });

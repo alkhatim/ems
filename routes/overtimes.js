@@ -76,7 +76,7 @@ router.put("/:id", async (req, res) => {
   if (!overtime)
     return res.status(404).send("There is no overtime with the given ID");
 
-  if (overtime.state.name != "New")
+  if (overtime.state.name !== "New")
     return res.status(400).send("You can only modify new overtimes");
 
   const { error } = validate(req.body);
@@ -140,7 +140,7 @@ router.delete("/:id", admin, validateObjectId, async (req, res) => {
 //states
 router.post("/approve/:id", admin, async (req, res) => {
   let overtime = await Overtime.findById(req.params.id);
-  if (overtime.state.name != "New")
+  if (overtime.state.name !== "New")
     return res.status(400).send("You can only approve new overtimes");
 
   const state = await State.findOne({ name: "Approved" });
@@ -159,7 +159,7 @@ router.post("/approve/:id", admin, async (req, res) => {
 
 router.post("/revert/:id", admin, async (req, res) => {
   let overtime = await Overtime.findById(req.params.id);
-  if (overtime.state.name != "Approved")
+  if (overtime.state.name !== "Approved")
     return res.status(400).send("You can only revert approved overtimes");
 
   const state = await State.findOne({ name: "New" });

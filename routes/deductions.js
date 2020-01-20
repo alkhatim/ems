@@ -74,7 +74,7 @@ router.put("/:id", async (req, res) => {
   if (!deduction)
     return res.status(404).send("There is no deduction with the given ID");
 
-  if (deduction.state.name != "New")
+  if (deduction.state.name !== "New")
     return res.status(400).send("You can only modify new deductions");
 
   const { error } = validate(req.body);
@@ -136,7 +136,7 @@ router.delete("/:id", admin, validateObjectId, async (req, res) => {
 //states
 router.post("/approve/:id", admin, async (req, res) => {
   let deduction = await Deduction.findById(req.params.id);
-  if (deduction.state.name != "New")
+  if (deduction.state.name !== "New")
     return res.status(400).send("You can only approve new deductions");
 
   const state = await State.findOne({ name: "Approved" });
@@ -157,7 +157,7 @@ router.post("/approve/:id", admin, async (req, res) => {
 
 router.post("/revert/:id", admin, async (req, res) => {
   let deduction = await Deduction.findById(req.params.id);
-  if (deduction.state.name != "Approved")
+  if (deduction.state.name !== "Approved")
     return res.status(400).send("You can only revert apporved deductions");
 
   const state = await State.findOne({ name: "New" });

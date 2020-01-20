@@ -184,7 +184,7 @@ router.put("/:id", validateObjectId, async (req, res) => {
         });
     }
 
-    if (req.body.installmentAmount > remaining && remaining != 0) {
+    if (req.body.installmentAmount > remaining && remaining !== 0) {
       req.body.installments.push({
         date: moment(lastDate)
           .add(1, "month")
@@ -258,7 +258,7 @@ router.put("/:id", validateObjectId, async (req, res) => {
 router.delete("/:id", admin, validateObjectId, async (req, res) => {
   const loan = await Loan.findById(req.params.id).select("installments");
 
-  if (loan.installments.filter(i => i.state.name != "Pending") == true)
+  if (loan.installments.filter(i => i.state.name !== "Pending") == true)
     return res
       .status(400)
       .send("You can't delete loans with pending installments!");
@@ -279,7 +279,7 @@ router.get("/installments/:id", validateObjectId, async (req, res) => {
 //states
 router.post("/approve/:id", admin, async (req, res) => {
   let loan = await Loan.findById(req.params.id);
-  if (loan.state.name != "New")
+  if (loan.state.name !== "New")
     return res.status(400).send("You can only approve new loans");
 
   const state = await State.findOne({ name: "Approved" });
@@ -294,7 +294,7 @@ router.post("/approve/:id", admin, async (req, res) => {
 
 router.post("/revert/:id", admin, async (req, res) => {
   let loan = await Loan.findById(req.params.id);
-  if (loan.state.name != "Approved")
+  if (loan.state.name !== "Approved")
     return res.status(400).send("You can only revert approved loans");
   if (loan.installments.find(i => i.state.name == "Closed"))
     return res
@@ -313,7 +313,7 @@ router.post("/revert/:id", admin, async (req, res) => {
 
 router.post("/freeze/:id", admin, async (req, res) => {
   let loan = await Loan.findById(req.params.id);
-  if (loan.state.name != "Approved")
+  if (loan.state.name !== "Approved")
     return res.status(400).send("You can only freeze approved loans");
 
   const state = await State.findOne({ name: "Frozen" });
@@ -328,7 +328,7 @@ router.post("/freeze/:id", admin, async (req, res) => {
 
 router.post("/unfreeze/:id", admin, async (req, res) => {
   let loan = await Loan.findById(req.params.id);
-  if (loan.state.name != "Frozen")
+  if (loan.state.name !== "Frozen")
     return res.status(400).send("You can only unfreeze frozen loans");
 
   const state = await State.findOne({ name: "Approved" });
@@ -364,7 +364,7 @@ router.post(
     const loan = await Loan.findOne({ "installments._id": req.params.id });
     if (!loan)
       return res.status(404).send("There is no installment with the given ID");
-    if (loan.state.name != "Approved")
+    if (loan.state.name !== "Approved")
       return res
         .status(400)
         .send("You can only pay installments for approved loans");

@@ -161,7 +161,7 @@ router.put("/:id", validateObjectId, async (req, res) => {
   let vacation = await Vacation.findById(req.params.id);
   if (!vacation)
     return res.status(404).send("There is no vacation with the given ID");
-  if (vacation.state.name != "New")
+  if (vacation.state.name !== "New")
     return res.status(400).send("You can only modify new vacations");
 
   const { error } = validate(req.body);
@@ -292,7 +292,7 @@ router.delete("/:id", admin, validateObjectId, async (req, res) => {
 //states
 router.post("/approve/:id", admin, async (req, res) => {
   let vacation = await Vacation.findById(req.params.id);
-  if (vacation.state.name != "New")
+  if (vacation.state.name !== "New")
     return res.status(400).send("You can only approve new vacations");
 
   const state = await VacationState.findOne({ name: "Approved" });
@@ -323,7 +323,7 @@ router.post("/approve/:id", admin, async (req, res) => {
 
 router.post("/revert/:id", admin, async (req, res) => {
   let vacation = await Vacation.findById(req.params.id);
-  if (vacation.state.name != "Approved")
+  if (vacation.state.name !== "Approved")
     return res.status(400).send("You can only revert apporved vacations");
 
   const state = await VacationState.findOne({ name: "New" });
@@ -342,7 +342,7 @@ router.post("/revert/:id", admin, async (req, res) => {
 
 router.post("/cutoff/:id", admin, async (req, res) => {
   let vacation = await Vacation.findById(req.params.id);
-  if (vacation.state.name != "Ongoing")
+  if (vacation.state.name !== "Ongoing")
     return res.status(400).send("You can only cutoff ongoing vacations");
 
   if (!req.body.actualEndDate)
