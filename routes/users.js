@@ -21,7 +21,7 @@ router.post("/", async (req, res) => {
   const user = new User({
     username: req.body.username,
     password: req.body.password,
-    roles: req.body.roles
+    role: req.body.role
   });
 
   await user.save();
@@ -60,7 +60,7 @@ router.put("/:id", admin, validateObjectId, async (req, res) => {
     {
       username: req.body.username,
       password: req.body.password,
-      roles: req.body.roles
+      role: req.body.role
     },
     { new: true }
   );

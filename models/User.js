@@ -18,12 +18,10 @@ const schema = new mongoose.Schema({
     minlength: 6,
     maxlength: 255
   },
-  roles: [
-    {
-      type: String,
-      enum: ["user", "admin"]
-    }
-  ]
+  role: {
+    type: String,
+    enum: ["user", "admin"]
+  }
 });
 
 schema.methods.genJwt = function() {
@@ -31,7 +29,7 @@ schema.methods.genJwt = function() {
     {
       _id: this._id,
       username: this.username,
-      roles: this.roles
+      role: this.role
     },
     config.get("jwtSecret")
   );
@@ -53,9 +51,7 @@ const validate = function(user) {
       symbol: 0,
       requirmentCount: 3
     }),
-    roles: Joi.array()
-      .items(Joi.string().valid("user", "admin"))
-      .unique()
+    role: Joi.string().valid("user", "admin")
   };
 
   return Joi.validate(user, schema);

@@ -1,7 +1,6 @@
 TODO:
 
 modify winston format
-change roles to role in user model
 
 ----------------------------------
 
