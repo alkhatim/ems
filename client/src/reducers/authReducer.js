@@ -1,21 +1,6 @@
 import http from "../helpers/http";
 import { LOGIN_SUCCESS, LOGIN_FAIL } from "../actions/types";
 
-const token = localStorage.getItem("jwt");
-
-const getUser = async () => {
-  if (!token) return null;
-
-  http.setToken(token);
-  try {
-    const res = await http.get("/api/logins");
-    console.log(res);
-    return res.data;
-  } catch (error) {
-    return null;
-  }
-};
-
 const initialState = {
   token: null,
   user: null,
@@ -38,7 +23,7 @@ export default function(state = initialState, action) {
 
     case LOGIN_FAIL:
       localStorage.removeItem("jwt");
-      http.removeToken();
+      http.setToken(null);
       return {
         ...state,
         token: null,
