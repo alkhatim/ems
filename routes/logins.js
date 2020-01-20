@@ -31,7 +31,7 @@ router.get("/", async (req, res) => {
 
   try {
     const tokenUser = jwt.verify(token, config.get("jwtSecret"));
-    const user = await User.findById(tokenUser._id).select("-password");
+    const user = await User.findById(tokenUser._id).select("_id username role");
     res.status(200).send(user);
   } catch (error) {
     res.status(401).send();
