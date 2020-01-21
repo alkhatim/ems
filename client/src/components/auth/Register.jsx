@@ -1,9 +1,7 @@
 import React, { Fragment, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { REGISTER_SUCCESS, REGISTER_FAIL } from "../../actions/types";
-import http from "../../helpers/http";
-import messages from "../../helpers/messages";
 import { Link, Redirect } from "react-router-dom";
+import { register } from "../../actions/authActions";
 
 export const Register = () => {
   const [formData, setformData] = useState({
@@ -24,23 +22,7 @@ export const Register = () => {
 
   const onSubmit = async e => {
     e.preventDefault();
-    try {
-      const res = await http.post("/api/users", { username, password });
-      const user = res.data;
-      const token = res.headers["x-jwt"];
-      dispatch({
-        type: REGISTER_SUCCESS,
-        payload: {
-          token,
-          user
-        }
-      });
-    } catch (error) {
-      dispatch({
-        type: REGISTER_FAIL
-      });
-      messages.error(error);
-    }
+    dispatch(register(username, password));
   };
 
   if (isLoggedIn) {

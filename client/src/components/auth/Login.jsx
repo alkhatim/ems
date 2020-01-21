@@ -1,9 +1,7 @@
 import React, { Fragment, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { LOGIN_SUCCESS, LOGIN_FAIL } from "../../actions/types";
-import http from "../../helpers/http";
-import messages from "../../helpers/messages";
 import { Link, Redirect } from "react-router-dom";
+import { login } from "../../actions/authActions";
 
 export const Login = () => {
   const [formData, setformData] = useState({
@@ -23,23 +21,7 @@ export const Login = () => {
 
   const onSubmit = async e => {
     e.preventDefault();
-    try {
-      const res = await http.post("/api/logins", { username, password });
-      const user = res.data;
-      const token = res.headers["x-jwt"];
-      dispatch({
-        type: LOGIN_SUCCESS,
-        payload: {
-          token,
-          user
-        }
-      });
-    } catch (error) {
-      messages.error(error);
-      dispatch({
-        type: LOGIN_FAIL
-      });
-    }
+    dispatch(login(username, password));
   };
 
   if (isLoggedIn) {

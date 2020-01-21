@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import { Provider } from "react-redux";
-import store from "./store";
-import http from "./helpers/http";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import store from "./store";
+import { loadUser } from "./actions/authActions";
 import { Navbar } from "./components/layouts/Navbar";
 import { Landing } from "./components/layouts/Landing";
 import { Login } from "./components/auth/Login";
 import { Register } from "./components/auth/Register";
-import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "@fortawesome/fontawesome-free/css/all.css";
 import "materialize-css/dist/css/materialize.min.css";
@@ -16,7 +16,7 @@ import "./spacing.css";
 
 const App = () => {
   useEffect(() => {
-    store.dispatch(http.loadUser());
+    store.dispatch(loadUser());
   }, []);
 
   return (
