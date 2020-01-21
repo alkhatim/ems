@@ -13,7 +13,7 @@ const { Department } = require("../models/Department");
 const { Location } = require("../models/Location");
 const { Loan } = require("../models/Loan");
 const { VacationCredit } = require("../models/VacationCredit");
-const calculateSalary = require("../services/calculateSalary");
+const calculateSalary = require("../helpers/calculateSalary");
 const validateObjectId = require("../middleware/validateObjectId");
 
 router.post("/", async (req, res) => {
