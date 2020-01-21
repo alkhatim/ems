@@ -1,8 +1,15 @@
 import React, { Fragment } from "react";
-import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Link, Redirect } from "react-router-dom";
 import { Footer } from "./Footer";
 
 export const Landing = () => {
+  const isLoggedIn = useSelector(state => state.authReducer.isLoggedIn);
+
+  if (isLoggedIn) {
+    return <Redirect to="/dashboard" />;
+  }
+
   return (
     <Fragment>
       <section className="landing">

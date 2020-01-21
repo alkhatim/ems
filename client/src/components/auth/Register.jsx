@@ -1,7 +1,8 @@
 import React, { Fragment, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, Redirect } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { register } from "../../actions/authActions";
+import messages from "../../helpers/messages";
 
 export const Register = () => {
   const [formData, setformData] = useState({
@@ -23,10 +24,11 @@ export const Register = () => {
   const onSubmit = async e => {
     e.preventDefault();
     dispatch(register(username, password, isAdmin));
+    messages.success("User registered");
   };
 
   if (isLoggedIn) {
-    return <Redirect to="/" />;
+    return <Redirect to="/dashboard" />;
   }
 
   return (
@@ -35,8 +37,8 @@ export const Register = () => {
         <div className="row center">
           <h1 className="center teal-text mt-4 mb-2">Sign Up</h1>
           <p className="flow-text teal-text">
-            <i className="fas fa-sign-in-alt mr-1 mb-1"></i> Register a new
-            account
+            <i className="fas fa-sign-in-alt mr-1 mb-1"></i> Register an account
+            for a new user
           </p>
           <div className="col s6 offset-s3 card">
             <div className="card-content">
@@ -77,7 +79,7 @@ export const Register = () => {
                   />
                   <label htmlFor="password2">Confirm Password</label>
                 </div>
-                <div className="input-field">
+                <div className="input-field my-2">
                   <p>
                     <label>
                       <input
@@ -87,7 +89,7 @@ export const Register = () => {
                         onChange={e => onChange(e)}
                         class="filled-in"
                       />
-                      <span>Is Admin?</span>
+                      <span>Admin Account</span>
                     </label>
                   </p>
                 </div>
@@ -98,12 +100,6 @@ export const Register = () => {
                   </button>
                 </div>
               </form>
-              <p>
-                Already registered ? &nbsp;
-                <Link to="/login" className="teal-text text-darken-2">
-                  Login
-                </Link>
-              </p>
             </div>
           </div>
         </div>

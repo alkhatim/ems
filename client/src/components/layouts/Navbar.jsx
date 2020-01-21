@@ -8,6 +8,7 @@ export const Navbar = () => {
   const dispatch = useDispatch();
 
   const isLoggedIn = useSelector(state => state.authReducer.isLoggedIn);
+  const user = useSelector(state => state.authReducer.user);
 
   useEffect(() => {
     var sidenav = document.querySelectorAll(".sidenav");
@@ -31,17 +32,19 @@ export const Navbar = () => {
               <i className="material-icons">menu</i>
             </a>
             <ul className="right hide-on-med-and-down">
-              <li>
-                <Link to="/settings">Settings</Link>
-              </li>
-              {!isLoggedIn && (
+              {isLoggedIn && user.role === "admin" && (
                 <li>
-                  <Link to="/register">Sign Up</Link>
+                  <Link to="/settings">Settings</Link>
                 </li>
               )}
               {!isLoggedIn && (
                 <li>
                   <Link to="/login">Login</Link>
+                </li>
+              )}
+              {isLoggedIn && (
+                <li>
+                  <Link to="/profile">{user.username}</Link>
                 </li>
               )}
               {isLoggedIn && (
@@ -67,15 +70,10 @@ export const Navbar = () => {
         <li className="mb-1">
           <div className="divider blue-grey darken-2"></div>
         </li>
-        <li>
-          <Link to="/settings" className="white-text">
-            Settings
-          </Link>
-        </li>
-        {!isLoggedIn && (
+        {isLoggedIn && (
           <li>
-            <Link to="/register" className="white-text">
-              Sign Up
+            <Link to="/settings" className="white-text">
+              Settings
             </Link>
           </li>
         )}
@@ -83,6 +81,13 @@ export const Navbar = () => {
           <li>
             <Link to="/login" className="white-text">
               Login
+            </Link>
+          </li>
+        )}
+        {isLoggedIn && (
+          <li>
+            <Link to="/profile" className="white-text">
+              profile
             </Link>
           </li>
         )}

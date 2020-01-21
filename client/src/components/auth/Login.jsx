@@ -1,9 +1,9 @@
 import React, { Fragment, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, Redirect } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { login } from "../../actions/authActions";
 
-export const Login = () => {
+export const Login = props => {
   const [formData, setformData] = useState({
     username: "",
     password: ""
@@ -22,10 +22,13 @@ export const Login = () => {
   const onSubmit = async e => {
     e.preventDefault();
     dispatch(login(username, password));
+    props.history.location.state
+      ? props.history.push(props.history.location.state.from)
+      : props.history.push("/dashboard");
   };
 
   if (isLoggedIn) {
-    return <Redirect to="/" />;
+    return <Redirect to="/dashboard" />;
   }
 
   return (
@@ -34,8 +37,8 @@ export const Login = () => {
         <div className="row center">
           <h1 className="center teal-text mt-4 mb-2">Login</h1>
           <p className="flow-text teal-text">
-            <i className="fas fa-sign-in-alt mr-1 mb-1"></i>Sign Into Your
-            Account
+            <i className="fas fa-sign-in-alt mr-1 mb-1"></i>Sign into your
+            account
           </p>
           <div className="col s6 offset-s3 card">
             <div className="card-content">
@@ -70,12 +73,6 @@ export const Login = () => {
                   </button>
                 </div>
               </form>
-              <p>
-                Don't have an account ? &nbsp;
-                <Link to="/register" className="teal-text text-darken-2">
-                  Register
-                </Link>
-              </p>
             </div>
           </div>
         </div>
