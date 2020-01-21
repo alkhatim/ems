@@ -1,9 +1,11 @@
 import http from "../helpers/http";
 import {
+  USER_LOADED,
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   REGISTER_SUCCESS,
-  REGISTER_FAIL
+  REGISTER_FAIL,
+  USER_LOAD_FAILED
 } from "../actions/types";
 
 const initialState = {
@@ -16,9 +18,23 @@ export default function(state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
+    case USER_LOADED:
+      return {
+        ...state,
+        token: payload.token,
+        user: payload.user,
+        isLoggedIn: true
+      };
+
+    case USER_LOAD_FAILED:
+      return {
+        ...state,
+        token: null,
+        user: null,
+        isLoggedIn: false
+      };
+
     case LOGIN_SUCCESS:
-      localStorage.setItem("jwt", payload.token);
-      http.setToken(payload.token);
       return {
         ...state,
         user: payload.user,
@@ -27,8 +43,6 @@ export default function(state = initialState, action) {
       };
 
     case LOGIN_FAIL:
-      localStorage.removeItem("jwt");
-      http.setToken(null);
       return {
         ...state,
         token: null,
@@ -37,8 +51,6 @@ export default function(state = initialState, action) {
       };
 
     case REGISTER_SUCCESS:
-      localStorage.setItem("jwt", payload.token);
-      http.setToken(payload.token);
       return {
         ...state,
         user: payload.user,
@@ -47,8 +59,6 @@ export default function(state = initialState, action) {
       };
 
     case REGISTER_FAIL:
-      localStorage.removeItem("jwt");
-      http.setToken(null);
       return {
         ...state,
         token: null,

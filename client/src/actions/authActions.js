@@ -1,5 +1,7 @@
 import http from "../helpers/http";
 import {
+  USER_LOADED,
+  USER_LOAD_FAILED,
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   REGISTER_SUCCESS,
@@ -12,15 +14,18 @@ export const login = (username, password) => async dispatch => {
     const res = await http.post("/api/logins", { username, password });
     const user = res.data;
     const token = res.headers["x-jwt"];
+    localStorage.setItem("jwt", token);
+    http.setToken(token);
     dispatch({
       type: LOGIN_SUCCESS,
       payload: {
-        token,
         user
       }
     });
   } catch (error) {
     messages.error(error);
+    localStorage.removeItem("jwt");
+    http.setToken(null);
     dispatch({
       type: LOGIN_FAIL
     });
@@ -32,6 +37,8 @@ export const register = (username, password) => async dispatch => {
     const res = await http.post("/api/users", { username, password });
     const user = res.data;
     const token = res.headers["x-jwt"];
+    localStorage.setItem("jwt", token);
+    http.setToken(token);
     dispatch({
       type: REGISTER_SUCCESS,
       payload: {
@@ -40,10 +47,12 @@ export const register = (username, password) => async dispatch => {
       }
     });
   } catch (error) {
+    localStorage.removeItem("jwt");
+    http.setToken(null);
+    messages.error(error);
     dispatch({
       type: REGISTER_FAIL
     });
-    messages.error(error);
   }
 };
 
@@ -52,7 +61,7 @@ export const loadUser = () => async dispatch => {
 
   if (!token)
     return dispatch({
-      type: LOGIN_FAIL
+      type: USER_LOAD_FAILED
     });
 
   http.setToken(token);
@@ -61,15 +70,16 @@ export const loadUser = () => async dispatch => {
     const res = await http.get("/api/logins");
     const user = res.data;
     dispatch({
-      type: LOGIN_SUCCESS,
+      type: USER_LOADED,
       payload: {
         token,
         user
       }
     });
   } catch (error) {
+    http.setToken(null);
     dispatch({
-      type: LOGIN_FAIL
+      type: USER_LOAD_FAILED
     });
   }
 };
