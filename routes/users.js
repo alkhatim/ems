@@ -33,7 +33,7 @@ router.post("/", async (req, res) => {
     .status(201)
     .header("access-control-expose-headers", "x-jwt")
     .header("x-jwt", token)
-    .send(_.pick(user, ["_id", "username"]));
+    .send(_.pick(user, ["_id", "username", "role"]));
 });
 
 router.put("/:id", [auth, validateObjectId], async (req, res) => {
