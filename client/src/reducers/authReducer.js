@@ -1,4 +1,3 @@
-import http from "../helpers/http";
 import {
   USER_LOADED,
   LOGIN_SUCCESS,
