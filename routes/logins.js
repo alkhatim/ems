@@ -27,14 +27,14 @@ router.post("/", async (req, res) => {
 
 router.get("/", async (req, res) => {
   const token = req.header("x-jwt");
-  if (!token) return res.status(401).send();
+  if (!token) return res.status(401).send("No authentication token provided");
 
   try {
     const tokenUser = jwt.verify(token, config.get("jwtSecret"));
     const user = await User.findById(tokenUser._id).select("_id username role");
     res.status(200).send(user);
   } catch (error) {
-    res.status(401).send();
+    res.status(400).send("Invalid authentication token");
   }
 });
 
