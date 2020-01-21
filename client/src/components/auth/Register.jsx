@@ -10,7 +10,7 @@ export const Register = () => {
     password2: ""
   });
 
-  const { username, password, password2 } = formData;
+  const { username, password, password2, isAdmin } = formData;
 
   const dispatch = useDispatch();
 
@@ -22,7 +22,7 @@ export const Register = () => {
 
   const onSubmit = async e => {
     e.preventDefault();
-    dispatch(register(username, password));
+    dispatch(register(username, password, isAdmin));
   };
 
   if (isLoggedIn) {
@@ -75,11 +75,26 @@ export const Register = () => {
                     className="validate"
                     required
                   />
-                  <label htmlFor="password">Confirm Password</label>
+                  <label htmlFor="password2">Confirm Password</label>
                 </div>
-                <div className="input-field center">
+                <div className="input-field">
+                  <p>
+                    <label>
+                      <input
+                        type="checkbox"
+                        name="isAdmin"
+                        id="isAdmin"
+                        onChange={e => onChange(e)}
+                        class="filled-in"
+                      />
+                      <span>Is Admin?</span>
+                    </label>
+                  </p>
+                </div>
+
+                <div className="input-field">
                   <button type="submit" className="btn btn-large">
-                    Login
+                    Register
                   </button>
                 </div>
               </form>

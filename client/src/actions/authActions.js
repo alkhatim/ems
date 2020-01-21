@@ -32,9 +32,10 @@ export const login = (username, password) => async dispatch => {
   }
 };
 
-export const register = (username, password) => async dispatch => {
+export const register = (username, password, isAdmin) => async dispatch => {
   try {
-    const res = await http.post("/api/users", { username, password });
+    const role = isAdmin ? "admin" : "user";
+    const res = await http.post("/api/users", { username, password, role });
     const user = res.data;
     const token = res.headers["x-jwt"];
     localStorage.setItem("jwt", token);
@@ -78,6 +79,7 @@ export const loadUser = () => async dispatch => {
     });
   } catch (error) {
     http.setToken(null);
+    localStorage.removeItem("jwt");
     dispatch({
       type: USER_LOAD_FAILED
     });
