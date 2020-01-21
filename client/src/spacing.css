@@ -1,169 +1,169 @@
 /* Spacing */
 /* TODO: Fix x and y margins to not set the other axis to 0rem */
 .m-1 {
-  margin: 1rem;
+  margin: 1rem !important;
 }
 
 .mt-1 {
-  margin-top: 1rem;
+  margin-top: 1rem !important;
 }
 
 .mb-1 {
-  margin-bottom: 1rem;
+  margin-bottom: 1rem !important;
 }
 
 .ml-1 {
-  margin-left: 1rem;
+  margin-left: 1rem !important;
 }
 
 .mr-1 {
-  margin-right: 1rem;
+  margin-right: 1rem !important;
 }
 
 .mx-1 {
-  margin: 0rem 1rem;
+  margin: 0rem 1rem !important;
 }
 
 .my-1 {
-  margin: 1rem 0rem;
+  margin: 1rem 0rem !important;
 }
 
 .m-2 {
-  margin: 2rem;
+  margin: 2rem !important;
 }
 
 .mt-2 {
-  margin-top: 2rem;
+  margin-top: 2rem !important;
 }
 
 .mb-2 {
-  margin-bottom: 2rem;
+  margin-bottom: 2rem !important;
 }
 
 .ml-2 {
-  margin-left: 2rem;
+  margin-left: 2rem !important;
 }
 
 .mr-2 {
-  margin-right: 2rem;
+  margin-right: 2rem !important;
 }
 
 .mx-2 {
-  margin: 0rem 2rem;
+  margin: 0rem 2rem !important;
 }
 
 .my-2 {
-  margin: 2rem 0rem;
+  margin: 2rem 0rem !important;
 }
 
 .m-3 {
-  margin: 3rem;
+  margin: 3rem !important;
 }
 
 .mt-3 {
-  margin-top: 3rem;
+  margin-top: 3rem !important;
 }
 
 .mb-3 {
-  margin-bottom: 3rem;
+  margin-bottom: 3rem !important;
 }
 
 .ml-3 {
-  margin-left: 3rem;
+  margin-left: 3rem !important;
 }
 
 .mr-3 {
-  margin-right: 3rem;
+  margin-right: 3rem !important;
 }
 
 .mx-3 {
-  margin: 0rem 3rem;
+  margin: 0rem 3rem !important;
 }
 
 .my-3 {
-  margin: 3rem 0rem;
+  margin: 3rem 0rem !important;
 }
 
 .m-4 {
-  margin: 4rem;
+  margin: 4rem !important;
 }
 
 .mt-4 {
-  margin-top: 4rem;
+  margin-top: 4rem !important;
 }
 
 .mb-4 {
-  margin-bottom: 4rem;
+  margin-bottom: 4rem !important;
 }
 
 .ml-4 {
-  margin-left: 4rem;
+  margin-left: 4rem !important;
 }
 
 .mr-4 {
-  margin-right: 4rem;
+  margin-right: 4rem !important;
 }
 
 .mx-4 {
-  margin: 0rem 4rem;
+  margin: 0rem 4rem !important;
 }
 
 .my-4 {
-  margin: 4rem 0rem;
+  margin: 4rem 0rem !important;
 }
 
 .m-5 {
-  margin: 5rem;
+  margin: 5rem !important;
 }
 
 .mt-5 {
-  margin-top: 5rem;
+  margin-top: 5rem !important;
 }
 
 .mb-5 {
-  margin-bottom: 5rem;
+  margin-bottom: 5rem !important;
 }
 
 .ml-5 {
-  margin-left: 5rem;
+  margin-left: 5rem !important;
 }
 
 .mr-5 {
-  margin-right: 5rem;
+  margin-right: 5rem !important;
 }
 
 .mx-5 {
-  margin: 0rem 5rem;
+  margin: 0rem 5rem !important;
 }
 
 .my-5 {
-  margin: 5rem 0rem;
+  margin: 5rem 0rem !important;
 }
 
 .m-6 {
-  margin: 6rem;
+  margin: 6rem !important;
 }
 
 .mt-6 {
-  margin-top: 6rem;
+  margin-top: 6rem !important;
 }
 
 .mb-6 {
-  margin-bottom: 6rem;
+  margin-bottom: 6rem !important;
 }
 
 .ml-6 {
-  margin-left: 6rem;
+  margin-left: 6rem !important;
 }
 
 .mr-6 {
-  margin-right: 6rem;
+  margin-right: 6rem !important;
 }
 
 .mx-6 {
-  margin: 0rem 6rem;
+  margin: 0rem 6rem !important;
 }
 
 .my-6 {
-  margin: 6rem 0rem;
+  margin: 6rem 0rem !important;
 }
