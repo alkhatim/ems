@@ -1,12 +1,22 @@
 import React, { Fragment, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { signOut } from "../../actions/authActions";
 import M from "materialize-css/dist/js/materialize.min.js";
 
 export const Navbar = () => {
+  const dispatch = useDispatch();
+
+  const isLoggedIn = useSelector(state => state.authReducer.isLoggedIn);
+
   useEffect(() => {
     var sidenav = document.querySelectorAll(".sidenav");
     M.Sidenav.init(sidenav, {});
   }, []);
+
+  const onSignOut = () => {
+    dispatch(signOut());
+  };
 
   return (
     <Fragment>
@@ -24,12 +34,23 @@ export const Navbar = () => {
               <li>
                 <Link to="/settings">Settings</Link>
               </li>
-              <li>
-                <Link to="/register">Sign Up</Link>
-              </li>
-              <li>
-                <Link to="/login">Login</Link>
-              </li>
+              {!isLoggedIn && (
+                <li>
+                  <Link to="/register">Sign Up</Link>
+                </li>
+              )}
+              {!isLoggedIn && (
+                <li>
+                  <Link to="/login">Login</Link>
+                </li>
+              )}
+              {isLoggedIn && (
+                <li>
+                  <Link to="/" onClick={() => onSignOut()}>
+                    Sign out
+                  </Link>
+                </li>
+              )}
             </ul>
           </div>
         </nav>
@@ -51,16 +72,27 @@ export const Navbar = () => {
             Settings
           </Link>
         </li>
-        <li>
-          <Link to="/register" className="white-text">
-            Sign Up
-          </Link>
-        </li>
-        <li>
-          <Link to="/login" className="white-text">
-            Login
-          </Link>
-        </li>
+        {!isLoggedIn && (
+          <li>
+            <Link to="/register" className="white-text">
+              Sign Up
+            </Link>
+          </li>
+        )}
+        {!isLoggedIn && (
+          <li>
+            <Link to="/login" className="white-text">
+              Login
+            </Link>
+          </li>
+        )}
+        {isLoggedIn && (
+          <li>
+            <Link to="/" onClick={() => signOut()} className="white-text">
+              Sign out
+            </Link>
+          </li>
+        )}
       </ul>
     </Fragment>
   );

@@ -5,7 +5,8 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   REGISTER_SUCCESS,
-  REGISTER_FAIL
+  REGISTER_FAIL,
+  SIGNED_OUT
 } from "./types";
 import messages from "../helpers/messages";
 
@@ -84,4 +85,12 @@ export const loadUser = () => async dispatch => {
       type: USER_LOAD_FAILED
     });
   }
+};
+
+export const signOut = () => async dispatch => {
+  localStorage.removeItem("jwt");
+  http.setToken(null);
+  dispatch({
+    type: SIGNED_OUT
+  });
 };

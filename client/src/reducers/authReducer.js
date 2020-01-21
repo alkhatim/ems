@@ -4,7 +4,8 @@ import {
   LOGIN_FAIL,
   REGISTER_SUCCESS,
   REGISTER_FAIL,
-  USER_LOAD_FAILED
+  USER_LOAD_FAILED,
+  SIGNED_OUT
 } from "../actions/types";
 
 const initialState = {
@@ -58,6 +59,14 @@ export default function(state = initialState, action) {
       };
 
     case REGISTER_FAIL:
+      return {
+        ...state,
+        token: null,
+        user: null,
+        isLoggedIn: false
+      };
+
+    case SIGNED_OUT:
       return {
         ...state,
         token: null,
