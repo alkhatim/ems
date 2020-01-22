@@ -16,7 +16,7 @@ const PrivateRoute = props => {
         !isLoading && !isAdmin ? (
           <Redirect
             to={{
-              pathname: "/unAuthorized",
+              pathname: "/forbidden",
               state: { from: props.location }
             }}
           />

@@ -10,6 +10,7 @@ import { Landing } from "./components/layouts/Landing";
 import { Login } from "./components/auth/Login";
 import { Register } from "./components/auth/Register";
 import { Dashboard } from "./components/layouts/Dashboard";
+import { Forbidden } from "./components/auth/Forbidden";
 import "react-toastify/dist/ReactToastify.css";
 import "@fortawesome/fontawesome-free/css/all.css";
 import "materialize-css/dist/css/materialize.min.css";
@@ -30,6 +31,7 @@ const App = () => {
           <Route exact path="/login" component={Login} />
           <Route exact path="/register" component={Register} />
           <ProtectedRoute exact path="/dashboard" component={Dashboard} />
+          <Route exact path="/forbidden" component={Forbidden} />
         </Switch>
       </BrowserRouter>
       <ToastContainer pauseOnFocusLoss={false} />

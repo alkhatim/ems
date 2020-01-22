@@ -42,3 +42,8 @@ footer .col {
   margin-top: 0.8rem;
   margin-bottom: 0.6rem;
 }
+
+.forbidden {
+  height: 90vh;
+  padding: 10rem;
+}
