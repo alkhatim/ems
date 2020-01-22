@@ -11,7 +11,7 @@ const ProtectedRoute = props => {
     <Route
       {...rest}
       render={props => {
-        if (isLoading == false && !isLoggedIn)
+        if (!isLoading && !isLoggedIn)
           return (
             <Redirect
               to={{

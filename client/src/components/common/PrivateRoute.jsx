@@ -13,7 +13,7 @@ const PrivateRoute = props => {
     <Route
       {...rest}
       render={props => {
-        if (isLoading == false && !isAdmin)
+        if (!isLoading && !isAdmin)
           return (
             <Redirect
               to={{
