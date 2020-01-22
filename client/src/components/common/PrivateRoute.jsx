@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { Route, Redirect } from "react-router-dom";
 
 const PrivateRoute = props => {
-  const { path, component: Component, render, ...rest } = props;
+  const { path, component: Component, ...rest } = props;
   const isLoggedIn = useSelector(state => state.authReducer.isLoggedIn);
   const isLoading = useSelector(state => state.authReducer.isLoading);
   const user = useSelector(state => state.authReducer.user);
@@ -12,18 +12,18 @@ const PrivateRoute = props => {
   return (
     <Route
       {...rest}
-      render={props => {
-        if (!isLoading && !isAdmin)
-          return (
-            <Redirect
-              to={{
-                pathname: "/unAuthorized",
-                state: { from: props.location }
-              }}
-            />
-          );
-        return Component ? <Component {...props} /> : render(props);
-      }}
+      render={props =>
+        !isLoading && !isAdmin ? (
+          <Redirect
+            to={{
+              pathname: "/unAuthorized",
+              state: { from: props.location }
+            }}
+          />
+        ) : (
+          <Component {...props} />
+        )
+      }
     />
   );
 };
