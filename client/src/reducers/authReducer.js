@@ -11,7 +11,8 @@ import {
 const initialState = {
   token: null,
   user: null,
-  isLoggedIn: false
+  isLoggedIn: false,
+  isLoading: true
 };
 
 export default function(state = initialState, action) {
@@ -25,7 +26,8 @@ export default function(state = initialState, action) {
         ...state,
         token: payload.token,
         user: payload.user,
-        isLoggedIn: true
+        isLoggedIn: true,
+        isLoading: false
       };
 
     case USER_LOAD_FAILED:
@@ -36,7 +38,8 @@ export default function(state = initialState, action) {
         ...state,
         token: null,
         user: null,
-        isLoggedIn: false
+        isLoggedIn: false,
+        isLoading: false
       };
 
     default:

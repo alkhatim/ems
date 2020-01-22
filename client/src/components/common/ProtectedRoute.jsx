@@ -5,12 +5,13 @@ import { Route, Redirect } from "react-router-dom";
 const ProtectedRoute = props => {
   const { path, component: Component, render, ...rest } = props;
   const isLoggedIn = useSelector(state => state.authReducer.isLoggedIn);
+  const isLoading = useSelector(state => state.authReducer.isLoading);
 
   return (
     <Route
       {...rest}
       render={props => {
-        if (!isLoggedIn)
+        if (isLoading == false && !isLoggedIn)
           return (
             <Redirect
               to={{

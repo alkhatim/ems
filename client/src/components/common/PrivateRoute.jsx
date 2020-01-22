@@ -5,6 +5,7 @@ import { Route, Redirect } from "react-router-dom";
 const PrivateRoute = props => {
   const { path, component: Component, render, ...rest } = props;
   const isLoggedIn = useSelector(state => state.authReducer.isLoggedIn);
+  const isLoading = useSelector(state => state.authReducer.isLoading);
   const user = useSelector(state => state.authReducer.user);
   const isAdmin = isLoggedIn && user.role === "admin";
 
@@ -12,7 +13,7 @@ const PrivateRoute = props => {
     <Route
       {...rest}
       render={props => {
-        if (!isAdmin)
+        if (isLoading == false && !isAdmin)
           return (
             <Redirect
               to={{
