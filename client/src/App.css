@@ -2,6 +2,14 @@ html * {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+.navbar-fixed {
+  height: 8.75vh;
+}
+
+nav {
+  height: 8.75vh;
+}
+
 .landing {
   position: relative;
   background: url("./img/showcase.jpg") no-repeat center center/cover;
@@ -35,12 +43,12 @@ footer span {
 }
 
 .page-footer {
-  padding: 0 !important;
+  padding: 0;
 }
 
 footer .col {
-  margin-top: 0.8rem;
-  margin-bottom: 0.6rem;
+  margin-top: 0.6rem;
+  margin-bottom: 0.4rem;
 }
 
 .error-page {
