@@ -2,7 +2,7 @@ import React from "react";
 
 export const Forbidden = () => {
   return (
-    <div className="forbidden center">
+    <div className="error-page center">
       <i className="fas fa-frown fa-7x"></i>
       <h1>
         <span className="red-text">Error 403 </span>Forbidden

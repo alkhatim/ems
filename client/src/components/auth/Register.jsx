@@ -8,7 +8,8 @@ export const Register = () => {
   const [formData, setformData] = useState({
     username: "",
     password: "",
-    password2: ""
+    password2: "",
+    isAdmin: false
   });
 
   const { username, password, password2, isAdmin } = formData;
