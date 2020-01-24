@@ -23,8 +23,8 @@ require("./startup/jobs")();
 
 app.use(express.json());
 app.use("/api/logins", loginsRouter);
-app.use("/api/users", usersRouter);
 app.use(auth);
+app.use("/api/users", usersRouter);
 app.use("/api/lookups", lookupsRouter);
 app.use("/api/employees", employeesRouter);
 app.use("/api/overtimes", overtimesRouter);

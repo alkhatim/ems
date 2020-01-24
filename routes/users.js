@@ -2,12 +2,11 @@ const express = require("express");
 const router = express.Router();
 const _ = require("lodash");
 const admin = require("../middleware/admin");
-const auth = require("../middleware/auth");
 const bcrypt = require("bcrypt");
 const { User, validate } = require("../models/User");
 const validateObjectId = require("../middleware/validateObjectId");
 
-router.post("/", async (req, res) => {
+router.post("/", admin, async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -28,21 +27,15 @@ router.post("/", async (req, res) => {
 
   await user.save();
 
-  const token = user.genJwt();
-
-  res
-    .status(201)
-    .header("access-control-expose-headers", "x-jwt")
-    .header("x-jwt", token)
-    .send(_.pick(user, ["_id", "username", "avatar", "role"]));
+  res.status(201).send(_.pick(user, ["_id", "username", "avatar", "role"]));
 });
 
-router.put("/:id", [auth, validateObjectId], async (req, res) => {
+router.put("/:id", validateObjectId, async (req, res) => {
   let user = await User.findById(req.params.id);
   if (!user) return res.status(404).send("There is no user with the given ID");
 
   if (req.user.id != user.id && req.user.role != "admin")
-    return res.status(403).send();
+    return res.status(403).send("You must be an admin to edit another user");
 
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
@@ -71,13 +64,7 @@ router.put("/:id", [auth, validateObjectId], async (req, res) => {
     { new: true }
   );
 
-  const token = user.genJwt();
-
-  res
-    .status(200)
-    .header("access-control-expose-headers", "x-jwt")
-    .header("x-jwt", token)
-    .send(_.pick(user, ["_id", "username", "avatar", "role"]));
+  res.status(200).send(_.pick(user, ["_id", "username", "avatar", "role"]));
 });
 
 router.delete("/:id", [admin, validateObjectId], async (req, res) => {
