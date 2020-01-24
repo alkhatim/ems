@@ -28,7 +28,7 @@ export const Register = () => {
 
   const onUpload = e => {
     const file = e.target.files[0];
-    let reader = new FileReader();
+    const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onloadend = () => {
       setformData({ ...formData, avatar: reader.result });

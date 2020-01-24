@@ -8,7 +8,7 @@ const schema = new mongoose.Schema({
   username: {
     type: String,
     required: true,
-    minlength: 5,
+    minlength: 4,
     maxlength: 30,
     unique: true
   },
@@ -43,7 +43,7 @@ const validate = function(user) {
   const schema = {
     username: Joi.string()
       .required()
-      .min(5)
+      .min(4)
       .max(30),
     password: new PasswordComplexity({
       min: 6,

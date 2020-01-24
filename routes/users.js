@@ -4,6 +4,7 @@ const _ = require("lodash");
 const admin = require("../middleware/admin");
 const bcrypt = require("bcrypt");
 const { User, validate } = require("../models/User");
+const { Inbox } = require("../models/Inbox");
 const validateObjectId = require("../middleware/validateObjectId");
 
 router.post("/", admin, async (req, res) => {
@@ -26,6 +27,16 @@ router.post("/", admin, async (req, res) => {
   });
 
   await user.save();
+
+  const inbox = new Inbox({
+    user: {
+      _id: user._id,
+      username: user.username
+    },
+    messages: []
+  });
+
+  await inbox.save();
 
   res.status(201).send(_.pick(user, ["_id", "username", "avatar", "role"]));
 });
@@ -70,6 +81,7 @@ router.put("/:id", validateObjectId, async (req, res) => {
 router.delete("/:id", [admin, validateObjectId], async (req, res) => {
   const user = await User.findByIdAndDelete(req.params.id);
   if (!user) return res.status(404).send("There is no user with the given ID");
+  await Inbox.findOneAndDelete({ "user._id": user._id });
   res.status(200).send(_.pick(user, ["_id", "username", "role"]));
 });
 

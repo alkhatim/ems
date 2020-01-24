@@ -15,6 +15,7 @@ const missionsRouter = require("./routes/missions");
 const loansRouter = require("./routes/loans");
 const batchesRouter = require("./routes/batches");
 const promotionsRouter = require("./routes/promotions");
+const messagesRouter = require("./routes/messages");
 const auth = require("./middleware/auth");
 const errors = require("./middleware/errors");
 
@@ -35,6 +36,7 @@ app.use("/api/missions", missionsRouter);
 app.use("/api/loans", loansRouter);
 app.use("/api/batches", batchesRouter);
 app.use("/api/promotions", promotionsRouter);
+app.use("/api/messages", messagesRouter);
 app.use(errors);
 
 const port = process.env.PORT || 3000;
