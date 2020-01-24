@@ -1,5 +1,6 @@
 TODO:
 
+fix issue that causes register success toast to pop even on fail
 add validation to auth components
 use helper text in forms
 use icon prefix for from inputs
