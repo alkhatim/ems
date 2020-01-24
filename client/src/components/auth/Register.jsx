@@ -1,8 +1,6 @@
 import React, { Fragment, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Redirect } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { register } from "../../actions/authActions";
-import messages from "../../helpers/messages";
 
 export const Register = () => {
   const [formData, setformData] = useState({
@@ -16,21 +14,21 @@ export const Register = () => {
 
   const dispatch = useDispatch();
 
-  const isLoggedIn = useSelector(state => state.authReducer.isLoggedIn);
-
   const onChange = e => {
     setformData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const onCheck = e => {
+    setformData({
+      ...formData,
+      [e.target.name]: e.target.checked ? true : false
+    });
   };
 
   const onSubmit = async e => {
     e.preventDefault();
     dispatch(register(username, password, isAdmin));
-    messages.success("User registered");
   };
-
-  if (isLoggedIn) {
-    return <Redirect to="/dashboard" />;
-  }
 
   return (
     <Fragment>
@@ -100,8 +98,8 @@ export const Register = () => {
                         type="checkbox"
                         name="isAdmin"
                         id="isAdmin"
-                        onChange={onChange}
-                        class="filled-in"
+                        onChange={onCheck}
+                        className="filled-in"
                       />
                       <span>Admin Account</span>
                     </label>

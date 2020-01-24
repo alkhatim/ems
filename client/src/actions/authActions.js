@@ -41,6 +41,7 @@ export const register = (username, password, isAdmin) => async dispatch => {
     const token = res.headers["x-jwt"];
     localStorage.setItem("jwt", token);
     http.setToken(token);
+    messages.success("User registered");
     dispatch({
       type: REGISTER_SUCCESS,
       payload: {
