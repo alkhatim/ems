@@ -79,8 +79,10 @@ export const loadUser = () => async dispatch => {
       }
     });
   } catch (error) {
-    http.setToken(null);
-    localStorage.removeItem("jwt");
+    if (error.response.status === 400 || error.response.status === 400) {
+      http.setToken(null);
+      localStorage.removeItem("jwt");
+    }
     dispatch({
       type: USER_LOAD_FAILED
     });
