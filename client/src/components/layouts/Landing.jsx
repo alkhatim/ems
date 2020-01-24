@@ -19,10 +19,10 @@ export const Landing = () => {
               <h1>EMS</h1>
               <p className="flow-text">Manage employees' data and salaries</p>
               <Link
-                to="/register"
+                to="/about"
                 className="btn btn-large teal darken-2 waves-effect mr-1"
               >
-                Sign Up
+                About
               </Link>
               <Link
                 to="/login"

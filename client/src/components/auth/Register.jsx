@@ -43,14 +43,14 @@ export const Register = () => {
           </p>
           <div className="col s6 offset-s3 card">
             <div className="card-content">
-              <form onSubmit={e => onSubmit(e)}>
+              <form onSubmit={onSubmit}>
                 <div className="input-field">
                   <input
                     type="text"
                     name="username"
                     id="username"
                     value={username}
-                    onChange={e => onChange(e)}
+                    onChange={onChange}
                     className="validate"
                     required
                   />
@@ -62,7 +62,7 @@ export const Register = () => {
                     name="password"
                     id="password"
                     value={password}
-                    onChange={e => onChange(e)}
+                    onChange={onChange}
                     className="validate"
                     required
                   />
@@ -74,7 +74,7 @@ export const Register = () => {
                     name="password2"
                     id="password2"
                     value={password2}
-                    onChange={e => onChange(e)}
+                    onChange={onChange}
                     className="validate"
                     required
                   />
@@ -100,7 +100,7 @@ export const Register = () => {
                         type="checkbox"
                         name="isAdmin"
                         id="isAdmin"
-                        onChange={e => onChange(e)}
+                        onChange={onChange}
                         class="filled-in"
                       />
                       <span>Admin Account</span>

@@ -42,14 +42,14 @@ export const Login = props => {
           </p>
           <div className="col s6 offset-s3 card">
             <div className="card-content">
-              <form onSubmit={e => onSubmit(e)}>
+              <form onSubmit={onSubmit}>
                 <div className="input-field">
                   <input
                     type="text"
                     name="username"
                     id="username"
                     value={username}
-                    onChange={e => onChange(e)}
+                    onChange={onChange}
                     className="validate"
                     required
                   />
@@ -61,7 +61,7 @@ export const Login = props => {
                     name="password"
                     id="password"
                     value={password}
-                    onChange={e => onChange(e)}
+                    onChange={onChange}
                     className="validate"
                     required
                   />
