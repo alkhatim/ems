@@ -54,7 +54,7 @@ const validate = function(user) {
       symbol: 0,
       requirmentCount: 3
     }),
-    avatar: Joi.string(),
+    avatar: Joi.string().allow(""),
     role: Joi.string().valid("user", "admin")
   };
 

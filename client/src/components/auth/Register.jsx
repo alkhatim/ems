@@ -7,7 +7,7 @@ export const Register = () => {
     username: "",
     password: "",
     password2: "",
-    avatar: null,
+    avatar: "",
     isAdmin: false
   });
 
@@ -27,19 +27,24 @@ export const Register = () => {
   };
 
   const onUpload = e => {
-    setformData({ ...formData, avatar: e.target.files[0] });
+    const file = e.target.files[0];
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setformData({ ...formData, avatar: reader.result });
+    };
   };
 
-  const onSubmit = async e => {
+  const onSubmit = e => {
     e.preventDefault();
-    dispatch(register(username, password, isAdmin));
+    dispatch(register(username, password, avatar, isAdmin));
   };
 
   return (
     <Fragment>
       <div className="container">
         <div className="row center">
-          <h1 className="center teal-text mt-4 mb-2">Sign Up</h1>
+          <h1 className="center teal-text mt-4 mb-2">Register</h1>
           <p className="flow-text teal-text">
             <i className="fas fa-sign-in-alt mr-1 mb-1"></i> Register an account
             for a new user

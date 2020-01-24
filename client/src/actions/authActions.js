@@ -33,25 +33,25 @@ export const login = (username, password) => async dispatch => {
   }
 };
 
-export const register = (username, password, isAdmin) => async dispatch => {
+export const register = (
+  username,
+  password,
+  avatar,
+  isAdmin
+) => async dispatch => {
   try {
     const role = isAdmin ? "admin" : "user";
-    const res = await http.post("/api/users", { username, password, role });
-    const user = res.data;
-    const token = res.headers["x-jwt"];
-    localStorage.setItem("jwt", token);
-    http.setToken(token);
+    await http.post("/api/users", {
+      username,
+      password,
+      avatar,
+      role
+    });
     messages.success("User registered");
     dispatch({
-      type: REGISTER_SUCCESS,
-      payload: {
-        token,
-        user
-      }
+      type: REGISTER_SUCCESS
     });
   } catch (error) {
-    localStorage.removeItem("jwt");
-    http.setToken(null);
     messages.error(error);
     dispatch({
       type: REGISTER_FAIL

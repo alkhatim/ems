@@ -21,7 +21,6 @@ export default function(state = initialState, action) {
   switch (type) {
     case USER_LOADED:
     case LOGIN_SUCCESS:
-    case REGISTER_SUCCESS:
       return {
         ...state,
         token: payload.token,
@@ -32,7 +31,6 @@ export default function(state = initialState, action) {
 
     case USER_LOAD_FAILED:
     case LOGIN_FAIL:
-    case REGISTER_FAIL:
     case SIGNED_OUT:
       return {
         ...state,
@@ -41,6 +39,10 @@ export default function(state = initialState, action) {
         isLoggedIn: false,
         isLoading: false
       };
+
+    case REGISTER_SUCCESS:
+    case REGISTER_FAIL:
+      return state;
 
     default:
       return state;
