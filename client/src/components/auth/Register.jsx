@@ -7,10 +7,11 @@ export const Register = () => {
     username: "",
     password: "",
     password2: "",
+    avatar: null,
     isAdmin: false
   });
 
-  const { username, password, password2, isAdmin } = formData;
+  const { username, password, password2, avatar, isAdmin } = formData;
 
   const dispatch = useDispatch();
 
@@ -23,6 +24,10 @@ export const Register = () => {
       ...formData,
       [e.target.name]: e.target.checked ? true : false
     });
+  };
+
+  const onUpload = e => {
+    setformData({ ...formData, avatar: e.target.files[0] });
   };
 
   const onSubmit = async e => {
@@ -80,14 +85,14 @@ export const Register = () => {
                 </div>
                 <div className="file-field input-field">
                   <div className="btn yellow darken-2">
-                    <span>Upload</span>
-                    <input type="file" />
+                    <span>Avatar</span>
+                    <input type="file" onChange={onUpload} />
                   </div>
                   <div className="file-path-wrapper">
                     <input
                       className="file-path"
                       type="text"
-                      placeholder="Profile Picture"
+                      placeholder="Upload an account avatar"
                     />
                   </div>
                 </div>
