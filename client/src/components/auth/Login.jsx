@@ -15,6 +15,14 @@ export const Login = props => {
 
   const isLoggedIn = useSelector(state => state.authReducer.isLoggedIn);
 
+  if (isLoggedIn) {
+    return props.history.location.state ? (
+      <Redirect to={props.history.location.state.from} />
+    ) : (
+      <Redirect to="/dashboard" />
+    );
+  }
+
   const onChange = e => {
     setformData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -22,14 +30,7 @@ export const Login = props => {
   const onSubmit = async e => {
     e.preventDefault();
     dispatch(login(username, password));
-    props.history.location.state
-      ? props.history.push(props.history.location.state.from)
-      : props.history.push("/dashboard");
   };
-
-  if (isLoggedIn) {
-    return <Redirect to="/dashboard" />;
-  }
 
   return (
     <Fragment>
