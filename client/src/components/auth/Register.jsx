@@ -80,6 +80,19 @@ export const Register = () => {
                   />
                   <label htmlFor="password2">Confirm Password</label>
                 </div>
+                <div className="file-field input-field">
+                  <div className="btn yellow darken-2">
+                    <span>Upload</span>
+                    <input type="file" />
+                  </div>
+                  <div className="file-path-wrapper">
+                    <input
+                      className="file-path"
+                      type="text"
+                      placeholder="Profile Picture"
+                    />
+                  </div>
+                </div>
                 <div className="input-field my-2">
                   <p>
                     <label>
