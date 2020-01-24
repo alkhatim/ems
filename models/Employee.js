@@ -122,7 +122,8 @@ const schema = new mongoose.Schema({
       min: 0
     },
     vacationSchedule: [Date]
-  }
+  },
+  photo: String
 });
 
 schema.pre("save", function() {
@@ -219,7 +220,8 @@ const validate = function(employee) {
         .integer()
         .min(1)
         .max(12)
-    )
+    ),
+    photo: Joi.string()
   };
 
   return Joi.validate(employee, schema);

@@ -18,6 +18,9 @@ const schema = new mongoose.Schema({
     minlength: 6,
     maxlength: 255
   },
+  avatar: {
+    type: String
+  },
   role: {
     type: String,
     enum: ["user", "admin"]
@@ -51,6 +54,7 @@ const validate = function(user) {
       symbol: 0,
       requirmentCount: 3
     }),
+    avatar: Joi.string(),
     role: Joi.string().valid("user", "admin")
   };
 

@@ -88,7 +88,8 @@ router.post("/", async (req, res) => {
     vacationInfo: {
       vacationDays: req.body.vacationDays,
       vacationSchedule: req.body.vacationSchedule
-    }
+    },
+    photo: req.body.photo
   });
 
   if (req.body.vacationDays) {
@@ -224,7 +225,8 @@ router.put("/:id", validateObjectId, async (req, res) => {
     vacationInfo: {
       vacationDays: req.body.vacationDays,
       vacationSchedule: req.body.vacationSchedule
-    }
+    },
+    photo: req.body.photo
   };
 
   employee = await Employee.findByIdAndUpdate(req.params.id, employee, {

@@ -22,7 +22,7 @@ router.post("/", async (req, res) => {
     .status(200)
     .header("access-control-expose-headers", "x-jwt")
     .header("x-jwt", token)
-    .send(_.pick(user, ["_id", "username", "role"]));
+    .send(_.pick(user, ["_id", "username", "avatar", "role"]));
 });
 
 router.get("/", async (req, res) => {
@@ -31,7 +31,9 @@ router.get("/", async (req, res) => {
 
   try {
     const tokenUser = jwt.verify(token, config.get("jwtSecret"));
-    const user = await User.findById(tokenUser._id).select("_id username role");
+    const user = await User.findById(tokenUser._id).select(
+      "_id username avatar role"
+    );
     res.status(200).send(user);
   } catch (error) {
     res.status(400).send("Invalid authentication token");

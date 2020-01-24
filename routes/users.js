@@ -22,6 +22,7 @@ router.post("/", async (req, res) => {
   const user = new User({
     username: req.body.username,
     password: req.body.password,
+    avatar: req.body.avatar,
     role: req.body.role
   });
 
@@ -33,7 +34,7 @@ router.post("/", async (req, res) => {
     .status(201)
     .header("access-control-expose-headers", "x-jwt")
     .header("x-jwt", token)
-    .send(_.pick(user, ["_id", "username", "role"]));
+    .send(_.pick(user, ["_id", "username", "avatar", "role"]));
 });
 
 router.put("/:id", [auth, validateObjectId], async (req, res) => {
@@ -64,6 +65,7 @@ router.put("/:id", [auth, validateObjectId], async (req, res) => {
     {
       username: req.body.username,
       password: req.body.password,
+      avatar: req.body.avatar,
       role: req.body.role
     },
     { new: true }
@@ -75,13 +77,13 @@ router.put("/:id", [auth, validateObjectId], async (req, res) => {
     .status(200)
     .header("access-control-expose-headers", "x-jwt")
     .header("x-jwt", token)
-    .send(_.pick(user, ["_id", "username"]));
+    .send(_.pick(user, ["_id", "username", "avatar", "role"]));
 });
 
 router.delete("/:id", [admin, validateObjectId], async (req, res) => {
   const user = await User.findByIdAndDelete(req.params.id);
   if (!user) return res.status(404).send("There is no user with the given ID");
-  res.status(200).send(_.pick(user, ["_id", "username"]));
+  res.status(200).send(_.pick(user, ["_id", "username", "role"]));
 });
 
 module.exports = router;
