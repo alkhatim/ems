@@ -10,7 +10,6 @@ module.exports = function(req, res, next) {
     req.user = user;
     next();
   } catch (ex) {
-    return res.status(400).send("Invalid authentication token");
+    res.status(400).send("Invalid authentication token");
   }
-  next();
 };
