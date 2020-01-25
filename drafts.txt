@@ -1,13 +1,10 @@
 TODO:
 
-add validation to auth components
-use helper text in forms
-use icon prefix for from inputs
 update navbar style and add user icon and messages link
 update mobile navbar
 create preloader
 create dashboard with graphs and inbox
-create reusable datatable component
+create reusable datatable, text input, combobox and lookup components
 
 ----------------------------------
 

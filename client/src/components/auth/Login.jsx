@@ -1,15 +1,20 @@
 import React, { Fragment, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
+import Joi from "joi";
 import { login } from "../../actions/authActions";
 
 export const Login = props => {
   const [formData, setformData] = useState({
     username: "",
-    password: ""
+    password: "",
+    errors: {
+      username: "",
+      password: ""
+    }
   });
 
-  const { username, password } = formData;
+  const { username, password, errors } = formData;
 
   const dispatch = useDispatch();
 
@@ -27,51 +32,103 @@ export const Login = props => {
     setformData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const onBlur = e => {
+    validateProperty(e.target);
+  };
+
   const onSubmit = async e => {
     e.preventDefault();
+    if (validateForm()) return;
     dispatch(login(username, password));
+  };
+
+  const formSchema = {
+    username: Joi.string()
+      .min(4)
+      .max(30)
+      .required()
+      .label("Username"),
+    password: Joi.string()
+      .min(6)
+      .max(26)
+      .required()
+      .label("Password")
+  };
+
+  const validateForm = () => {
+    const { error } = Joi.validate({ username, password }, formSchema, {
+      abortEarly: false
+    });
+    const errors = {};
+    for (let item of error.details) {
+      errors[item.path[0]] = item.message;
+    }
+    setformData({ ...formData, errors });
+    return error;
+  };
+
+  const validateProperty = input => {
+    const { error } = Joi.validate(
+      { [input.name]: input.value },
+      { [input.name]: formSchema[input.name] }
+    );
+    if (error) {
+      errors[input.name] = error.details[0].message;
+      setformData({ ...formData, errors });
+    } else {
+      delete errors[input.name];
+      setformData({ ...formData, errors });
+    }
   };
 
   return (
     <Fragment>
       <div className="container">
         <div className="row center">
-          <h1 className="center teal-text mt-4 mb-2">Login</h1>
-          <p className="flow-text teal-text">
-            <i className="fas fa-sign-in-alt mr-1 mb-1"></i>Sign into your
-            account
-          </p>
+          <h4 className="center teal-text mt-4 mb-2">Login</h4>
           <div className="col s6 offset-s3 card">
             <div className="card-content">
               <form onSubmit={onSubmit}>
-                <div className="input-field">
-                  <input
-                    type="text"
-                    name="username"
-                    id="username"
-                    value={username}
-                    onChange={onChange}
-                    className="validate"
-                    required
-                  />
-                  <label htmlFor="username">Usernmae</label>
+                <div className="row">
+                  <div className="input-field">
+                    <input
+                      type="text"
+                      name="username"
+                      id="username"
+                      value={username}
+                      onChange={onChange}
+                      onBlur={onBlur}
+                      className={errors.username ? "invalid" : ""}
+                    />
+                    <label htmlFor="username">Usernmae</label>
+                    <span className="helper-text red-text left">
+                      {errors.username}
+                    </span>
+                  </div>
                 </div>
-                <div className="input-field">
-                  <input
-                    type="password"
-                    name="password"
-                    id="password"
-                    value={password}
-                    onChange={onChange}
-                    className="validate"
-                    required
-                  />
-                  <label htmlFor="password">Password</label>
+                <div className="row">
+                  <div className="input-field">
+                    <input
+                      type="password"
+                      name="password"
+                      id="password"
+                      value={password}
+                      onChange={onChange}
+                      onBlur={onBlur}
+                      className={errors.password ? "invalid" : ""}
+                    />
+                    <label htmlFor="password">Password</label>
+                    <span className="helper-text red-text left">
+                      {errors.password}
+                    </span>
+                  </div>
                 </div>
-                <div className="input-field center">
-                  <button type="submit" className="btn btn-large">
-                    Login
-                  </button>
+                <div className="row">
+                  <div className="input-field center">
+                    <button type="submit" className="btn btn-large">
+                      Login
+                    </button>
+                  </div>
                 </div>
               </form>
             </div>

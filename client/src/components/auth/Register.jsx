@@ -1,5 +1,6 @@
 import React, { Fragment, useState } from "react";
 import { useDispatch } from "react-redux";
+import Joi from "joi";
 import { register } from "../../actions/authActions";
 
 export const Register = () => {
@@ -8,10 +9,15 @@ export const Register = () => {
     password: "",
     password2: "",
     avatar: "",
-    isAdmin: false
+    isAdmin: false,
+    errors: {
+      username: "",
+      password: "",
+      password2: ""
+    }
   });
 
-  const { username, password, password2, avatar, isAdmin } = formData;
+  const { username, password, password2, avatar, isAdmin, errors } = formData;
 
   const dispatch = useDispatch();
 
@@ -35,73 +41,141 @@ export const Register = () => {
     };
   };
 
+  const onBlur = e => {
+    validateProperty(e.target);
+  };
+
   const onSubmit = e => {
     e.preventDefault();
+    if (validateForm()) return;
     dispatch(register(username, password, avatar, isAdmin));
+  };
+
+  const formSchema = {
+    username: Joi.string()
+      .min(4)
+      .max(30)
+      .required()
+      .label("Username"),
+    password: Joi.string()
+      .min(6)
+      .max(26)
+      .required()
+      .label("Password"),
+    password2: Joi.string()
+      .valid(password)
+      .error(() => {
+        return {
+          message: "Passwords don't match"
+        };
+      })
+  };
+
+  const validateForm = () => {
+    const { error } = Joi.validate(
+      { username, password, password2 },
+      formSchema,
+      {
+        abortEarly: false
+      }
+    );
+    const errors = {};
+    for (let item of error.details) {
+      errors[item.path[0]] = item.message;
+    }
+    setformData({ ...formData, errors });
+    return error;
+  };
+
+  const validateProperty = input => {
+    const { error } = Joi.validate(
+      { [input.name]: input.value },
+      { [input.name]: formSchema[input.name] }
+    );
+    if (error) {
+      errors[input.name] = error.details[0].message;
+      setformData({ ...formData, errors });
+    } else {
+      delete errors[input.name];
+      setformData({ ...formData, errors });
+    }
   };
 
   return (
     <Fragment>
       <div className="container">
         <div className="row center">
-          <h1 className="center teal-text mt-4 mb-2">Register</h1>
-          <p className="flow-text teal-text">
-            <i className="fas fa-sign-in-alt mr-1 mb-1"></i> Register an account
-            for a new user
-          </p>
+          <h4 className="center teal-text mt-4 mb-2">Register</h4>
           <div className="col s6 offset-s3 card">
             <div className="card-content">
               <form onSubmit={onSubmit}>
-                <div className="input-field">
-                  <input
-                    type="text"
-                    name="username"
-                    id="username"
-                    value={username}
-                    onChange={onChange}
-                    className="validate"
-                    required
-                  />
-                  <label htmlFor="username">Usernmae</label>
-                </div>
-                <div className="input-field">
-                  <input
-                    type="password"
-                    name="password"
-                    id="password"
-                    value={password}
-                    onChange={onChange}
-                    className="validate"
-                    required
-                  />
-                  <label htmlFor="password">Password</label>
-                </div>
-                <div className="input-field">
-                  <input
-                    type="password"
-                    name="password2"
-                    id="password2"
-                    value={password2}
-                    onChange={onChange}
-                    className="validate"
-                    required
-                  />
-                  <label htmlFor="password2">Confirm Password</label>
-                </div>
-                <div className="file-field input-field">
-                  <div className="btn yellow darken-2">
-                    <span>Avatar</span>
-                    <input type="file" onChange={onUpload} />
-                  </div>
-                  <div className="file-path-wrapper">
+                <div className="row">
+                  <div className="input-field">
                     <input
-                      className="file-path"
                       type="text"
-                      placeholder="Upload an account avatar"
+                      name="username"
+                      id="username"
+                      value={username}
+                      onChange={onChange}
+                      onBlur={onBlur}
+                      className={errors.username ? "invalid" : ""}
                     />
+                    <label htmlFor="username">Usernmae</label>
+                    <span className="helper-text red-text left">
+                      {errors.username}
+                    </span>
                   </div>
                 </div>
-                <div className="input-field my-2">
+                <div className="row">
+                  <div className="input-field">
+                    <input
+                      type="password"
+                      name="password"
+                      id="password"
+                      value={password}
+                      onChange={onChange}
+                      onBlur={onBlur}
+                      className={errors.password ? "invalid" : ""}
+                    />
+                    <label htmlFor="password">Password</label>
+                    <span className="helper-text red-text left">
+                      {errors.password}
+                    </span>
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="input-field">
+                    <input
+                      type="password"
+                      name="password2"
+                      id="password2"
+                      value={password2}
+                      onChange={onChange}
+                      onBlur={onBlur}
+                      className={errors.password2 ? "invalid" : ""}
+                    />
+                    <label htmlFor="password2">Confirm Password</label>
+                    <span className="helper-text red-text left">
+                      {errors.password2}
+                    </span>
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="file-field input-field">
+                    <div className="btn yellow darken-2">
+                      <span>Avatar</span>
+                      <input type="file" onChange={onUpload} />
+                    </div>
+                    <div className="file-path-wrapper">
+                      <input
+                        className="file-path"
+                        type="text"
+                        placeholder="Upload an account avatar"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="input-field mb-2">
                   <p>
                     <label>
                       <input
@@ -115,7 +189,6 @@ export const Register = () => {
                     </label>
                   </p>
                 </div>
-
                 <div className="input-field">
                   <button type="submit" className="btn btn-large">
                     Register
