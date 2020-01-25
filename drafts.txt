@@ -1,12 +1,9 @@
 TODO:
 
-add messages model and router
-add avatar to user model and router
 add validation to auth components
 use helper text in forms
 use icon prefix for from inputs
-add image property to employee model and router
-update navbar style (set fixed height) and add user icon and messages link
+update navbar style and add user icon and messages link
 update mobile navbar
 create preloader
 create dashboard with graphs and inbox

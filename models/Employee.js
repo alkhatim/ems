@@ -221,7 +221,7 @@ const validate = function(employee) {
         .min(1)
         .max(12)
     ),
-    photo: Joi.string()
+    photo: Joi.string().allow("")
   };
 
   return Joi.validate(employee, schema);
