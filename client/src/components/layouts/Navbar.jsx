@@ -50,7 +50,7 @@ export const Navbar = () => {
               {isLoggedIn && (
                 <li>
                   <Link to="/" onClick={onSignOut}>
-                    Sign out
+                    Log out
                   </Link>
                 </li>
               )}
@@ -94,7 +94,7 @@ export const Navbar = () => {
         {isLoggedIn && (
           <li>
             <Link to="/" onClick={() => signOut()} className="white-text">
-              Sign out
+              Log out
             </Link>
           </li>
         )}
