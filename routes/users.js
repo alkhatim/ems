@@ -85,4 +85,26 @@ router.delete("/:id", [admin, validateObjectId], async (req, res) => {
   res.status(200).send(_.pick(user, ["_id", "username", "role"]));
 });
 
+//avatar
+router.patch("/:id", validateObjectId, async (req, res) => {
+  let user = await User.findById(req.params.id).select("_id username");
+  if (!user) return res.status(404).send("There is no user with the given ID");
+
+  if (req.user.id != user.id)
+    return res.status(403).send("You can only change your avatar");
+
+  if (!req.body.avatar)
+    return res.status(400).send("Please provide a valid avatar");
+
+  user = await User.findByIdAndUpdate(
+    req.params.id,
+    {
+      avatar: req.body.avatar
+    },
+    { new: true }
+  );
+
+  res.status(200).send(_.pick(user, ["_id", "username", "avatar", "role"]));
+});
+
 module.exports = router;
