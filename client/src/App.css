@@ -21,6 +21,11 @@ html * {
   height: 100%;
 }
 
+.auth-page-header {
+  margin-top: 7rem;
+  margin-bottom: 2rem;
+}
+
 footer .row {
   margin-bottom: 0;
 }

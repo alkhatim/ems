@@ -2,6 +2,7 @@ import React, { Fragment, useState } from "react";
 import { useDispatch } from "react-redux";
 import Joi from "joi";
 import { register } from "../../actions/authActions";
+import profile from "../../img/profile.png";
 
 export const Register = () => {
   const [formData, setformData] = useState({
@@ -107,7 +108,7 @@ export const Register = () => {
     <Fragment>
       <div className="container">
         <div className="row center">
-          <h4 className="center teal-text mt-4 mb-2">Register</h4>
+          <h4 className="center teal-text auth-page-header">Register</h4>
           <div className="col s6 offset-s3 card">
             <div className="card-content">
               <form onSubmit={onSubmit}>
@@ -120,8 +121,8 @@ export const Register = () => {
                       className="hide"
                     />
                     <img
-                      src={avatar}
-                      alt="../../img/profile.png"
+                      src={avatar || profile}
+                      alt="Profile Avatar"
                       onClick={() => avatarInput.click()}
                       className="circle responsive-img"
                       style={{

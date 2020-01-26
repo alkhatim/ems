@@ -85,7 +85,7 @@ export const Login = props => {
     <Fragment>
       <div className="container">
         <div className="row center">
-          <h4 className="center teal-text mt-4 mb-2">Login</h4>
+          <h4 className="center teal-text auth-page-header">Login</h4>
           <div className="col s6 offset-s3 card">
             <div className="card-content">
               <form onSubmit={onSubmit}>
