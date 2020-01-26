@@ -82,12 +82,14 @@ export const Register = () => {
         abortEarly: false
       }
     );
-    const errors = {};
-    for (let item of error.details) {
-      errors[item.path[0]] = item.message;
+    if (error) {
+      const errors = {};
+      for (let item of error.details) {
+        errors[item.path[0]] = item.message;
+      }
+      setformData({ ...formData, errors });
+      return error;
     }
-    setformData({ ...formData, errors });
-    return error;
   };
 
   const validateProperty = input => {
