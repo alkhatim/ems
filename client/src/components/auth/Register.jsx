@@ -19,6 +19,8 @@ export const Register = () => {
 
   const { username, password, password2, avatar, isAdmin, errors } = formData;
 
+  let avatarInput = {};
+
   const dispatch = useDispatch();
 
   const onChange = e => {
@@ -110,6 +112,27 @@ export const Register = () => {
             <div className="card-content">
               <form onSubmit={onSubmit}>
                 <div className="row">
+                  <div className="file-field input-field">
+                    <input
+                      type="file"
+                      onChange={onUpload}
+                      ref={input => (avatarInput = input)}
+                      className="hide"
+                    />
+                    <img
+                      src={avatar}
+                      alt="../../img/profile.png"
+                      onClick={() => avatarInput.click()}
+                      className="circle responsive-img"
+                      style={{
+                        width: "70px",
+                        height: "70px",
+                        cursor: "pointer"
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className="row">
                   <div className="input-field">
                     <input
                       type="text"
@@ -161,19 +184,7 @@ export const Register = () => {
                   </div>
                 </div>
                 <div className="row">
-                  <div className="file-field input-field">
-                    <div className="btn yellow darken-2">
-                      <span>Avatar</span>
-                      <input type="file" onChange={onUpload} />
-                    </div>
-                    <div className="file-path-wrapper">
-                      <input
-                        className="file-path"
-                        type="text"
-                        placeholder="Upload an account avatar"
-                      />
-                    </div>
-                  </div>
+                  <div className="input-field center"></div>
                 </div>
                 <div className="input-field mb-2">
                   <p>
