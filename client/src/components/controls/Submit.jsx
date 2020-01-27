@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 export const Submit = ({ label }) => {
   return (
@@ -8,4 +9,8 @@ export const Submit = ({ label }) => {
       </button>
     </div>
   );
+};
+
+Submit.propTypes = {
+  label: PropTypes.string.isRequired
 };
