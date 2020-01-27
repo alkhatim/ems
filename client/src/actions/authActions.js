@@ -20,7 +20,8 @@ export const login = (username, password) => async dispatch => {
     dispatch({
       type: LOGIN_SUCCESS,
       payload: {
-        user
+        user,
+        token
       }
     });
   } catch (error) {
