@@ -13,7 +13,6 @@ import { Dashboard } from "./components/layouts/Dashboard";
 import { Forbidden } from "./components/auth/Forbidden";
 import { NotFound } from "./components/auth/NotFound";
 import "react-toastify/dist/ReactToastify.css";
-import "@fortawesome/fontawesome-free/css/all.css";
 import "materialize-css/dist/css/materialize.min.css";
 import "./App.css";
 import "./spacing.css";
