@@ -2,7 +2,7 @@ import React, { Fragment, useState } from "react";
 import { useDispatch } from "react-redux";
 import Joi from "joi";
 import { register } from "../../actions/authActions";
-import profilePicture from "../../img/profile.png";
+import defaultPic from "../../img/profile.png";
 
 export const Register = () => {
   const [formData, setformData] = useState({
@@ -123,7 +123,7 @@ export const Register = () => {
                       className="hide"
                     />
                     <img
-                      src={avatar || profilePicture}
+                      src={avatar || defaultPic}
                       alt="Profile Avatar"
                       onClick={() => avatarInput.click()}
                       className="circle responsive-img"

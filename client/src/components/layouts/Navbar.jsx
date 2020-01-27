@@ -2,7 +2,7 @@ import React, { Fragment, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { logOut } from "../../actions/authActions";
-import profilePicture from "../../img/profile.png";
+import defaultPic from "../../img/profile.png";
 import M from "materialize-css/dist/js/materialize.min.js";
 
 export const Navbar = () => {
@@ -48,7 +48,7 @@ export const Navbar = () => {
               {isLoggedIn && (
                 <li>
                   <img
-                    src={(user && user.avatar) || profilePicture}
+                    src={(user && user.avatar) || defaultPic}
                     alt=""
                     className="circle responsive-img dropdown-trigger"
                     data-target="profile-dropdown"
