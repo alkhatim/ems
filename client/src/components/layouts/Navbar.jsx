@@ -1,7 +1,8 @@
 import React, { Fragment, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { signOut } from "../../actions/authActions";
+import { logOut } from "../../actions/authActions";
+import profilePicture from "../../img/profile.png";
 import M from "materialize-css/dist/js/materialize.min.js";
 
 export const Navbar = () => {
@@ -13,17 +14,19 @@ export const Navbar = () => {
   useEffect(() => {
     var sidenav = document.querySelectorAll(".sidenav");
     M.Sidenav.init(sidenav, {});
+    var profileDropdown = document.querySelectorAll(".dropdown-trigger");
+    M.Dropdown.init(profileDropdown, { coverTrigger: false });
   }, []);
 
-  const onSignOut = () => {
-    dispatch(signOut());
+  const onLogOut = () => {
+    dispatch(logOut());
   };
 
   return (
     <Fragment>
       <div className="navbar-fixed">
         <nav className="teal darken-3 z-depth-3">
-          <div className="nav-wrapper mx-4">
+          <div className="nav-wrapper ml-4 mr-2">
             <Link to="/" className="brand-logo">
               <i className="far fa-id-badge" />
               EMS
@@ -44,20 +47,33 @@ export const Navbar = () => {
               )}
               {isLoggedIn && (
                 <li>
-                  <Link to="/profile">{user.username}</Link>
-                </li>
-              )}
-              {isLoggedIn && (
-                <li>
-                  <Link to="/" onClick={onSignOut}>
-                    Log out
-                  </Link>
+                  <img
+                    src={(user && user.avatar) || profilePicture}
+                    alt=""
+                    className="circle responsive-img dropdown-trigger"
+                    data-target="profile-dropdown"
+                    style={{
+                      width: "40px",
+                      height: "40px",
+                      marginTop: "0.75rem",
+                      marginLeft: "0.4rem"
+                    }}
+                  />
                 </li>
               )}
             </ul>
           </div>
         </nav>
       </div>
+
+      {/* Profile Dropdown */}
+      <ul className="dropdown-content" id="profile-dropdown">
+        <li>
+          <Link to="/" onClick={onLogOut}>
+            Log out
+          </Link>
+        </li>
+      </ul>
 
       {/* Mobile SideNav */}
 
@@ -93,7 +109,7 @@ export const Navbar = () => {
         )}
         {isLoggedIn && (
           <li>
-            <Link to="/" onClick={() => signOut()} className="white-text">
+            <Link to="/" onClick={onLogOut} className="white-text">
               Log out
             </Link>
           </li>

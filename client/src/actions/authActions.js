@@ -6,7 +6,7 @@ import {
   LOGIN_FAIL,
   REGISTER_SUCCESS,
   REGISTER_FAIL,
-  SIGNED_OUT
+  LOGGED_OUT
 } from "./types";
 import messages from "../helpers/messages";
 
@@ -90,10 +90,10 @@ export const loadUser = () => async dispatch => {
   }
 };
 
-export const signOut = () => async dispatch => {
+export const logOut = () => async dispatch => {
   localStorage.removeItem("jwt");
   http.setToken(null);
   dispatch({
-    type: SIGNED_OUT
+    type: LOGGED_OUT
   });
 };
