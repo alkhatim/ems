@@ -86,13 +86,6 @@ export const Navbar = () => {
         <li className="mb-1">
           <div className="divider blue-grey darken-2"></div>
         </li>
-        {isLoggedIn && (
-          <li>
-            <Link to="/settings" className="white-text">
-              Settings
-            </Link>
-          </li>
-        )}
         {!isLoggedIn && (
           <li>
             <Link to="/login" className="white-text">
@@ -103,7 +96,14 @@ export const Navbar = () => {
         {isLoggedIn && (
           <li>
             <Link to="/profile" className="white-text">
-              profile
+              Profile
+            </Link>
+          </li>
+        )}
+        {isLoggedIn && user.role === "admin" && (
+          <li>
+            <Link to="/settings" className="white-text">
+              Settings
             </Link>
           </li>
         )}
