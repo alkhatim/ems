@@ -5,6 +5,7 @@ import { ToastContainer } from "react-toastify";
 import store from "./redux/store";
 import { loadUser } from "./actions/authActions";
 import ProtectedRoute from "./components/common/ProtectedRoute";
+import PrivateRoute from "./components/common/PrivateRoute";
 import { Navbar } from "./components/layouts/Navbar";
 import { Landing } from "./components/layouts/Landing";
 import { Login } from "./components/auth/Login";
@@ -29,7 +30,7 @@ const App = () => {
         <Switch>
           <Route exact path="/" component={Landing} />
           <Route exact path="/login" component={Login} />
-          <Route exact path="/register" component={Register} />
+          <PrivateRoute exact path="/register" component={Register} />
           <ProtectedRoute exact path="/dashboard" component={Dashboard} />
           <Route exact path="/forbidden" component={Forbidden} />
           <Route component={NotFound} />

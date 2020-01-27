@@ -2,6 +2,8 @@ import React, { Fragment, useState } from "react";
 import { useDispatch } from "react-redux";
 import Joi from "joi";
 import { register } from "../../actions/authActions";
+import { FormInput } from "./../controls/FormInput";
+import { Submit } from "./../controls/Submit";
 import messages from "../../helpers/messages";
 import defaultPic from "../../img/defaultProfile.png";
 
@@ -140,60 +142,33 @@ export const Register = () => {
                     />
                   </div>
                 </div>
-                <div className="row">
-                  <div className="input-field">
-                    <input
-                      type="text"
-                      name="username"
-                      id="username"
-                      value={username}
-                      onChange={onChange}
-                      onBlur={onBlur}
-                      className={errors.username ? "invalid" : ""}
-                    />
-                    <label htmlFor="username">Usernmae</label>
-                    <span className="helper-text red-text left">
-                      {errors.username}
-                    </span>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="input-field">
-                    <input
-                      type="password"
-                      name="password"
-                      id="password"
-                      value={password}
-                      onChange={onChange}
-                      onBlur={onBlur}
-                      className={errors.password ? "invalid" : ""}
-                    />
-                    <label htmlFor="password">Password</label>
-                    <span className="helper-text red-text left">
-                      {errors.password}
-                    </span>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="input-field">
-                    <input
-                      type="password"
-                      name="password2"
-                      id="password2"
-                      value={password2}
-                      onChange={onChange}
-                      onBlur={onBlur}
-                      className={errors.password2 ? "invalid" : ""}
-                    />
-                    <label htmlFor="password2">Confirm Password</label>
-                    <span className="helper-text red-text left">
-                      {errors.password2}
-                    </span>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="input-field center"></div>
-                </div>
+                <FormInput
+                  type="text"
+                  name="username"
+                  label="Username"
+                  error={errors.username}
+                  value={username}
+                  onChange={onChange}
+                  onBlur={onBlur}
+                />
+                <FormInput
+                  type="password"
+                  name="password"
+                  label="Password"
+                  error={errors.password}
+                  value={password}
+                  onChange={onChange}
+                  onBlur={onBlur}
+                />
+                <FormInput
+                  type="password"
+                  name="password2"
+                  label="Confirm Password"
+                  error={errors.password2}
+                  value={password2}
+                  onChange={onChange}
+                  onBlur={onBlur}
+                />
                 <div className="input-field mb-2">
                   <p>
                     <label>
@@ -208,11 +183,7 @@ export const Register = () => {
                     </label>
                   </p>
                 </div>
-                <div className="input-field">
-                  <button type="submit" className="btn btn-large">
-                    Register
-                  </button>
-                </div>
+                <Submit label="Register" />
               </form>
             </div>
           </div>

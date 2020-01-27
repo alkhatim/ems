@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import Joi from "joi";
 import { login } from "../../actions/authActions";
+import { FormInput } from "../controls/FormInput";
+import { Submit } from "../controls/Submit";
 
 export const Login = props => {
   const [formData, setformData] = useState({
@@ -91,47 +93,25 @@ export const Login = props => {
           <div className="col s6 offset-s3 card">
             <div className="card-content">
               <form onSubmit={onSubmit}>
-                <div className="row">
-                  <div className="input-field">
-                    <input
-                      type="text"
-                      name="username"
-                      id="username"
-                      value={username}
-                      onChange={onChange}
-                      onBlur={onBlur}
-                      className={errors.username ? "invalid" : ""}
-                    />
-                    <label htmlFor="username">Usernmae</label>
-                    <span className="helper-text red-text left">
-                      {errors.username}
-                    </span>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="input-field">
-                    <input
-                      type="password"
-                      name="password"
-                      id="password"
-                      value={password}
-                      onChange={onChange}
-                      onBlur={onBlur}
-                      className={errors.password ? "invalid" : ""}
-                    />
-                    <label htmlFor="password">Password</label>
-                    <span className="helper-text red-text left">
-                      {errors.password}
-                    </span>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="input-field center">
-                    <button type="submit" className="btn btn-large">
-                      Login
-                    </button>
-                  </div>
-                </div>
+                <FormInput
+                  type="text"
+                  name="username"
+                  label="Username"
+                  error={errors.username}
+                  value={username}
+                  onChange={onChange}
+                  onBlur={onBlur}
+                />
+                <FormInput
+                  type="password"
+                  name="password"
+                  label="Password"
+                  error={errors.password}
+                  value={password}
+                  onChange={onChange}
+                  onBlur={onBlur}
+                />
+                <Submit label="Login" />
               </form>
             </div>
           </div>

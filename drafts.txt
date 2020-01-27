@@ -1,10 +1,9 @@
 TODO:
 
-update navbar style and add user icon and messages link
-update mobile navbar
+add common controls
+add transaction to the server app
 create preloader
 create dashboard with graphs and inbox
-create reusable datatable, text input, combobox and lookup components
 
 ----------------------------------
 
