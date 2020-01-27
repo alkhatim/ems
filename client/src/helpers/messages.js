@@ -1,7 +1,12 @@
 import { toast } from "react-toastify";
 
 const error = error => {
-  if (error.response.status < 500)
+  if (!error.response)
+    toast.error(error.message, {
+      position: toast.POSITION.BOTTOM_RIGHT,
+      autoClose: 5000
+    });
+  if (error.response && error.response.status < 500)
     toast.error(error.response.data, {
       position: toast.POSITION.BOTTOM_RIGHT,
       autoClose: 5000

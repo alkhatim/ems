@@ -2,7 +2,7 @@ import React, { Fragment, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { logOut } from "../../actions/authActions";
-import defaultPic from "../../img/profile.png";
+import defaultPic from "../../img/defaultProfile.png";
 import M from "materialize-css/dist/js/materialize.min.js";
 
 export const Navbar = () => {

@@ -6,7 +6,7 @@ import {
   REGISTER_FAIL,
   USER_LOAD_FAILED,
   LOGGED_OUT
-} from "../actions/types";
+} from "../actions/actionTypes";
 
 const initialState = {
   token: null,

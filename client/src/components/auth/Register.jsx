@@ -2,7 +2,8 @@ import React, { Fragment, useState } from "react";
 import { useDispatch } from "react-redux";
 import Joi from "joi";
 import { register } from "../../actions/authActions";
-import defaultPic from "../../img/profile.png";
+import messages from "../../helpers/messages";
+import defaultPic from "../../img/defaultProfile.png";
 
 export const Register = () => {
   const [formData, setformData] = useState({
@@ -38,10 +39,14 @@ export const Register = () => {
   const onUpload = e => {
     const file = e.target.files[0];
     const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onloadend = () => {
-      setformData({ ...formData, avatar: reader.result });
-    };
+    try {
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        setformData({ ...formData, avatar: reader.result });
+      };
+    } catch (error) {
+      messages.error(error);
+    }
   };
 
   const onBlur = e => {
