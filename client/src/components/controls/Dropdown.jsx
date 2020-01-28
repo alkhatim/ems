@@ -4,9 +4,8 @@ import getLookup from "./../../services/lookups";
 import M from "materialize-css/dist/js/materialize.min.js";
 
 const Dropdown = props => {
-  const { label, lookup } = props;
-
   const [data, setData] = useState([]);
+  const { label, lookup } = props;
 
   const fetchData = async () => {
     setData(await getLookup(lookup));
