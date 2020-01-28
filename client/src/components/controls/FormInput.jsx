@@ -22,6 +22,6 @@ export const FormInput = props => {
 
 FormInput.propTypes = {
   name: PropTypes.string.isRequired,
-  error: PropTypes.string.isRequired,
+  error: PropTypes.string,
   label: PropTypes.string.isRequired
 };

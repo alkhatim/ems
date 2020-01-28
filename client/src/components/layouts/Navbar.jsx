@@ -53,7 +53,7 @@ export const Navbar = () => {
                   <Link to="/settings">Settings</Link>
                 </li>
               )}
-              <li className={!isLoggedIn && "hide"}>
+              <li className={isLoggedIn ? "" : "hide"}>
                 <img
                   src={(user && user.avatar) || defaultPic}
                   alt=""
