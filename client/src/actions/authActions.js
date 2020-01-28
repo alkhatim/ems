@@ -81,7 +81,7 @@ export const loadUser = () => async dispatch => {
       }
     });
   } catch (error) {
-    if (error.response.status === 400 || error.response.status === 400) {
+    if (error.response.status === 400 || error.response.status === 401) {
       http.setToken(null);
       localStorage.removeItem("jwt");
     }
