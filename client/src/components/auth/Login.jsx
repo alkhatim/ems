@@ -38,7 +38,7 @@ export const Login = props => {
     validateProperty(e.target);
   };
 
-  const onSubmit = async e => {
+  const onSubmit = e => {
     e.preventDefault();
     if (validateForm()) return;
     dispatch(login(username, password));

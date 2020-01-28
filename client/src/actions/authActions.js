@@ -7,7 +7,7 @@ import {
   REGISTER_SUCCESS,
   REGISTER_FAIL,
   LOGGED_OUT
-} from "./actionTypes";
+} from "./ActionTypes";
 import messages from "../services/messages";
 
 export const login = (username, password) => async dispatch => {
