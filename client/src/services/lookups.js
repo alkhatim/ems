@@ -3,8 +3,8 @@ import messages from "./messages";
 
 const Lookup = {};
 
-const getLookup = type => {
-  if (!Lookup[type]) fetchLookup(type);
+const getLookup = async type => {
+  if (!Lookup[type]) await fetchLookup(type);
   return Lookup[type];
 };
 

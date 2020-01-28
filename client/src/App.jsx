@@ -11,7 +11,7 @@ import { Landing } from "./components/layouts/Landing";
 import { Login } from "./components/auth/Login";
 import { Register } from "./components/auth/Register";
 import { Dashboard } from "./components/layouts/Dashboard";
-import { Playground } from "./components/layouts/Playground";
+import { Playground } from "./components/misc/Playground";
 import { Forbidden } from "./components/auth/Forbidden";
 import { NotFound } from "./components/misc/NotFound";
 import "react-toastify/dist/ReactToastify.css";
