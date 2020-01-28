@@ -8,7 +8,8 @@ const getLookup = type => {
 
 const fetchLookup = async type => {
   try {
-    Lookup[type] = await http.get(`/lookups/?lookup=${type}`);
+    var res = await http.get(`/lookups/?lookup=${type}`);
+    Lookup[type] = res.data;
   } catch (error) {
     messages.error(error);
   }
