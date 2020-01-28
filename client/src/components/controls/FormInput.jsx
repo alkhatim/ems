@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-export const FormInput = props => {
+const FormInput = props => {
   const { name, error, label } = props;
 
   return (
@@ -25,3 +25,5 @@ FormInput.propTypes = {
   error: PropTypes.string,
   label: PropTypes.string.isRequired
 };
+
+export default FormInput;
