@@ -4,7 +4,7 @@ import Joi from "joi";
 import { register } from "../../actions/authActions";
 import { FormInput } from "./../controls/FormInput";
 import { Submit } from "./../controls/Submit";
-import messages from "../../helpers/messages";
+import messages from "../../services/messages";
 import defaultPic from "../../img/defaultProfile.png";
 
 export const Register = () => {

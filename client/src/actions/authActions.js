@@ -1,4 +1,4 @@
-import http from "../helpers/http";
+import http from "../services/http";
 import {
   USER_LOADED,
   USER_LOAD_FAILED,
@@ -8,11 +8,11 @@ import {
   REGISTER_FAIL,
   LOGGED_OUT
 } from "./actionTypes";
-import messages from "../helpers/messages";
+import messages from "../services/messages";
 
 export const login = (username, password) => async dispatch => {
   try {
-    const res = await http.post("/api/logins", { username, password });
+    const res = await http.post("/logins", { username, password });
     const user = res.data;
     const token = res.headers["x-jwt"];
     localStorage.setItem("jwt", token);
@@ -42,7 +42,7 @@ export const register = (
 ) => async dispatch => {
   try {
     const role = isAdmin ? "admin" : "user";
-    await http.post("/api/users", {
+    await http.post("/users", {
       username,
       password,
       avatar,
@@ -71,7 +71,7 @@ export const loadUser = () => async dispatch => {
   http.setToken(token);
 
   try {
-    const res = await http.get("/api/logins");
+    const res = await http.get("/logins");
     const user = res.data;
     dispatch({
       type: USER_LOADED,
