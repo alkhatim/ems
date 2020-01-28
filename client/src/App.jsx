@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Provider } from "react-redux";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -20,9 +20,7 @@ import "./App.css";
 import "./spacing.css";
 
 const App = () => {
-  useEffect(() => {
-    store.dispatch(loadUser());
-  }, []);
+  store.dispatch(loadUser());
 
   return (
     <Provider store={store}>
