@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import getLookup from "./../../services/lookups";
+import getLookup from "../../services/lookups";
 import { Dropdown } from "primereact/dropdown";
 
-const Dropdown = props => {
+const Select = props => {
   const [data, setData] = useState([]);
   const { label, lookup } = props;
 
-  const fetchData = async () => {
-    setData(await getLookup(lookup));
-  };
-
   useEffect(() => {
+    const fetchData = async () => {
+      setData(await getLookup(lookup));
+    };
     fetchData();
   }, []);
 
@@ -35,4 +34,4 @@ Dropdown.propTypes = {
   lookup: PropTypes.string.isRequired
 };
 
-export default Dropdown;
+export default Select;
