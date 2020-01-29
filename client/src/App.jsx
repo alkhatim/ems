@@ -16,8 +16,6 @@ import { Forbidden } from "./components/auth/Forbidden";
 import { NotFound } from "./components/misc/NotFound";
 import "react-toastify/dist/ReactToastify.css";
 import "materialize-css/dist/css/materialize.min.css";
-import "primereact/resources/themes/nova-dark/theme.css";
-import "primereact/resources/primereact.min.css";
 import "./App.css";
 import "./spacing.css";
 
