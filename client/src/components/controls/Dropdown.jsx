@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import getLookup from "./../../services/lookups";
-import M from "materialize-css/dist/js/materialize.min.js";
+import { Dropdown } from "primereact/dropdown";
 
 const Dropdown = props => {
   const [data, setData] = useState([]);
@@ -12,24 +12,19 @@ const Dropdown = props => {
   };
 
   useEffect(() => {
-    var dropdown = document.querySelectorAll("select");
-    M.FormSelect.init(dropdown, {});
     fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
+  }, []);
 
   return (
     <div className="row">
       <div className="input-field">
-        <select defaultValue={""} {...props}>
-          <option value="" disabled></option>
-          {data.map(item => (
-            <option key={item._id} value={item._id}>
-              {item.name}
-            </option>
-          ))}
-        </select>
-        <label>{label}</label>
+        <Dropdown
+          optionLabel="name"
+          options={data}
+          placeholder={label}
+          showClear={true}
+          {...props}
+        />
       </div>
     </div>
   );
