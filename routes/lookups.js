@@ -4,6 +4,7 @@ const { BatchType } = require("../models/BatchType");
 const { Contract } = require("../models/Contract");
 const { DeductionType } = require("../models/DeductionType");
 const { Department } = require("../models/Department");
+const { Employee } = require("../models/Employee");
 const { EmployeeStatus } = require("../models/EmployeeStatus");
 const { Gender } = require("../models/Gender");
 const { InstallmentState } = require("../models/InstallmentState");
@@ -34,6 +35,10 @@ router.get("/", async (req, res) => {
       break;
     case "Department":
       lookups = await Department.find();
+      res.status(200).send(lookups);
+      break;
+    case "Employee":
+      lookups = await Employee.find().select("_id name");
       res.status(200).send(lookups);
       break;
     case "EmployeeStatus":
