@@ -5,25 +5,50 @@ import getLookup from "./../../services/lookups";
 import messages from "../../services/messages";
 
 export default class Autocomplete extends Component {
-  constructor(props) {
-    super(props);
-    this.label = this.props.label;
-    this.lookup = this.props.lookup;
-    this.data = {};
-  }
+  label = this.props.label;
+  lookup = this.props.lookup;
+  onSelect = this.props.onSelect;
+  data = {};
+  state = {
+    lookups: [],
+    value: "",
+    id: ""
+  };
 
-  componentDidMount() {
-    getLookup(this.lookup)
-      .then(lookups => {
-        const autocomplete = document.querySelectorAll(".autocomplete");
-        lookups.forEach(item => {
-          this.data[item.name] = null;
-        });
-        M.Autocomplete.init(autocomplete, {
-          data: this.data
-        });
-      })
-      .catch(error => messages.error(error));
+  onChange = e => {
+    const selected =
+      this.state.lookups.find(item => item.name === e.target.value) || null;
+    this.setState({
+      value: e.target.value,
+      id: selected ? selected._id : null
+    });
+    this.onSelect(selected ? selected._id : null);
+  };
+
+  onAutocomplete = value => {
+    const selected =
+      this.state.lookups.find(item => item.name === value) || null;
+    this.setState({
+      value: value,
+      id: selected ? selected._id : null
+    });
+    this.onSelect(selected ? selected._id : null);
+  };
+
+  async componentDidMount() {
+    try {
+      this.setState({ lookups: await getLookup(this.lookup) });
+      this.state.lookups.forEach(item => {
+        this.data[item.name] = null;
+      });
+      const autocomplete = document.querySelectorAll(".autocomplete");
+      M.Autocomplete.init(autocomplete, {
+        data: this.data,
+        onAutocomplete: this.onAutocomplete
+      });
+    } catch (error) {
+      messages.error(error);
+    }
   }
   render() {
     return (
@@ -33,6 +58,8 @@ export default class Autocomplete extends Component {
             type="text"
             name="autocomplete"
             id="autocomplete"
+            value={this.state.value}
+            onChange={this.onChange}
             className="autocomplete"
             {...this.props}
           />
@@ -45,5 +72,14 @@ export default class Autocomplete extends Component {
 
 Autocomplete.propTypes = {
   label: PropTypes.string.isRequired,
-  lookup: PropTypes.string.isRequired
+  lookup: PropTypes.string.isRequired,
+  onSelect: PropTypes.func.isRequired
 };
+
+// USE:
+// <Autocomplete onSelect={onSelect} label="State" lookup="State" />;
+// const [employeeId, setemployeeId] = useState("");
+
+// const onSelect = id => {
+//   setemployeeId(id);
+// };
