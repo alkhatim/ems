@@ -21,7 +21,7 @@ export const Navbar = () => {
     });
   }, []);
 
-  const onLogOut = () => {
+  const handleLogOut = () => {
     dispatch(logOut());
   };
 
@@ -80,7 +80,7 @@ export const Navbar = () => {
           </Link>
         </li>
         <li>
-          <Link to="/" onClick={onLogOut}>
+          <Link to="/" onClick={handleLogOut}>
             <i className="fa fa-sign-out mr-1"></i>Log out
           </Link>
         </li>
@@ -127,7 +127,7 @@ export const Navbar = () => {
         )}
         {isLoggedIn && (
           <li>
-            <Link to="/" onClick={onLogOut} className="white-text">
+            <Link to="/" onClick={handleLogOut} className="white-text">
               <i className="fa fa-sign-out white-text"></i>Log out
             </Link>
           </li>

@@ -27,18 +27,18 @@ export const Register = () => {
 
   const dispatch = useDispatch();
 
-  const onChange = e => {
+  const handleChange = e => {
     setformData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const onCheck = e => {
+  const handleCheck = e => {
     setformData({
       ...formData,
       [e.target.name]: e.target.checked ? true : false
     });
   };
 
-  const onUpload = e => {
+  const handleUpload = e => {
     const file = e.target.files[0];
     const reader = new FileReader();
     try {
@@ -51,11 +51,11 @@ export const Register = () => {
     }
   };
 
-  const onBlur = e => {
+  const handleBlur = e => {
     validateProperty(e.target);
   };
 
-  const onSubmit = e => {
+  const handleSubmit = e => {
     e.preventDefault();
     if (validateForm()) return;
     dispatch(register(username, password, avatar, isAdmin));
@@ -120,12 +120,12 @@ export const Register = () => {
           <h4 className="center teal-text auth-page-header">Register</h4>
           <div className="col s6 offset-s3 card">
             <div className="card-content">
-              <form onSubmit={onSubmit}>
+              <form onSubmit={handleSubmit}>
                 <div className="row">
                   <div className="file-field input-field">
                     <input
                       type="file"
-                      onChange={onUpload}
+                      onChange={handleUpload}
                       ref={input => (avatarInput = input)}
                       className="hide"
                     />
@@ -148,8 +148,8 @@ export const Register = () => {
                   label="Username"
                   error={errors.username}
                   value={username}
-                  onChange={onChange}
-                  onBlur={onBlur}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
                 />
                 <FormInput
                   type="password"
@@ -157,8 +157,8 @@ export const Register = () => {
                   label="Password"
                   error={errors.password}
                   value={password}
-                  onChange={onChange}
-                  onBlur={onBlur}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
                 />
                 <FormInput
                   type="password"
@@ -166,8 +166,8 @@ export const Register = () => {
                   label="Confirm Password"
                   error={errors.password2}
                   value={password2}
-                  onChange={onChange}
-                  onBlur={onBlur}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
                 />
                 <div className="input-field mb-2">
                   <p>
@@ -176,7 +176,7 @@ export const Register = () => {
                         type="checkbox"
                         name="isAdmin"
                         id="isAdmin"
-                        onChange={onCheck}
+                        onChange={handleCheck}
                         className="filled-in"
                       />
                       <span>Admin Account</span>
