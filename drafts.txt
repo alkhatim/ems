@@ -1,7 +1,14 @@
 TODO:
 
-add common controls
-add transaction to the server app
+--server
+add transaction to routers
+use multer for file uploads
+use redis for caching common endpoints
+update salaries to count for hire date, termination date...etc
+auto send entries for approval
+
+--client
+create datatable
 create preloader
 create dashboard with graphs and inbox
 
