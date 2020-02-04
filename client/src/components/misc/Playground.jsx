@@ -3,9 +3,9 @@ import Dropdown from "./../shared/Dropdown";
 import Autocomplete from "./../shared/Autocomplete";
 
 export const Playground = () => {
-  let selected = "";
-  const handleSelect = id => {
-    console.log(id);
+  const employeeId = "";
+  const handleAutocomplete = id => {
+    employeeId = id;
   };
 
   return (
@@ -14,8 +14,8 @@ export const Playground = () => {
         <div className="row">
           <div className="col s6 offset-s3">
             <Autocomplete
-              selected={selected}
-              onChose={handleSelect}
+              id={employeeId}
+              onAutocomplete={handleAutocomplete}
               label="Employee"
               lookup="Employee"
             />
