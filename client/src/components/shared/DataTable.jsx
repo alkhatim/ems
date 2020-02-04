@@ -6,12 +6,10 @@ const DataTable = props => {
   const { columns, data } = props;
   return (
     <MaterialTable
-      title=""
       columns={columns}
       data={data}
       options={{
-        search: false,
-        exportButton: true,
+        toolbar: false,
         headerStyle: {
           color: "#494444",
           fontWeight: "bold",
@@ -20,6 +18,7 @@ const DataTable = props => {
           fontSize: 15
         }
       }}
+      {...props}
     />
   );
 };
