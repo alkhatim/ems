@@ -30,15 +30,15 @@ export const Login = props => {
     );
   }
 
-  const onChange = e => {
+  const handleChange = e => {
     setformData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const onBlur = e => {
+  const handleBlur = e => {
     validateProperty(e.target);
   };
 
-  const onSubmit = e => {
+  const handleSubmit = e => {
     e.preventDefault();
     if (validateForm()) return;
     dispatch(login(username, password));
@@ -92,15 +92,15 @@ export const Login = props => {
           <h4 className="center teal-text auth-page-header">Login</h4>
           <div className="col s6 offset-s3 card">
             <div className="card-content">
-              <form onSubmit={onSubmit}>
+              <form onSubmit={handleSubmit}>
                 <FormInput
                   type="text"
                   name="username"
                   label="Username"
                   error={errors.username}
                   value={username}
-                  onChange={onChange}
-                  onBlur={onBlur}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
                 />
                 <FormInput
                   type="password"
@@ -108,8 +108,8 @@ export const Login = props => {
                   label="Password"
                   error={errors.password}
                   value={password}
-                  onChange={onChange}
-                  onBlur={onBlur}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
                 />
                 <Submit label="Login" />
               </form>

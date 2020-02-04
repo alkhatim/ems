@@ -7,44 +7,44 @@ import messages from "../../services/messages";
 export default class Autocomplete extends Component {
   label = this.props.label;
   lookup = this.props.lookup;
-  onSelect = this.props.onSelect;
-  data = {};
+  selected = this.props.selected;
+  onChose = this.props.onChose;
   state = {
+    data: {},
     lookups: [],
-    value: "",
-    id: ""
+    value: ""
   };
 
-  onChange = e => {
+  handleChange = e => {
     const selected =
       this.state.lookups.find(item => item.name === e.target.value) || null;
     this.setState({
-      value: e.target.value,
-      id: selected ? selected._id : null
+      value: e.target.value
     });
-    this.onSelect(selected ? selected._id : null);
+    this.selected = selected;
+    this.onChose(selected ? selected._id : "");
   };
 
-  onAutocomplete = value => {
+  handleAutocomplete = value => {
     const selected =
       this.state.lookups.find(item => item.name === value) || null;
     this.setState({
-      value: value,
-      id: selected ? selected._id : null
+      value: value
     });
-    this.onSelect(selected ? selected._id : null);
+    this.selected = selected;
+    this.onChose(selected ? selected._id : "");
   };
 
   async componentDidMount() {
     try {
       this.setState({ lookups: await getLookup(this.lookup) });
       this.state.lookups.forEach(item => {
-        this.data[item.name] = null;
+        this.state.data[item.name] = null;
       });
       const autocomplete = document.querySelectorAll(".autocomplete");
       M.Autocomplete.init(autocomplete, {
-        data: this.data,
-        onAutocomplete: this.onAutocomplete
+        data: this.state.data,
+        onAutocomplete: this.handleAutocomplete
       });
     } catch (error) {
       messages.error(error);
@@ -59,7 +59,7 @@ export default class Autocomplete extends Component {
             name="autocomplete"
             id="autocomplete"
             value={this.state.value}
-            onChange={this.onChange}
+            onChange={this.handleChange}
             className="autocomplete"
             {...this.props}
           />
@@ -73,7 +73,8 @@ export default class Autocomplete extends Component {
 Autocomplete.propTypes = {
   label: PropTypes.string.isRequired,
   lookup: PropTypes.string.isRequired,
-  onSelect: PropTypes.func.isRequired
+  selected: PropTypes.string.isRequired,
+  onChose: PropTypes.func.isRequired
 };
 
 // USE:
