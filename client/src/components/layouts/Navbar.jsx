@@ -8,8 +8,7 @@ import M from "materialize-css/dist/js/materialize.min.js";
 export const Navbar = () => {
   const dispatch = useDispatch();
 
-  const isLoggedIn = useSelector(store => store.authReducer.isLoggedIn);
-  const user = useSelector(store => store.authReducer.user);
+  const { user, isLoggedIn } = useSelector(store => store.authReducer);
 
   useEffect(() => {
     var sidenav = document.querySelectorAll(".sidenav");

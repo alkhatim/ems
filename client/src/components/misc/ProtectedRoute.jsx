@@ -4,8 +4,7 @@ import { Route, Redirect } from "react-router-dom";
 
 const ProtectedRoute = props => {
   const { path, component: Component, ...rest } = props;
-  const isLoggedIn = useSelector(store => store.authReducer.isLoggedIn);
-  const isLoading = useSelector(store => store.authReducer.isLoading);
+  const { isLoggedIn, isLoading } = useSelector(store => store.authReducer);
 
   return (
     <Route
