@@ -8,9 +8,9 @@ update salaries to count for hire date, termination date...etc
 auto send entries for approval
 
 --client
-create datatable
-create preloader
 create dashboard with graphs and inbox
+create inbox component
+create employees module
 
 ----------------------------------
 

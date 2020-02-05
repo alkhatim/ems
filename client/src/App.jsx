@@ -23,13 +23,13 @@ import "./spacing.css";
 
 const App = () => {
   store.dispatch(loadUser());
-  const loading = store.getState().applicationReducer.loading;
+  const loading = store.getState().appReducer.loading;
 
   return (
     <Provider store={store}>
       <LoadingOverlay
         active={loading}
-        spinner={<ClipLoader size={130} color="teal" />}
+        spinner={<ClipLoader size={110} color="teal" />}
       >
         <BrowserRouter>
           <Navbar />
