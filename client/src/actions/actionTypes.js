@@ -1,3 +1,7 @@
+// application actions
+export const LOADING = "LOADING";
+export const LOADED = "LOADED";
+
 // auth actions
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const LOGIN_FAIL = "LOGIN_FAIL";
