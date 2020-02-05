@@ -20,7 +20,7 @@ export const Login = props => {
 
   const dispatch = useDispatch();
 
-  const isLoggedIn = useSelector(state => state.authReducer.isLoggedIn);
+  const isLoggedIn = useSelector(store => store.authReducer.isLoggedIn);
 
   if (isLoggedIn) {
     return props.history.location.state ? (

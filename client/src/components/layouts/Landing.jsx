@@ -4,7 +4,7 @@ import { Link, Redirect } from "react-router-dom";
 import { Footer } from "./Footer";
 
 export const Landing = () => {
-  const isLoggedIn = useSelector(state => state.authReducer.isLoggedIn);
+  const isLoggedIn = useSelector(store => store.authReducer.isLoggedIn);
 
   if (isLoggedIn) {
     return <Redirect to="/dashboard" />;
