@@ -1,25 +1,25 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Doughnut } from "react-chartjs-2";
+import { Pie } from "react-chartjs-2";
 
-const DoughnutChart = props => {
+const PieChart = props => {
   const { title, data, labels, height, width } = props;
 
   return (
-    <Doughnut
+    <Pie
       data={{
         datasets: [
           {
             data,
             backgroundColor: [
-              "rgba(255, 99, 132, 0.8)",
-              "rgba(54, 162, 255, 0.8)",
-              "rgba(255, 200, 80, 0.8)",
-              "rgba(80, 250, 170, 0.8)",
-              "rgba(200, 192, 192, 0.8)",
-              "rgba(200, 150, 255, 0.8)",
-              "rgba(255, 120, 80, 0.8)",
-              "rgba(200, 100, 100, 0.8)",
+              "rgba(247, 202, 24, 0.8)",
+              "rgba(80, 255, 140, 0.8)",
+              "rgba(255, 50, 70, 0.8)",
+              "rgba(50, 120, 255, 0.8)",
+              "rgba(180, 130, 130, 0.8)",
+              "rgba(191, 85, 236, 0.8)",
+              "rgba(255, 100, 100, 0.8)",
+              "rgba(250, 190, 88, 0.8)",
               "rgba(100, 255, 100, 0.8)"
             ]
           }
@@ -45,7 +45,7 @@ const DoughnutChart = props => {
   );
 };
 
-DoughnutChart.propTypes = {
+PieChart.propTypes = {
   title: PropTypes.string.isRequired,
   data: PropTypes.array.isRequired,
   labels: PropTypes.array.isRequired,
@@ -53,4 +53,4 @@ DoughnutChart.propTypes = {
   width: PropTypes.number.isRequired
 };
 
-export default DoughnutChart;
+export default PieChart;
