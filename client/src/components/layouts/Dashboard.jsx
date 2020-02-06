@@ -65,16 +65,16 @@ export const Dashboard = () => {
           <div className="row mt-1">
             <div className="col s12 l6">
               <DoughnutChart
-                data={[20, 20, 10, 30, 25, 5]}
-                labels={["Google", "Samsung", "Microsoft", "Apple"]}
-                title="Companies"
+                data={[65, 15, 5, 15]}
+                labels={["Normal", "Vacation", "Mission", "Terminated"]}
+                title="Employee Statuses"
               />
             </div>
             <div className="col s12 l6">
               <PieChart
-                data={[20, 20, 10, 30, 25, 5]}
-                labels={["BMW", "Toyota", "Audi", "GMC", "Ford", "Skoda"]}
-                title="Cars"
+                data={[30, 10, 15, 20, 5, 20]}
+                labels={["HQ", "Riyad", "Jabra", "Bahri", "Soba", "Omdurman"]}
+                title="Locations"
               />
             </div>
           </div>
