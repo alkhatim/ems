@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { Doughnut } from "react-chartjs-2";
+import DoughnutChart from "../shared/DoughnutChart";
 import defaultPic from "../../img/defaultProfile.png";
 
 export const Dashboard = () => {
@@ -58,36 +58,10 @@ export const Dashboard = () => {
         <div className="col m7 s12">
           <div className="row mt-1">
             <div className="col s12 l6">
-              <Doughnut
-                data={{
-                  datasets: [
-                    {
-                      data: [60, 15, 5, 20],
-                      backgroundColor: [
-                        "rgba(255, 99, 132, 0.8)",
-                        "rgba(54, 162, 235, 0.8)",
-                        "rgba(255, 206, 86, 0.8)",
-                        "rgba(75, 192, 192, 0.8)"
-                      ]
-                    }
-                  ],
-                  labels: ["Normal", "Vacation", "Mission", "Terminated"]
-                }}
-                width={100}
-                height={75}
-                options={{
-                  animation: {
-                    duration: 2000
-                  },
-                  legend: {
-                    position: "bottom"
-                  },
-                  title: {
-                    display: true,
-                    position: "top",
-                    text: "Employees' Status"
-                  }
-                }}
+              <DoughnutChart
+                data={[20, 20, 10, 30, 25, 5]}
+                labels={["BMW", "Toyota", "Audi", "GMC", "Ford", "Skoda"]}
+                title="Cars"
               />
             </div>
             <div className="col s12 l6"></div>
