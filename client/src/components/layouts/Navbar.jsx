@@ -26,6 +26,7 @@ export const Navbar = () => {
 
   return (
     <Fragment>
+      {/* Fixed Nav */}
       <div className="navbar-fixed">
         <nav className="teal darken-3 z-depth-3">
           <div className="nav-wrapper ml-4 mr-2">
@@ -86,7 +87,6 @@ export const Navbar = () => {
       </ul>
 
       {/* Mobile SideNav */}
-
       <ul className="sidenav sidenav-close blue-grey darken-4" id="mobile-nav">
         <h3 className="mb-3 center">
           <Link to="/" className="teal-text ">

@@ -1,5 +1,33 @@
 /* Spacing */
 /* TODO: Fix x and y margins to not set the other axis to 0rem */
+.m-0 {
+  margin: 0rem !important;
+}
+
+.mt-0 {
+  margin-top: 0rem !important;
+}
+
+.mb-0 {
+  margin-bottom: 0rem !important;
+}
+
+.ml-0 {
+  margin-left: 0rem !important;
+}
+
+.mr-0 {
+  margin-right: 0rem !important;
+}
+
+.mx-0 {
+  margin: 0rem 0rem !important;
+}
+
+.my-0 {
+  margin: 0rem 0rem !important;
+}
+
 .m-1 {
   margin: 1rem !important;
 }

@@ -2,6 +2,7 @@ html * {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+/* landing */
 .landing {
   position: relative;
   background: url("./img/showcase.jpg") no-repeat center center/cover;
@@ -21,6 +22,7 @@ html * {
   height: 100%;
 }
 
+/* spinner */
 ._loading_overlay_overlay {
   background-color: rgba(0, 0, 0, 0.2);
   position: absolute;
@@ -31,11 +33,14 @@ html * {
   min-height: 100vh;
 }
 
+/* auth pages */
+
 .auth-page-header {
   margin-top: 7rem;
   margin-bottom: 2rem;
 }
 
+/* landing footer */
 footer .row {
   margin-bottom: 0;
 }
@@ -58,7 +63,16 @@ footer .col {
   margin-bottom: 0.4rem;
 }
 
+/* error pages */
+
 .error-page {
   height: 90vh;
   padding: 10rem;
+}
+
+/* common */
+.nowrap {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
