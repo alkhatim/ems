@@ -10,7 +10,7 @@ router.post("/", async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  const from = _.pick(req.user, ["_id", "username"]);
+  const from = await User.findById(req.user._id).select("_id username avatar");
   if (!from) return res.status(500).send();
 
   const to = [];

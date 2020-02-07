@@ -31,7 +31,8 @@ router.post("/", admin, async (req, res) => {
   const inbox = new Inbox({
     user: {
       _id: user._id,
-      username: user.username
+      username: user.username,
+      avatar: user.avatar
     },
     messages: []
   });
