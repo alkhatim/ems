@@ -6,7 +6,6 @@ export const loadInbox = () => async dispatch => {
   try {
     const res = await http.get("/messages/inbox");
     const inbox = res.data.messages;
-    console.log(inbox);
     dispatch({
       type: INBOX_LOADED,
       payload: inbox

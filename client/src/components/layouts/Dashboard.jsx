@@ -7,6 +7,7 @@ import LineChart from "../shared/LineChart";
 
 export const Dashboard = () => {
   const { user, isLoading } = useSelector(store => store.authReducer);
+  const { inbox } = useSelector(store => store.inboxReducer);
 
   return (
     <div className="container">
@@ -27,21 +28,13 @@ export const Dashboard = () => {
             You have <span className="red-text">4</span> unread messages
           </p>
           <h4 className="teal-text">Inbox</h4>
-          <ul className="collection z-depth-2">
-            <Message
-              from={{ username: "Ahmed" }}
-              message={{
-                subject: "Posting batches",
-                body:
-                  "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Magni porro numquam eveniet dolor. Deserunt, labore!"
-              }}
-            />
-            <li className="collection-item">Alvin</li>
-            <li className="collection-item">Alvin</li>
-            <li className="collection-item">Alvin</li>
-            <li className="collection-item">Alvin</li>
-            <li className="collection-item">Alvin</li>
-            <li className="collection-item">Alvin</li>
+          <ul className="collection inbox-widget z-depth-2">
+            {inbox
+              .reverse()
+              .slice(0, 3)
+              .map(message => (
+                <Message message={message} key={message._id} />
+              ))}
           </ul>
         </div>
         {/* Charts */}

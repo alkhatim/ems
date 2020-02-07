@@ -16,7 +16,7 @@ const LineChart = props => {
           }
         ]
       }}
-      height={height || 80}
+      height={height || 90}
       width={width || 100}
       options={{
         animation: {
@@ -26,6 +26,9 @@ const LineChart = props => {
           xAxes: [
             {
               type: "category",
+              ticks: {
+                fontSize: 10
+              },
               labels
             }
           ]

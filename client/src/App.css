@@ -22,24 +22,6 @@ html * {
   height: 100%;
 }
 
-/* spinner */
-._loading_overlay_overlay {
-  background-color: rgba(0, 0, 0, 0.2);
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  min-height: 100vh;
-}
-
-/* auth pages */
-
-.auth-page-header {
-  margin-top: 7rem;
-  margin-bottom: 2rem;
-}
-
 /* landing footer */
 footer .row {
   margin-bottom: 0;
@@ -63,11 +45,34 @@ footer .col {
   margin-bottom: 0.4rem;
 }
 
+/* spinner */
+._loading_overlay_overlay {
+  background-color: rgba(0, 0, 0, 0.2);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+}
+
+/* Dashboard */
+.inbox-widget {
+  max-height: 60vh;
+}
+
 /* error pages */
 
 .error-page {
   height: 90vh;
   padding: 10rem;
+}
+
+/* auth pages */
+
+.auth-page-header {
+  margin-top: 7rem;
+  margin-bottom: 2rem;
 }
 
 /* common */

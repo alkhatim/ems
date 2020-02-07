@@ -1,6 +1,8 @@
 TODO:
 
 --server
+add sent outbox
+add Read? property to message model
 add transaction to routers
 use multer for file uploads
 use redis for caching common endpoints

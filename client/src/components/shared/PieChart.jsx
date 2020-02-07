@@ -38,6 +38,7 @@ const PieChart = props => {
         title: {
           display: true,
           position: "top",
+          fontSize: 15,
           text: title
         }
       }}
