@@ -1,9 +1,9 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import Message from "./../shared/Message";
 import DoughnutChart from "../shared/DoughnutChart";
 import PieChart from "./../shared/PieChart";
 import LineChart from "../shared/LineChart";
-import defaultPic from "../../img/defaultProfile.png";
 
 export const Dashboard = () => {
   const { user, isLoading } = useSelector(store => store.authReducer);
@@ -28,30 +28,7 @@ export const Dashboard = () => {
           </p>
           <h4 className="teal-text">Inbox</h4>
           <ul className="collection z-depth-2">
-            <li class="collection-item" style={{ cursor: "pointer" }}>
-              <div className="row mb-1">
-                <div className="col s2">
-                  <img
-                    src={defaultPic}
-                    alt=""
-                    className="circle responsive-img right"
-                    style={{
-                      width: "30px",
-                      height: "30px",
-                      marginTop: "0.5rem"
-                    }}
-                  />
-                </div>
-                <div className="col s10">
-                  <h6 className="left">Omer</h6>
-                </div>
-              </div>
-              <span>
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Vitae
-                exercitationem nulla suscipit expedita fugit voluptates incidunt
-                aspernatur placeat et explicabo?
-              </span>
-            </li>
+            <Message from={{username: "Ahmed"}} message={{subject: "Posting batches", body: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Magni porro numquam eveniet dolor. Deserunt, labore!" }} />
             <li class="collection-item">Alvin</li>
             <li class="collection-item">Alvin</li>
             <li class="collection-item">Alvin</li>

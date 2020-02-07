@@ -28,6 +28,34 @@
   margin: 0rem 0rem !important;
 }
 
+.m-h {
+  margin: 0.5rem !important;
+}
+
+.mt-h {
+  margin-top: 0.5rem !important;
+}
+
+.mb-h {
+  margin-bottom: 0.5rem !important;
+}
+
+.ml-h {
+  margin-left: 0.5rem !important;
+}
+
+.mr-h {
+  margin-right: 0.5rem !important;
+}
+
+.mx-h {
+  margin: 0rem 0.5rem !important;
+}
+
+.my-h {
+  margin: 0.5rem 0rem !important;
+}
+
 .m-1 {
   margin: 1rem !important;
 }

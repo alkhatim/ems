@@ -76,3 +76,7 @@ footer .col {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.bold-text {
+  font-weight: 600;
+}
