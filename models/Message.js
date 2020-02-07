@@ -47,19 +47,15 @@ const Message = mongoose.model("Message", schema);
 
 const validate = function(message) {
   const schema = {
-    from: Joi.objectId().required(),
     to: Joi.array()
       .items(Joi.objectId())
       .min(1)
       .required(),
-    date: Joi.date().required(),
     subject: Joi.string(),
     body: Joi.string(),
     url: Joi.string(),
     attachments: Joi.array().items(Joi.string()),
-    deadline: Joi.date()
-      .min(new Date())
-      .required()
+    deadline: Joi.date().min(new Date())
   };
 
   return Joi.validate(message, schema);

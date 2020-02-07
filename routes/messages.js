@@ -6,12 +6,23 @@ const { User } = require("../models/User");
 const { Inbox } = require("../models/Inbox");
 const validateObjectId = require("../middleware/validateObjectId");
 
+// inbox
+router.get("/inbox", async (req, res) => {
+  const inbox = await Inbox.findOne({ "user._id": req.user._id }).populate(
+    "messages"
+  );
+  if (!inbox)
+    return res.status(500).send("Somthing is wrong with your account");
+
+  res.status(200).send(inbox);
+});
+
 router.post("/", async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
   const from = await User.findById(req.user._id).select("_id username avatar");
-  if (!from) return res.status(500).send();
+  if (!from) return res.status(500).send("Somthing is wrong with your account");
 
   const to = [];
   for (user of req.body.to) {
@@ -21,7 +32,7 @@ router.post("/", async (req, res) => {
   const message = new Message({
     from,
     to,
-    date: req.body.date,
+    date: new Date(),
     subject: req.body.subject,
     body: req.body.body,
     url: req.body.url,
@@ -37,12 +48,7 @@ router.post("/", async (req, res) => {
     await inbox.save();
   }
 
-  res.status(201).send(message);
-});
-
-router.get("/", async (req, res) => {
-  const messages = await Message.find(req.query);
-  res.status(200).send(messages);
+  res.status(200).send(message);
 });
 
 router.get("/:id", validateObjectId, async (req, res) => {

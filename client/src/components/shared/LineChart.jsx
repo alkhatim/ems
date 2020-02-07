@@ -39,8 +39,8 @@ LineChart.propTypes = {
   title: PropTypes.string.isRequired,
   data: PropTypes.array.isRequired,
   labels: PropTypes.array.isRequired,
-  height: PropTypes.number.isRequired,
-  width: PropTypes.number.isRequired
+  height: PropTypes.number,
+  width: PropTypes.number
 };
 
 export default LineChart;

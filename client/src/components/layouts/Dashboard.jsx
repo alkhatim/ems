@@ -22,32 +22,39 @@ export const Dashboard = () => {
       {/* Body */}
       <div className="row">
         {/* Inbox */}
-        <div className="col m5 s12">
+        <div className="col l5 s12">
           <p>
             You have <span className="red-text">4</span> unread messages
           </p>
           <h4 className="teal-text">Inbox</h4>
           <ul className="collection z-depth-2">
-            <Message from={{username: "Ahmed"}} message={{subject: "Posting batches", body: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Magni porro numquam eveniet dolor. Deserunt, labore!" }} />
-            <li class="collection-item">Alvin</li>
-            <li class="collection-item">Alvin</li>
-            <li class="collection-item">Alvin</li>
-            <li class="collection-item">Alvin</li>
-            <li class="collection-item">Alvin</li>
-            <li class="collection-item">Alvin</li>
+            <Message
+              from={{ username: "Ahmed" }}
+              message={{
+                subject: "Posting batches",
+                body:
+                  "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Magni porro numquam eveniet dolor. Deserunt, labore!"
+              }}
+            />
+            <li className="collection-item">Alvin</li>
+            <li className="collection-item">Alvin</li>
+            <li className="collection-item">Alvin</li>
+            <li className="collection-item">Alvin</li>
+            <li className="collection-item">Alvin</li>
+            <li className="collection-item">Alvin</li>
           </ul>
         </div>
         {/* Charts */}
-        <div className="col m7 s12">
+        <div className="col l7 s12">
           <div className="row mt-1">
-            <div className="col s12 l6">
+            <div className="col l6 s12">
               <DoughnutChart
                 data={[65, 15, 5, 15]}
                 labels={["Normal", "Vacation", "Mission", "Terminated"]}
                 title="Employee Statuses"
               />
             </div>
-            <div className="col s12 l6">
+            <div className="col l6 s12">
               <PieChart
                 data={[30, 10, 15, 20, 5, 20]}
                 labels={["HQ", "Riyad", "Jabra", "Bahri", "Soba", "Omdurman"]}

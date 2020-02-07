@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import store from "./redux/store";
 import { loadUser } from "./actions/authActions";
+import { loadInbox } from "./actions/inboxActions";
 import ProtectedRoute from "./components/misc/ProtectedRoute";
 import PrivateRoute from "./components/misc/PrivateRoute";
 import { Navbar } from "./components/layouts/Navbar";
@@ -23,6 +24,7 @@ import "./spacing.css";
 
 const App = () => {
   store.dispatch(loadUser());
+  store.dispatch(loadInbox());
   const loading = store.getState().appReducer.loading;
 
   return (
