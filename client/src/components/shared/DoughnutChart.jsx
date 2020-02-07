@@ -12,7 +12,7 @@ const DoughnutChart = props => {
           {
             data,
             backgroundColor: [
-              "rgba(80, 250, 170, 0.8)",
+              "rgba(0, 177, 106, 0.8)",
               "rgba(54, 162, 255, 0.8)",
               "rgba(255, 200, 80, 0.8)",
               "rgba(255, 90, 112, 0.8)",
