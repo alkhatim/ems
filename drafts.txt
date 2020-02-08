@@ -11,10 +11,10 @@ update salaries to count for hire date, termination date...etc
 auto send entries for approval
 
 --client
-move loading inbox from app to dashboard
 add preloader and use it for dashboard inbox
-create dashboard with graphs and inbox
-create inbox component
+add place for time and deadline in message component
+use seen property in inbox widget
+create messages page
 create employees module
 
 ----------------------------------

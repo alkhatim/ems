@@ -30,7 +30,7 @@ const Message = props => {
         </div>
       </div>
       <p className="bold-text grey-text text-darken-2">{message.subject}</p>
-      <span>{message.body}</span>
+      <span className="truncate">{message.body}</span>
     </li>
   );
 };

@@ -4,6 +4,7 @@ import Message from "./../shared/Message";
 import DoughnutChart from "../shared/DoughnutChart";
 import PieChart from "./../shared/PieChart";
 import LineChart from "../shared/LineChart";
+import BarChart from "../shared/BarChart";
 
 export const Dashboard = () => {
   const { user, isLoading } = useSelector(store => store.authReducer);
@@ -28,7 +29,7 @@ export const Dashboard = () => {
             You have <span className="red-text">4</span> unread messages
           </p>
           <h4 className="teal-text">Inbox</h4>
-          <ul className="collection inbox-widget z-depth-2">
+          <ul className="collection inbox-widget z-depth-1">
             {inbox
               .reverse()
               .slice(0, 3)
@@ -48,15 +49,6 @@ export const Dashboard = () => {
               />
             </div>
             <div className="col l6 s12">
-              <PieChart
-                data={[30, 10, 15, 20, 5, 20]}
-                labels={["HQ", "Riyad", "Jabra", "Bahri", "Soba", "Omdurman"]}
-                title="Locations"
-              />
-            </div>
-          </div>
-          <div className="row">
-            <div className="col s12 l6">
               <LineChart
                 data={[520000, 495000, 610500, 431000]}
                 labels={[
@@ -65,10 +57,21 @@ export const Dashboard = () => {
                   "2 Months ago",
                   "Last month"
                 ]}
-                title="Salaries"
+                title="Salary Report"
               />
             </div>
-            <div className="col s12 l6"></div>
+          </div>
+          <div className="row">
+            <div className="col l6 s12">
+              <PieChart
+                data={[30, 10, 15, 20, 5, 20]}
+                labels={["HQ", "Riyad", "Jabra", "Bahri", "Soba", "Omdurman"]}
+                title="Locations"
+              />
+            </div>
+            <div className="col l6 s12">
+              <BarChart data={[4, 6, 13]} title="Contracts Expiration" />
+            </div>
           </div>
         </div>
       </div>
