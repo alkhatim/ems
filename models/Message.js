@@ -44,6 +44,11 @@ const schema = new mongoose.Schema({
   attachments: {
     type: [String]
   },
+  seen: {
+    type: Boolean,
+    required: true,
+    default: false
+  },
   deadline: {
     type: Date
   }

@@ -58,4 +58,17 @@ router.get("/:id", validateObjectId, async (req, res) => {
   res.status(200).send(message);
 });
 
+//seen
+router.post("/:id", validateObjectId, async (req, res) => {
+  const message = await Message.findByIdAndUpdate(
+    req.params.id,
+    { seen: true },
+    { new: true }
+  );
+  if (!message)
+    return res.status(404).send("There is no message with the given ID");
+
+  res.status(200).send(message);
+});
+
 module.exports = router;
