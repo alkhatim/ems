@@ -26,7 +26,7 @@ router.post("/", async (req, res) => {
 
   const to = [];
   for (user of req.body.to) {
-    to.push(await User.findById(user).select("_id username"));
+    to.push(await User.findById(user).select("_id username avatar"));
   }
 
   const message = new Message({

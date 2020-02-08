@@ -7,6 +7,9 @@ const schema = new mongoose.Schema({
       username: {
         type: String,
         required: true
+      },
+      avatar: {
+        type: String
       }
     }),
     required: true
@@ -17,6 +20,9 @@ const schema = new mongoose.Schema({
         username: {
           type: String,
           required: true
+        },
+        avatar: {
+          type: String
         }
       })
     ],

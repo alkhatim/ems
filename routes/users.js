@@ -31,8 +31,7 @@ router.post("/", admin, async (req, res) => {
   const inbox = new Inbox({
     user: {
       _id: user._id,
-      username: user.username,
-      avatar: user.avatar
+      username: user.username
     },
     messages: []
   });
@@ -75,6 +74,11 @@ router.put("/:id", validateObjectId, async (req, res) => {
     },
     { new: true }
   );
+
+  const inbox = await Inbox.findOne({ "user._id": user._id });
+  inbox.user.username = user.username;
+
+  await inbox.save();
 
   res.status(200).send(_.pick(user, ["_id", "username", "avatar", "role"]));
 });
