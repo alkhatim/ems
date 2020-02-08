@@ -10,6 +10,7 @@ update salaries to count for hire date, termination date...etc
 auto send entries for approval
 
 --client
+add preloader and use it for dashboard inbox
 create dashboard with graphs and inbox
 create inbox component
 create employees module

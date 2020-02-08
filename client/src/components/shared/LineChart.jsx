@@ -16,7 +16,7 @@ const LineChart = props => {
           }
         ]
       }}
-      height={height || 90}
+      height={height || 80}
       width={width || 100}
       options={{
         animation: {
