@@ -65,6 +65,12 @@ footer .col {
   cursor: pointer;
 }
 
+/* Inbox page */
+.inbox-page {
+  min-height: 70vh;
+  border-color: LightGray;
+}
+
 /* error pages */
 
 .error-page {
