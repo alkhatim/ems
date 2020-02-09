@@ -29,22 +29,12 @@ const Message = props => {
           </span>
         </div>
         <div className="col s6 mt-h">
-          <span
-            className="bold-text grey-text text-darken-2 mr-1"
-            style={{ fontSize: 12 }}
-          >
+          <span className="bold-text fs-s grey-text text-darken-2 mr-1">
             {time}
           </span>
-          <span
-            className="grey-text text-darken-2"
-            style={{ fontSize: 12, fontWeight: "bold" }}
-          >
-            {date}
-          </span>
+          <span className="bold-text fs-s grey-text text-darken-2">{date}</span>
           {!message.seen && (
-            <span className="badge red white-text" style={{ fontSize: 10 }}>
-              unread
-            </span>
+            <span className="badge red white-text fs-xs">unread</span>
           )}
         </div>
       </div>

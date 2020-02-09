@@ -78,14 +78,3 @@ footer .col {
   margin-top: 7rem;
   margin-bottom: 2rem;
 }
-
-/* common */
-.nowrap {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.bold-text {
-  font-weight: 600;
-}

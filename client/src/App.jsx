@@ -19,7 +19,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import "react-toastify/dist/ReactToastify.css";
 import "materialize-css/dist/css/materialize.min.css";
 import "./App.css";
-import "./spacing.css";
+import "./common.css";
 
 const App = () => {
   store.dispatch(loadUser());
