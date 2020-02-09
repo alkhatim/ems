@@ -33,7 +33,11 @@ export const Dashboard = () => {
         {/* Inbox */}
         <div className="col l5 s12">
           <p>
-            You have <span className="red-text">4</span> unread messages
+            You have&nbsp;
+            <span className="red-text">
+              {inbox.filter(message => message.read === false).length || "no"}
+            </span>
+            &nbsp;unread messages
           </p>
           <h4 className="teal-text">Inbox</h4>
           <ul className="collection inbox-widget z-depth-1">
