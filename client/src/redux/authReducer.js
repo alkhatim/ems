@@ -1,9 +1,9 @@
 import {
   USER_LOADED,
-  LOGIN_SUCCESS,
-  LOGIN_FAIL,
-  REGISTER_SUCCESS,
-  REGISTER_FAIL,
+  LOGGED_IN,
+  LOGIN_FAILED,
+  REGISTERED,
+  REGISTER_FAILED,
   USER_LOAD_FAILED,
   LOGGED_OUT
 } from "../actions/ActionTypes";
@@ -20,7 +20,7 @@ export default function(state = initialState, action) {
 
   switch (type) {
     case USER_LOADED:
-    case LOGIN_SUCCESS:
+    case LOGGED_IN:
       return {
         ...state,
         token: payload.token,
@@ -30,7 +30,7 @@ export default function(state = initialState, action) {
       };
 
     case USER_LOAD_FAILED:
-    case LOGIN_FAIL:
+    case LOGIN_FAILED:
     case LOGGED_OUT:
       return {
         ...state,
@@ -40,8 +40,8 @@ export default function(state = initialState, action) {
         isLoading: false
       };
 
-    case REGISTER_SUCCESS:
-    case REGISTER_FAIL:
+    case REGISTERED:
+    case REGISTER_FAILED:
       return state;
 
     default:

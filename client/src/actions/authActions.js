@@ -2,10 +2,10 @@ import http from "../services/http";
 import {
   USER_LOADED,
   USER_LOAD_FAILED,
-  LOGIN_SUCCESS,
-  LOGIN_FAIL,
-  REGISTER_SUCCESS,
-  REGISTER_FAIL,
+  LOGGED_IN,
+  LOGIN_FAILED,
+  REGISTERED,
+  REGISTER_FAILED,
   LOGGED_OUT
 } from "./ActionTypes";
 import messages from "../services/messages";
@@ -18,7 +18,7 @@ export const login = (username, password) => async dispatch => {
     localStorage.setItem("jwt", token);
     http.setToken(token);
     dispatch({
-      type: LOGIN_SUCCESS,
+      type: LOGGED_IN,
       payload: {
         user,
         token
@@ -29,7 +29,7 @@ export const login = (username, password) => async dispatch => {
     localStorage.removeItem("jwt");
     http.setToken(null);
     dispatch({
-      type: LOGIN_FAIL
+      type: LOGIN_FAILED
     });
   }
 };
@@ -50,12 +50,12 @@ export const register = (
     });
     messages.success("User registered");
     dispatch({
-      type: REGISTER_SUCCESS
+      type: REGISTERED
     });
   } catch (error) {
     messages.error(error);
     dispatch({
-      type: REGISTER_FAIL
+      type: REGISTER_FAILED
     });
   }
 };
