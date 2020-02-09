@@ -58,11 +58,11 @@ router.get("/:id", validateObjectId, async (req, res) => {
   res.status(200).send(message);
 });
 
-//seen
+//read
 router.post("/:id", validateObjectId, async (req, res) => {
   const message = await Message.findByIdAndUpdate(
     req.params.id,
-    { seen: true },
+    { read: true },
     { new: true }
   );
   if (!message)

@@ -14,3 +14,5 @@ export const LOGGED_OUT = "LOGGED_OUT";
 // inbox actions
 export const INBOX_LOADED = "INBOX_LOADED";
 export const INBOX_LOAD_FAILED = "INBOX_LOAD_FAILED";
+export const MESSAGE_READ = "MESSAGE_READ";
+export const MESSAGE_READ_FAILED = "MESSAGE_READ_FAILED";

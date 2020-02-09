@@ -44,7 +44,7 @@ const schema = new mongoose.Schema({
   attachments: {
     type: [String]
   },
-  seen: {
+  read: {
     type: Boolean,
     required: true,
     default: false
@@ -66,7 +66,8 @@ const validate = function(message) {
     body: Joi.string(),
     url: Joi.string(),
     attachments: Joi.array().items(Joi.string()),
-    deadline: Joi.date().min(new Date())
+    deadline: Joi.date().min(new Date()),
+    read: Joi.boolean()
   };
 
   return Joi.validate(message, schema);

@@ -2,8 +2,6 @@ TODO:
 
 --server
 add sent outbox
-add seen property to message
-add Read? property to message model
 add transaction to routers
 use multer for file uploads
 use redis for caching common endpoints
@@ -11,9 +9,8 @@ update salaries to count for hire date, termination date...etc
 auto send entries for approval
 
 --client
+unify action names
 add preloader and use it for dashboard inbox
-add place for time and deadline in message component
-use seen property in inbox widget
 create messages page
 create employees module
 

@@ -1,17 +1,25 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { useDispatch } from "react-redux";
+import { readMessage } from "../../actions/inboxActions";
 import defaultPic from "../../img/defaultProfile.png";
 
 const Message = props => {
   const { message } = props;
-
   const date = new Date(message.date).toLocaleDateString();
   const time = new Date(message.date).toLocaleTimeString([], {
     timeStyle: "short"
   });
 
+  const dispatch = useDispatch();
+
+  const handleClick = () => {
+    if (message.read === true) return;
+    dispatch(readMessage(message._id));
+  };
+
   return (
-    <li className="collection-item inbox-message">
+    <li className="collection-item inbox-message" onClick={handleClick}>
       <div className="row ml-0">
         <div className="col s6 valign-wrapper">
           <img
@@ -33,7 +41,7 @@ const Message = props => {
             {time}
           </span>
           <span className="bold-text fs-s grey-text text-darken-2">{date}</span>
-          {!message.seen && (
+          {!message.read && (
             <span className="badge red white-text fs-xs">unread</span>
           )}
         </div>
