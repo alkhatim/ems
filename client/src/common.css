@@ -23,8 +23,16 @@
   font-size: 1.4rem !important;
 }
 
-/* Spacing */
-/* TODO: Fix x and y margins to not set the other axis to 0rem */
+.fs-xxl {
+  font-size: 1.6rem !important;
+}
+
+.fs-xxxl {
+  font-size: 1.8rem !important;
+}
+
+/* Margin */
+
 .m-0 {
   margin: 0rem !important;
 }
@@ -46,11 +54,13 @@
 }
 
 .mx-0 {
-  margin: 0rem 0rem !important;
+  margin-left: 0rem !important;
+  margin-right: 0rem !important;
 }
 
 .my-0 {
-  margin: 0rem 0rem !important;
+  margin-top: 0rem !important;
+  margin-bottom: 0rem !important;
 }
 
 .m-h {
@@ -74,11 +84,13 @@
 }
 
 .mx-h {
-  margin: 0rem 0.5rem !important;
+  margin-left: 0.5rem !important;
+  margin-right: 0.5rem !important;
 }
 
 .my-h {
-  margin: 0.5rem 0rem !important;
+  margin-top: 0.5rem !important;
+  margin-bottom: 0.5rem !important;
 }
 
 .m-1 {
@@ -102,11 +114,13 @@
 }
 
 .mx-1 {
-  margin: 0rem 1rem !important;
+  margin-left: 1rem !important;
+  margin-right: 1rem !important;
 }
 
 .my-1 {
-  margin: 1rem 0rem !important;
+  margin-top: 1rem !important;
+  margin-bottom: 1rem !important;
 }
 
 .m-2 {
@@ -130,11 +144,13 @@
 }
 
 .mx-2 {
-  margin: 0rem 2rem !important;
+  margin-left: 2rem !important;
+  margin-right: 2rem !important;
 }
 
 .my-2 {
-  margin: 2rem 0rem !important;
+  margin-top: 2rem !important;
+  margin-bottom: 2rem !important;
 }
 
 .m-3 {
@@ -158,11 +174,13 @@
 }
 
 .mx-3 {
-  margin: 0rem 3rem !important;
+  margin-left: 3rem !important;
+  margin-right: 3rem !important;
 }
 
 .my-3 {
-  margin: 3rem 0rem !important;
+  margin-top: 3rem !important;
+  margin-bottom: 3rem !important;
 }
 
 .m-4 {
@@ -186,11 +204,13 @@
 }
 
 .mx-4 {
-  margin: 0rem 4rem !important;
+  margin-left: 4rem !important;
+  margin-right: 4rem !important;
 }
 
 .my-4 {
-  margin: 4rem 0rem !important;
+  margin-top: 4rem !important;
+  margin-bottom: 4rem !important;
 }
 
 .m-5 {
@@ -214,11 +234,13 @@
 }
 
 .mx-5 {
-  margin: 0rem 5rem !important;
+  margin-left: 5rem !important;
+  margin-right: 5rem !important;
 }
 
 .my-5 {
-  margin: 5rem 0rem !important;
+  margin-top: 5rem !important;
+  margin-bottom: 5rem !important;
 }
 
 .m-6 {
@@ -242,9 +264,133 @@
 }
 
 .mx-6 {
-  margin: 0rem 6rem !important;
+  margin-left: 6rem !important;
+  margin-right: 6rem !important;
 }
 
 .my-6 {
-  margin: 6rem 0rem !important;
+  margin-top: 6rem !important;
+  margin-bottom: 6rem !important;
+}
+
+/* Padding */
+
+.p-0 {
+  padding: 0rem !important;
+}
+
+.pt-0 {
+  padding-top: 0rem !important;
+}
+
+.pb-0 {
+  padding-bottom: 0rem !important;
+}
+
+.pl-0 {
+  padding-left: 0rem !important;
+}
+
+.pr-0 {
+  padding-right: 0rem !important;
+}
+
+.px-0 {
+  padding-left: 0rem !important;
+  padding-right: 0rem !important;
+}
+
+.py-0 {
+  padding-top: 0rem !important;
+  padding-bottom: 0rem !important;
+}
+
+.p-h {
+  padding: 0.5rem !important;
+}
+
+.pt-h {
+  padding-top: 0.5rem !important;
+}
+
+.pb-h {
+  padding-bottom: 0.5rem !important;
+}
+
+.pl-h {
+  padding-left: 0.5rem !important;
+}
+
+.pr-h {
+  padding-right: 0.5rem !important;
+}
+
+.px-h {
+  padding-left: 0.5rem !important;
+  padding-right: 0.5rem !important;
+}
+
+.py-h {
+  padding-top: 0.5rem !important;
+  padding-bottom: 0.5rem !important;
+}
+
+.p-1 {
+  padding: 1rem !important;
+}
+
+.pt-1 {
+  padding-top: 1rem !important;
+}
+
+.pb-1 {
+  padding-bottom: 1rem !important;
+}
+
+.pl-1 {
+  padding-left: 1rem !important;
+}
+
+.pr-1 {
+  padding-right: 1rem !important;
+}
+
+.px-1 {
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+}
+
+.py-1 {
+  padding-top: 1rem !important;
+  padding-bottom: 1rem !important;
+}
+
+.p-2 {
+  padding: 2rem !important;
+}
+
+.pt-2 {
+  padding-top: 2rem !important;
+}
+
+.pb-2 {
+  padding-bottom: 2rem !important;
+}
+
+.pl-2 {
+  padding-left: 2rem !important;
+}
+
+.pr-2 {
+  padding-right: 2rem !important;
+}
+
+.px-2 {
+  padding-left: 2rem !important;
+  padding-right: 2rem !important;
+}
+
+.py-2 {
+  padding-top: 2rem !important;
+  padding-bottom: 2rem !important;
 }
