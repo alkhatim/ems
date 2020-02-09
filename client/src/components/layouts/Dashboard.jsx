@@ -1,5 +1,6 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { loadInbox } from "../../actions/inboxActions";
 import Message from "./../shared/Message";
 import DoughnutChart from "../shared/DoughnutChart";
 import PieChart from "./../shared/PieChart";
@@ -7,6 +8,12 @@ import LineChart from "../shared/LineChart";
 import BarChart from "../shared/BarChart";
 
 export const Dashboard = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(loadInbox());
+  }, []);
+
   const { user, isLoading } = useSelector(store => store.authReducer);
   const { inbox } = useSelector(store => store.inboxReducer);
 
@@ -64,8 +71,8 @@ export const Dashboard = () => {
           <div className="row">
             <div className="col l6 s12">
               <PieChart
-                data={[30, 10, 15, 20, 5, 20]}
-                labels={["HQ", "Riyad", "Jabra", "Bahri", "Soba", "Omdurman"]}
+                data={[30, 20, 15, 20, 15]}
+                labels={["HQ", "Riyad", "Jabra", "Bahri", "Soba"]}
                 title="Locations"
               />
             </div>

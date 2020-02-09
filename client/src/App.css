@@ -61,6 +61,10 @@ footer .col {
   max-height: 60vh;
 }
 
+.inbox-message {
+  cursor: pointer;
+}
+
 /* error pages */
 
 .error-page {

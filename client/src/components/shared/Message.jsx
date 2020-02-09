@@ -6,11 +6,14 @@ const Message = props => {
   const { message } = props;
 
   const date = new Date(message.date).toLocaleDateString();
+  const time = new Date(message.date).toLocaleTimeString([], {
+    timeStyle: "short"
+  });
 
   return (
-    <li className="collection-item" style={{ cursor: "pointer" }}>
+    <li className="collection-item inbox-message">
       <div className="row ml-0">
-        <div className="col s9 valign-wrapper">
+        <div className="col s6 valign-wrapper">
           <img
             src={(message.from && message.from.avatar) || defaultPic}
             alt=""
@@ -25,8 +28,24 @@ const Message = props => {
             {message.from.username}
           </span>
         </div>
-        <div className="col s3 mt-h">
-          <span>{date}</span>
+        <div className="col s6 mt-h">
+          <span
+            className="bold-text grey-text text-darken-2 mr-1"
+            style={{ fontSize: 12 }}
+          >
+            {time}
+          </span>
+          <span
+            className="grey-text text-darken-2"
+            style={{ fontSize: 12, fontWeight: "bold" }}
+          >
+            {date}
+          </span>
+          {!message.seen && (
+            <span className="badge red white-text" style={{ fontSize: 10 }}>
+              unread
+            </span>
+          )}
         </div>
       </div>
       <p className="bold-text grey-text text-darken-2">{message.subject}</p>
