@@ -6,7 +6,11 @@ import defaultPic from "../../img/defaultProfile.png";
 
 const Message = props => {
   const { message } = props;
-  const date = new Date(message.date).toLocaleDateString();
+  const date = new Date(message.date).toLocaleDateString([], {
+    day: "numeric",
+    month: "short",
+    year: "numeric"
+  });
   const time = new Date(message.date).toLocaleTimeString([], {
     timeStyle: "short"
   });
@@ -21,7 +25,7 @@ const Message = props => {
   return (
     <li className="collection-item inbox-message" onClick={handleClick}>
       <div className="row ml-0">
-        <div className="col s6 valign-wrapper">
+        <div className="col s5 valign-wrapper">
           <img
             src={(message.from && message.from.avatar) || defaultPic}
             alt=""
@@ -36,8 +40,8 @@ const Message = props => {
             {message.from.username}
           </span>
         </div>
-        <div className="col s6 mt-h">
-          <span className="bold-text fs-s grey-text text-darken-2 mr-1">
+        <div className="col s7 mt-h">
+          <span className="bold-text fs-s grey-text text-darken-2 mr-h">
             {time}
           </span>
           <span className="bold-text fs-s grey-text text-darken-2">{date}</span>

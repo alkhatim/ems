@@ -10,6 +10,7 @@ auto send entries for approval
 
 --client
 unify action names
+use optimistic updates
 add preloader and use it for dashboard inbox
 create messages page
 create employees module
