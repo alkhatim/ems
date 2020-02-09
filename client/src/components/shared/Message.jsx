@@ -24,7 +24,7 @@ const Message = props => {
 
   return (
     <li className="collection-item inbox-message" onClick={handleClick}>
-      <div className="row ml-0">
+      <div className="row">
         <div className="col s5 valign-wrapper">
           <img
             src={(message.from && message.from.avatar) || defaultPic}

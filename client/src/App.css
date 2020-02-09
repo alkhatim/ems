@@ -78,3 +78,8 @@ footer .col {
   margin-top: 7rem;
   margin-bottom: 2rem;
 }
+
+/* Common */
+.page-header {
+  height: 12vh;
+}

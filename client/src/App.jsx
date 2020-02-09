@@ -11,6 +11,7 @@ import Landing from "./components/layouts/Landing";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 import Dashboard from "./components/layouts/Dashboard";
+import Inbox from "./components/pages/Inbox";
 import Playground from "./components/misc/Playground";
 import Forbidden from "./components/auth/Forbidden";
 import NotFound from "./components/misc/NotFound";
@@ -38,6 +39,7 @@ const App = () => {
             <Route exact path="/login" component={Login} />
             <PrivateRoute exact path="/register" component={Register} />
             <ProtectedRoute exact path="/dashboard" component={Dashboard} />
+            <ProtectedRoute exact path="/inbox" component={Inbox} />
             <Route exact path="/playground" component={Playground} />
             <Route exact path="/forbidden" component={Forbidden} />
             <Route component={NotFound} />
