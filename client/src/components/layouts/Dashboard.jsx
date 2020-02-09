@@ -12,7 +12,7 @@ export const Dashboard = () => {
 
   useEffect(() => {
     dispatch(loadInbox());
-  }, []);
+  }, [dispatch]);
 
   const { user, isLoading } = useSelector(store => store.authReducer);
   const { inbox } = useSelector(store => store.inboxReducer);
