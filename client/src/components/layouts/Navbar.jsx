@@ -28,7 +28,7 @@ export const Navbar = () => {
     <Fragment>
       {/* Fixed Nav */}
       <div className="navbar-fixed">
-        <nav className="teal darken-3 z-depth-3">
+        <nav className="teal darken-2 z-depth-3">
           <div className="nav-wrapper ml-4 mr-2">
             <Link to="/" className="brand-logo">
               <i className="far fa-id-badge" />
