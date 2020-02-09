@@ -1,0 +1,5 @@
+TODO:
+
+add preloader and use it for dashboard inbox
+create messages page
+create employees module

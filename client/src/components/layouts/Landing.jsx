@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import { useSelector } from "react-redux";
 import { Link, Redirect } from "react-router-dom";
-import { Footer } from "./Footer";
+import Footer from "./Footer";
 
 export const Landing = () => {
   const isLoggedIn = useSelector(store => store.authReducer.isLoggedIn);
@@ -38,3 +38,5 @@ export const Landing = () => {
     </Fragment>
   );
 };
+
+export default Landing;

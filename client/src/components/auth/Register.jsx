@@ -192,3 +192,5 @@ export const Register = () => {
     </Fragment>
   );
 };
+
+export default Register;

@@ -11,3 +11,5 @@ export const Forbidden = () => {
     </div>
   );
 };
+
+export default Forbidden;

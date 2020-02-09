@@ -120,3 +120,5 @@ export const Login = props => {
     </Fragment>
   );
 };
+
+export default Login;

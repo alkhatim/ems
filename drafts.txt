@@ -1,18 +1,11 @@
 TODO:
 
---server
 add sent outbox
 add transaction to routers
 use multer for file uploads
 use redis for caching common endpoints
 update salaries to count for hire date, termination date...etc
 auto send entries for approval
-
---client
-use optimistic updates
-add preloader and use it for dashboard inbox
-create messages page
-create employees module
 
 ----------------------------------
 
