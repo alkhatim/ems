@@ -6,13 +6,15 @@ const PageHeader = props => {
   const { title, icon, color, url } = props;
 
   return (
-    <div className="row page-header valign-wrapper">
-      <div className="col s12">
+    <div className="row mb-0 page-header valign-wrapper">
+      <div className="col s9">
         <Link to={url} className="fs-xxxl ml-1">
           <i className={color + "-text " + icon}></i>
           <span className={color + "-text ml-1 flow-text"}>{title}</span>
         </Link>
       </div>
+      {/* Action buttons */}
+      <div className="col s3"></div>
     </div>
   );
 };

@@ -2,6 +2,13 @@ html * {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+/* Navbar */
+@media only screen and (max-width: 600px) {
+  .app-icon {
+    margin-top: 1rem;
+  }
+}
+
 /* landing */
 .landing {
   position: relative;
@@ -66,9 +73,14 @@ footer .col {
 }
 
 /* Inbox page */
-.inbox-page {
-  min-height: 70vh;
+.inbox-container {
+  min-height: 75vh;
   border-color: LightGray;
+}
+
+.inbox-view {
+  height: 75vh;
+  border: 1px solid LightGray;
 }
 
 /* error pages */
@@ -87,5 +99,5 @@ footer .col {
 
 /* Common */
 .page-header {
-  height: 12vh;
+  height: 10vh;
 }

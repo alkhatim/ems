@@ -40,8 +40,8 @@ const Message = props => {
             {message.from.username}
           </span>
         </div>
-        <div className="col s7 mt-h">
-          <span className="bold-text fs-s grey-text text-darken-2 mr-h">
+        <div className="col s7 mt-h hide-on-med-and-down">
+          <span className="bold-text fs-s grey-text text-darken-2  mr-h">
             {time}
           </span>
           <span className="bold-text fs-s grey-text text-darken-2">{date}</span>

@@ -23,14 +23,18 @@ export const Inbox = () => {
         color="text-darken-2 blue"
         url="/inbox"
       />
-      <div className="col s12 m3">
-        <ul className="collection inbox-page">
+      <div className="col s12 l3 p-0">
+        <ul className="collection inbox-container mt-0">
           {inbox.reverse().map(message => (
             <Message message={message} key={message._id} />
           ))}
         </ul>
       </div>
-      <div className="col m9 hide-on-small-only"></div>
+      <div className="col l9 hide-on-small-only p-0">
+        <div className="inbox-view">
+          <div className="row"></div>
+        </div>
+      </div>
     </div>
   );
 };

@@ -28,10 +28,10 @@ export const Navbar = () => {
     <Fragment>
       {/* Fixed Nav */}
       <div className="navbar-fixed">
-        <nav className="teal darken-2 z-depth-3">
+        <nav className="teal darken-2 z-depth-2">
           <div className="nav-wrapper ml-4 mr-2">
             <Link to="/" className="brand-logo">
-              <i className="far fa-id-badge" />
+              <i className="far fa-id-badge app-icon" />
               EMS
             </Link>
             <a href="#!" className="sidenav-trigger" data-target="mobile-nav">
