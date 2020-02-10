@@ -22,9 +22,9 @@ export default function(state = initialState, action) {
     case MESSAGE_READ:
       return {
         ...state,
-        inbox: state.inbox
-          .map(message => (message._id === payload._id ? payload : message))
-          .reverse()
+        inbox: state.inbox.map(message =>
+          message._id === payload._id ? payload : message
+        )
       };
 
     case INBOX_LOAD_FAILED:

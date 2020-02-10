@@ -14,6 +14,8 @@ router.get("/inbox", async (req, res) => {
   if (!inbox)
     return res.status(500).send("Somthing is wrong with your account");
 
+  inbox.messages = inbox.messages.reverse();
+
   res.status(200).send(inbox);
 });
 

@@ -41,12 +41,9 @@ export const Dashboard = () => {
           </p>
           <h4 className="teal-text">Inbox</h4>
           <ul className="collection inbox-widget z-depth-1">
-            {inbox
-              .reverse()
-              .slice(0, 3)
-              .map(message => (
-                <Message message={message} key={message._id} />
-              ))}
+            {inbox.slice(0, 3).map(message => (
+              <Message message={message} key={message._id} />
+            ))}
           </ul>
         </div>
         {/* Charts */}

@@ -25,7 +25,7 @@ export const Inbox = () => {
       />
       <div className="col s12 l3 p-0">
         <ul className="collection inbox-container mt-0">
-          {inbox.reverse().map(message => (
+          {inbox.map(message => (
             <Message message={message} key={message._id} />
           ))}
         </ul>
