@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { loadInbox } from "../../actions/inboxActions";
+import { loadInbox, readMessage } from "../../actions/inboxActions";
 import Message from "./../shared/Message";
 import DoughnutChart from "../shared/DoughnutChart";
 import PieChart from "./../shared/PieChart";
@@ -16,6 +16,11 @@ export const Dashboard = () => {
 
   const { user, isLoading } = useSelector(store => store.authReducer);
   const { inbox } = useSelector(store => store.inboxReducer);
+
+  const handleMessageClick = message => {
+    if (message.read === true) return;
+    dispatch(readMessage(message._id));
+  };
 
   return (
     <div className="container">
@@ -42,7 +47,11 @@ export const Dashboard = () => {
           <h4 className="teal-text">Inbox</h4>
           <ul className="collection inbox-widget z-depth-1">
             {inbox.slice(0, 3).map(message => (
-              <Message message={message} key={message._id} />
+              <Message
+                message={message}
+                key={message._id}
+                onMessageClick={handleMessageClick}
+              />
             ))}
           </ul>
         </div>

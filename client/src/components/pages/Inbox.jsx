@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { loadInbox } from "../../actions/inboxActions";
+import { loadInbox, readMessage } from "../../actions/inboxActions";
 import Message from "./../shared/Message";
+import MessageView from "../shared/MessageView";
 import PageHeader from "../shared/PageHeader";
+import defaultPic from "../../img/defaultProfile.png";
 
 export const Inbox = () => {
   const [selectedMessage, setSelectedMessage] = useState(null);
@@ -15,6 +17,11 @@ export const Inbox = () => {
 
   const { inbox } = useSelector(store => store.inboxReducer);
 
+  const handleMessageSelect = message => {
+    setSelectedMessage(message);
+    if (message.read === false) dispatch(readMessage(message._id));
+  };
+
   return (
     <div className="row">
       <PageHeader
@@ -26,13 +33,21 @@ export const Inbox = () => {
       <div className="col s12 l3 p-0">
         <ul className="collection inbox-container mt-0">
           {inbox.map(message => (
-            <Message message={message} key={message._id} />
+            <Message
+              message={message}
+              key={message._id}
+              onMessageClick={message => handleMessageSelect(message)}
+            />
           ))}
         </ul>
       </div>
       <div className="col l9 hide-on-small-only p-0">
         <div className="inbox-view">
-          <div className="row"></div>
+          {selectedMessage ? (
+            <MessageView message={selectedMessage} />
+          ) : (
+            <Fragment></Fragment>
+          )}
         </div>
       </div>
     </div>
