@@ -11,6 +11,11 @@ export const loadInbox = () => async dispatch => {
   try {
     const res = await http.get("/messages/inbox");
     const inbox = res.data.messages;
+    for (let message of inbox) {
+      const res = await http.get("/users/avatar/" + message.from._id);
+      const avatar = res.data;
+      message.from.avatar = avatar;
+    }
     dispatch({
       type: INBOX_LOADED,
       payload: inbox

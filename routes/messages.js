@@ -23,12 +23,12 @@ router.post("/", async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  const from = await User.findById(req.user._id).select("_id username avatar");
+  const from = await User.findById(req.user._id).select("_id username");
   if (!from) return res.status(500).send("Somthing is wrong with your account");
 
   const to = [];
   for (user of req.body.to) {
-    to.push(await User.findById(user).select("_id username avatar"));
+    to.push(await User.findById(user).select("_id username"));
   }
 
   const message = new Message({

@@ -7,6 +7,35 @@ const { User, validate } = require("../models/User");
 const { Inbox } = require("../models/Inbox");
 const validateObjectId = require("../middleware/validateObjectId");
 
+//avatar
+router.get("/avatar/:id", validateObjectId, async (req, res) => {
+  const user = await User.findById(req.params.id).select("avatar");
+  if (!user) return res.status(404).send("There is no user with the given ID");
+
+  res.status(200).send(user.avatar);
+});
+
+router.patch("/avatar/:id", validateObjectId, async (req, res) => {
+  let user = await User.findById(req.params.id).select("_id username");
+  if (!user) return res.status(404).send("There is no user with the given ID");
+
+  if (req.user.id != user.id)
+    return res.status(403).send("You can only change your avatar");
+
+  if (!req.body.avatar)
+    return res.status(400).send("Please provide a valid avatar");
+
+  user = await User.findByIdAndUpdate(
+    req.params.id,
+    {
+      avatar: req.body.avatar
+    },
+    { new: true }
+  );
+
+  res.status(200).send(_.pick(user, ["_id", "username", "avatar", "role"]));
+});
+
 router.post("/", admin, async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
@@ -88,28 +117,6 @@ router.delete("/:id", [admin, validateObjectId], async (req, res) => {
   if (!user) return res.status(404).send("There is no user with the given ID");
   await Inbox.findOneAndDelete({ "user._id": user._id });
   res.status(200).send(_.pick(user, ["_id", "username", "role"]));
-});
-
-//avatar
-router.patch("/:id", validateObjectId, async (req, res) => {
-  let user = await User.findById(req.params.id).select("_id username");
-  if (!user) return res.status(404).send("There is no user with the given ID");
-
-  if (req.user.id != user.id)
-    return res.status(403).send("You can only change your avatar");
-
-  if (!req.body.avatar)
-    return res.status(400).send("Please provide a valid avatar");
-
-  user = await User.findByIdAndUpdate(
-    req.params.id,
-    {
-      avatar: req.body.avatar
-    },
-    { new: true }
-  );
-
-  res.status(200).send(_.pick(user, ["_id", "username", "avatar", "role"]));
 });
 
 module.exports = router;
