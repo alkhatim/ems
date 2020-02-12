@@ -15,6 +15,7 @@ const { MissionState } = require("../models/MissionState");
 const { Nationality } = require("../models/Nationality");
 const { OvertimeType } = require("../models/OvertimeType");
 const { State } = require("../models/State");
+const { User } = require("../models/User");
 const { VacationState } = require("../models/VacationState");
 const { VacationType } = require("../models/VacationType");
 
@@ -80,6 +81,17 @@ router.get("/", async (req, res) => {
     case "State":
       lookups = await State.find();
       res.status(200).send(lookups);
+      break;
+    case "User":
+      lookups = await User.find();
+      res.status(200).send(
+        lookups.map(function(user) {
+          return {
+            _id: user._id,
+            name: user.username
+          };
+        })
+      );
       break;
     case "VacationState":
       lookups = await VacationState.find();
