@@ -13,6 +13,12 @@ const MessageView = props => {
     timeStyle: "short"
   });
 
+  const deadline = new Date(message.deadline).toLocaleDateString([], {
+    day: "numeric",
+    month: "short",
+    year: "numeric"
+  });
+
   return (
     <div className="mx-4 my-1">
       <div className="row">
@@ -27,19 +33,30 @@ const MessageView = props => {
               marginTop: "0.5rem"
             }}
           />
-          <span className="ml-h mt-h bold-text grey-text text-darken-2">
-            {message.from.username}
-          </span>
+          <span className="ml-h mt-h bold-text">{message.from.username}</span>
         </div>
         <div className="col s3">
-          <span className="bold-text fs-s grey-text text-darken-2  mr-h hide-on-med-and-down">
-            {time}
-          </span>
-          <span className="bold-text fs-s grey-text text-darken-2 hide-on-med-and-down">
-            {date}
-          </span>
+          <div className="row mt-1">
+            <span className="grey-text text-darken-3">Sent :&nbsp;</span>
+            <span className="grey-text text-darken-3 mr-h">{time}</span>
+            <span className="grey-text text-darken-3">{date}</span>
+          </div>
         </div>
       </div>
+      <div className="row bold-text mt-2">
+        <div className="col s9">Subject : {message.subject}</div>
+        <div className="col s3">
+          {message.deadline && (
+            <div>
+              <span className="red-text">Deadline :&nbsp;</span>
+              <span className="grey-text text-darken-3">{deadline}</span>
+            </div>
+          )}
+        </div>
+      </div>
+      <div className="divider"></div>
+      <div className="row mt-4">{message.body}</div>
+      {/* Add attachments here */}
     </div>
   );
 };

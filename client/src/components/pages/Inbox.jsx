@@ -4,7 +4,6 @@ import { loadInbox, readMessage } from "../../actions/inboxActions";
 import Message from "./../shared/Message";
 import MessageView from "../shared/MessageView";
 import PageHeader from "../shared/PageHeader";
-import defaultPic from "../../img/defaultProfile.png";
 
 export const Inbox = () => {
   const [selectedMessage, setSelectedMessage] = useState(null);

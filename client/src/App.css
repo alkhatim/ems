@@ -76,11 +76,15 @@ footer .col {
 .inbox-container {
   min-height: 75vh;
   border-color: LightGray;
+  border-top: none;
+  border-bottom: none;
 }
 
 .inbox-view {
   height: 75vh;
   border: 1px solid LightGray;
+  border-top: none;
+  border-bottom: none;
 }
 
 /* error pages */

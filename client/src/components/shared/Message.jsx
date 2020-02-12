@@ -36,7 +36,7 @@ const Message = props => {
           </span>
         </div>
         <div className="col l7 mt-h right">
-          <span className="bold-text fs-s grey-text text-darken-2  mr-h hide-on-med-and-down">
+          <span className="bold-text fs-s grey-text text-darken-2 mr-h hide-on-med-and-down">
             {time}
           </span>
           <span className="bold-text fs-s grey-text text-darken-2 hide-on-med-and-down">
