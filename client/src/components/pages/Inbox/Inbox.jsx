@@ -1,9 +1,12 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { loadInbox, readMessage } from "../../actions/inboxActions";
-import Message from "./../shared/Message";
-import MessageView from "../shared/MessageView";
-import PageHeader from "../shared/PageHeader";
+import { loadInbox, readMessage } from "../../../actions/inboxActions";
+import Message from "../../shared/Message";
+import MessageView from "../../shared/MessageView";
+import Compose from "./Compose";
+import PageHeader from "../../shared/PageHeader";
+import Fab from "../../shared/Fab";
+import M from "materialize-css/dist/js/materialize.min.js";
 
 export const Inbox = () => {
   const [selectedMessage, setSelectedMessage] = useState(null);
@@ -11,6 +14,8 @@ export const Inbox = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    var modal = document.querySelectorAll(".modal");
+    M.Modal.init(modal, {});
     dispatch(loadInbox());
   }, [dispatch]);
 
@@ -26,7 +31,7 @@ export const Inbox = () => {
       <PageHeader
         title="Inbox"
         icon="fa fa-inbox"
-        color="text-darken-2 blue"
+        color="blue-text text-darken-2"
         url="/inbox"
       />
       <div className="col s12 l3 p-0">
@@ -49,6 +54,8 @@ export const Inbox = () => {
           )}
         </div>
       </div>
+      <Fab color="blue darken-2" icon="fa fa-plus" data-target="compose" />
+      <Compose id="compose" />
     </div>
   );
 };

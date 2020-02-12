@@ -8,9 +8,9 @@ const PageHeader = props => {
   return (
     <div className="row mb-0 page-header valign-wrapper">
       <div className="col s9">
-        <Link to={url} className="fs-xxxl ml-1">
-          <i className={color + "-text " + icon}></i>
-          <span className={color + "-text ml-1 flow-text"}>{title}</span>
+        <Link to={url} className="fs-xxxl ml-1" {...props}>
+          <i className={color + " " + icon}></i>
+          <span className={"ml-1 flow-text " + color}>{title}</span>
         </Link>
       </div>
       {/* Action buttons */}

@@ -37,9 +37,13 @@ const MessageView = props => {
         </div>
         <div className="col s3">
           <div className="row mt-1">
-            <span className="grey-text text-darken-3">Sent :&nbsp;</span>
-            <span className="grey-text text-darken-3 mr-h">{time}</span>
-            <span className="grey-text text-darken-3">{date}</span>
+            <span className="grey-text text-darken-3 bold-text">
+              Sent :&nbsp;
+            </span>
+            <span className="grey-text text-darken-3 bold-text mr-h">
+              {time}
+            </span>
+            <span className="grey-text text-darken-3 bold-text">{date}</span>
           </div>
         </div>
       </div>
