@@ -1,5 +1,6 @@
 TODO:
 
+add datetime control
 add preloader and use it for dashboard inbox and inbox page as placeholder
 create messages page
 create employees module
