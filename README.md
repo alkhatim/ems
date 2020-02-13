@@ -1,2 +1,2 @@
 # ems
-The backend of an HR managment System
+an HR managment System
