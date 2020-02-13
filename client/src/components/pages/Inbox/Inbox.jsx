@@ -1,6 +1,10 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { loadInbox, readMessage } from "../../../actions/inboxActions";
+import {
+  loadInbox,
+  readMessage,
+  getMessage
+} from "../../../actions/inboxActions";
 import Message from "../../shared/Message";
 import MessageView from "../../shared/MessageView";
 import Compose from "./Compose";
@@ -22,6 +26,8 @@ export const Inbox = () => {
   const { inbox } = useSelector(store => store.inboxReducer);
 
   const handleMessageSelect = message => {
+    if (message.hasAttachments && !message.attachments)
+      dispatch(getMessage(message._id));
     setSelectedMessage(message);
     if (message.read === false) dispatch(readMessage(message._id));
   };

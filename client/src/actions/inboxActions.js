@@ -3,7 +3,9 @@ import {
   INBOX_LOADED,
   INBOX_LOAD_FAILED,
   MESSAGE_READ,
-  MESSAGE_READ_FAILED
+  MESSAGE_READ_FAILED,
+  MESSAGE_LOADED,
+  MESSAGE_LOAD_FAILED
 } from "./ActionTypes";
 import messages from "../services/messages";
 
@@ -24,6 +26,22 @@ export const loadInbox = () => async dispatch => {
     messages.error(error);
     dispatch({
       type: INBOX_LOAD_FAILED
+    });
+  }
+};
+
+export const getMessage = messageId => async dispatch => {
+  try {
+    const res = await http.get("/messages/" + messageId);
+    const message = res.data;
+    dispatch({
+      type: MESSAGE_LOADED,
+      payload: message
+    });
+  } catch (error) {
+    messages.error(error);
+    dispatch({
+      type: MESSAGE_LOAD_FAILED
     });
   }
 };

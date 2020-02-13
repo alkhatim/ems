@@ -38,6 +38,11 @@ const schema = new mongoose.Schema({
   attachments: {
     type: [String]
   },
+  hasAttachments: {
+    type: Boolean,
+    required: true,
+    default: false
+  },
   read: {
     type: Boolean,
     required: true,

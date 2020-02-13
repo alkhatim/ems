@@ -2,7 +2,9 @@ import {
   INBOX_LOADED,
   INBOX_LOAD_FAILED,
   MESSAGE_READ,
-  MESSAGE_READ_FAILED
+  MESSAGE_READ_FAILED,
+  MESSAGE_LOADED,
+  MESSAGE_LOAD_FAILED
 } from "../actions/ActionTypes";
 
 const initialState = {
@@ -19,6 +21,14 @@ export default function(state = initialState, action) {
         inbox: payload
       };
 
+    case MESSAGE_LOADED:
+      return {
+        ...state,
+        inbox: state.inbox.map(message =>
+          message._id === payload._id ? payload : message
+        )
+      };
+
     case MESSAGE_READ:
       return {
         ...state,
@@ -29,6 +39,7 @@ export default function(state = initialState, action) {
 
     case INBOX_LOAD_FAILED:
     case MESSAGE_READ_FAILED:
+    case MESSAGE_LOAD_FAILED:
       return state;
 
     default:

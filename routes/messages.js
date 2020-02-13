@@ -9,7 +9,8 @@ const validateObjectId = require("../middleware/validateObjectId");
 // inbox
 router.get("/inbox", async (req, res) => {
   const inbox = await Inbox.findOne({ "user._id": req.user._id }).populate(
-    "messages"
+    "messages",
+    "-attachments"
   );
   if (!inbox)
     return res.status(500).send("Somthing is wrong with your account");
@@ -39,6 +40,7 @@ router.post("/", async (req, res) => {
     body: req.body.body,
     url: req.body.url,
     attachments: req.body.attachments,
+    hasAttachments: req.body.attachments ? true : false,
     deadline: req.body.deadline
   });
 
