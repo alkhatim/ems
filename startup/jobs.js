@@ -25,14 +25,14 @@ const vacationStates = async function() {
   });
   const employeeNormalStatus = await EmployeeStatus.findOne({ name: "Normal" });
 
-  for (vacation of ongoingVacations) {
+  for (const vacation of ongoingVacations) {
     await Vacation.findByIdAndUpdate(vacation._id, { state: ongoingState });
     await Employee.findByIdAndUpdate(vacation.employee._id, {
       status: employeeVacationStatus
     });
   }
 
-  for (vacation of finishedVacations) {
+  for (const vacation of finishedVacations) {
     await Vacation.findByIdAndUpdate(vacation._id, { state: finishedState });
     await Employee.findByIdAndUpdate(vacation.employee._id, {
       status: employeeNormalStatus
@@ -51,9 +51,9 @@ const missionStates = async function() {
     name: "Mission"
   });
 
-  for (mission of ongoingMissions) {
+  for (const mission of ongoingMissions) {
     await Mission.findByIdAndUpdate(mission._id, { state: ongoingState });
-    for (employee of mission.employees) {
+    for (const employee of mission.employees) {
       await Employee.findByIdAndUpdate(employee._id, {
         status: employeeMissionStatus
       });
@@ -64,7 +64,7 @@ const missionStates = async function() {
 const vacationBalances = async function() {
   if (new Date().getDate() == 1 && new Date().getMonth() == 1) {
     const employees = await Employee.find().select("_id name vacationInfo");
-    for (employee of employees) {
+    for (const employee of employees) {
       const credit = await VacationCredit.findOne({
         "employee._id": employee._id
       });

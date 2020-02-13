@@ -19,7 +19,7 @@ router.post("/", async (req, res) => {
 
   const employees = [];
 
-  for (employee of req.body.employees) {
+  for (const employee of req.body.employees) {
     if (!mongoose.Types.ObjectId.isValid(employee._id))
       return res.status(404).send("One of the given employee IDs is not valid");
 
@@ -84,7 +84,7 @@ router.put("/:id", validateObjectId, async (req, res) => {
 
   const employees = [];
 
-  for (employee of req.body.employees) {
+  for (const employee of req.body.employees) {
     if (!mongoose.Types.ObjectId.isValid(employee._id))
       return res.status(404).send(`The ID ${employee._id} isn't valid`);
 
@@ -154,7 +154,7 @@ router.post("/approve/:id", admin, async (req, res) => {
     const employeeMissionStatus = await EmployeeStatus.findOne({
       name: "Mission"
     });
-    for (employee of mission.employees) {
+    for (const employee of mission.employees) {
       await Employee.findByIdAndUpdate(employee._id, {
         status: employeeMissionStatus
       });
@@ -210,7 +210,7 @@ router.post("/finish/:id", admin, async (req, res) => {
   const employeeNormalStatus = await EmployeeStatus.findOne({
     name: "Normal"
   });
-  for (employee in mission.employees) {
+  for (const employee in mission.employees) {
     await Employee.findByIdAndUpdate(employee._id, {
       status: employeeNormalStatus
     });

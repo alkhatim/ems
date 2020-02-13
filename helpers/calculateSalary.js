@@ -3,6 +3,7 @@ const config = require("config");
 const { Employee } = require("../models/Employee");
 const { Overtime } = require("../models/Overtime");
 const { Deduction } = require("../models/Deduction");
+const { AbsencePermission } = require("../models/AbsencePermission");
 const { Loan } = require("../models/Loan");
 
 const calculateSalary = async function(employeeId, date) {
@@ -17,7 +18,7 @@ const calculateSalary = async function(employeeId, date) {
   //#endregion
 
   //#region salary
-  const salaryRatio =
+  let salaryRatio =
     (30 -
       (30 -
         moment(date)
@@ -32,7 +33,7 @@ const calculateSalary = async function(employeeId, date) {
   )
     salaryRatio = 1;
 
-  if (!salaryRatio) return res.status(400).send("Enter a correct batch date");
+  if (!salaryRatio) throw new Error("Enter a correct batch date");
 
   batchEmployee.details.basicSalary =
     employee.salaryInfo.basicSalary * salaryRatio;
@@ -92,7 +93,7 @@ const calculateSalary = async function(employeeId, date) {
   });
   if (deductions) {
     batchEmployee.details.deductions = 0;
-    for (deduction of deductions) {
+    for (const deduction of deductions) {
       const permissions = await AbsencePermission.find({
         "employee._id": employee._id,
         "type._id": deduction.type._id,

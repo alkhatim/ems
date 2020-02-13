@@ -27,7 +27,7 @@ router.post("/", async (req, res) => {
   if (!from) return res.status(500).send("Somthing is wrong with your account");
 
   const to = [];
-  for (user of req.body.to) {
+  for (const user of req.body.to) {
     to.push(await User.findById(user).select("_id username"));
   }
 
@@ -44,7 +44,7 @@ router.post("/", async (req, res) => {
 
   await message.save();
 
-  for (user of message.to) {
+  for (const user of message.to) {
     const inbox = await Inbox.findOne({ "user._id": user._id });
     inbox.messages.push(message._id);
     await inbox.save();

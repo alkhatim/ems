@@ -49,7 +49,7 @@ router.post("/", async (req, res) => {
 
   //#region selected employees
   if (req.body.employees) {
-    for (id of req.body.employees) {
+    for (const id of req.body.employees) {
       if (!ObjectId.isValid(id))
         return res.status(404).send("One of the given Ids is not valdid");
       const employee = await Employee.findById(id).select(
@@ -88,14 +88,14 @@ router.post("/", async (req, res) => {
 
   if (type.name == "Salaries") {
     //TODO: use calculateSalary service
-    for (employee of employees) {
+    for (const employee of employees) {
       const batchEmployee = {};
       batchEmployee._id = employee._id;
       batchEmployee.name = employee.name;
       batchEmployee.details = {};
 
       //#region salary
-      const salaryRatio =
+      let salaryRatio =
         (30 -
           (30 -
             moment(req.body.date)
@@ -172,7 +172,7 @@ router.post("/", async (req, res) => {
       });
       if (deductions) {
         batchEmployee.details.deductions = 0;
-        for (deduction of deductions) {
+        for (const deduction of deductions) {
           const permissions = await AbsencePermission.find({
             "employee._id": employee._id,
             "type._id": deduction.type._id,
@@ -234,7 +234,7 @@ router.post("/", async (req, res) => {
   }
 
   if (type.name == "Vacations") {
-    for (employee of employees) {
+    for (const employee of employees) {
       const batchEmployee = {};
       batchEmployee._id = employee._id;
       batchEmployee.name = employee.name;
@@ -247,7 +247,7 @@ router.post("/", async (req, res) => {
       });
       if (vacations) {
         batchEmployee.details.vacations = 0;
-        for (vacation of vacations) {
+        for (const vacation of vacations) {
           batchEmployee.details.vacations +=
             (vacation.duration * employee.salaryInfo.totalSalary) / 30;
           req.body.entries.vacations.push(vacation._id);
@@ -263,7 +263,7 @@ router.post("/", async (req, res) => {
   }
 
   if (type.name == "Missions") {
-    for (employee of employees) {
+    for (const employee of employees) {
       const batchEmployee = {};
       batchEmployee._id = employee._id;
       batchEmployee.name = employee.name;
@@ -275,7 +275,7 @@ router.post("/", async (req, res) => {
       });
       if (missions) {
         batchEmployee.details.missions = 0;
-        for (mission of missions) {
+        for (const mission of missions) {
           const missionEmployee = _.find(mission.employees, {
             _id: employee._id
           });
@@ -336,15 +336,15 @@ router.post("/", async (req, res) => {
   if (!state)
     return res.status(500).send("The closed state is missing from the server!");
 
-  for (overtime of req.body.entries.overtimes) {
+  for (const overtime of req.body.entries.overtimes) {
     await Overtime.findByIdAndUpdate(overtime._id, { state: closedState });
   }
 
-  for (deduction of req.body.entries.deductions) {
+  for (const deduction of req.body.entries.deductions) {
     await Deduction.findByIdAndUpdate(deduction._id, { state: closedState });
   }
 
-  for (installment of req.body.entries.installments) {
+  for (const installment of req.body.entries.installments) {
     const loan = await Loan.findOne({ "installments._id": installment._id });
     loan.installments.id(installment._id).state = installmentClosedState;
     if (loan.installments.filter(i => i.state.name == "Pending").length == 0)
@@ -352,13 +352,13 @@ router.post("/", async (req, res) => {
     await loan.save();
   }
 
-  for (vacation of req.body.entries.vacations) {
+  for (const vacation of req.body.entries.vacations) {
     await Vacation.findByIdAndUpdate(vacation._id, {
       state: vacationClosedState
     });
   }
 
-  for (mission of req.body.entries.missions) {
+  for (const mission of req.body.entries.missions) {
     await Mission.findByIdAndUpdate(mission._id, { state: missionClosedState });
   }
   //#endregion
@@ -402,7 +402,7 @@ router.put("/:id", async (req, res) => {
 
   //#region selected employees
   if (req.body.employees) {
-    for (id of req.body.employees) {
+    for (const id of req.body.employees) {
       if (!ObjectId.isValid(id))
         return res.status(404).send("One of the given Ids is not valdid");
       const employee = await Employee.findById(id).select("name salaryInfo");
@@ -465,21 +465,21 @@ router.put("/:id", async (req, res) => {
       .status(500)
       .send("The pending loans installment state is missing from the server!");
 
-  for (overtime of batch.entries.overtimes) {
+  for (const overtime of batch.entries.overtimes) {
     await Overtime.findByIdAndUpdate(overtime._id, { state: approvedState });
   }
 
-  for (deduction of batch.entries.deductions) {
+  for (const deduction of batch.entries.deductions) {
     await Deduction.findByIdAndUpdate(deduction._id, { state: approvedState });
   }
 
-  for (vacation of batch.entries.vacations) {
+  for (const vacation of batch.entries.vacations) {
     await Vacation.findByIdAndUpdate(vacation._id, {
       state: vacationApprovedState
     });
   }
 
-  for (installment of batch.entries.installments) {
+  for (const installment of batch.entries.installments) {
     const loan = await Loan.findOne({ "installments._id": installment._id });
     loan.installments.id(installment._id).state = installmentPendingState;
     if (loan.state.name == "Closed")
@@ -487,7 +487,7 @@ router.put("/:id", async (req, res) => {
     await loan.save();
   }
 
-  for (mission of batch.entries.missions) {
+  for (const mission of batch.entries.missions) {
     await Mission.findByIdAndUpdate(mission._id, {
       state: missionFinishedState
     });
@@ -496,14 +496,14 @@ router.put("/:id", async (req, res) => {
 
   //#region caclulations
   if (type.name == "Salaries") {
-    for (employee of employees) {
+    for (const employee of employees) {
       const batchEmployee = {};
       batchEmployee._id = employee._id;
       batchEmployee.name = employee.name;
       batchEmployee.details = {};
 
       //#region salary
-      const salaryRatio =
+      let salaryRatio =
         (30 -
           (30 -
             moment(req.body.date)
@@ -567,7 +567,7 @@ router.put("/:id", async (req, res) => {
       });
       if (deductions) {
         batchEmployee.details.deductions = 0;
-        for (deduction of deductions) {
+        for (const deduction of deductions) {
           const permissions = await AbsencePermission.find({
             "employee._id": employee._id,
             "type._id": deduction.type._id,
@@ -627,7 +627,7 @@ router.put("/:id", async (req, res) => {
   }
 
   if (type.name == "Vacations") {
-    for (employee of employees) {
+    for (const employee of employees) {
       const batchEmployee = {};
       batchEmployee._id = employee._id;
       batchEmployee.name = employee.name;
@@ -640,7 +640,7 @@ router.put("/:id", async (req, res) => {
       });
       if (vacations) {
         batchEmployee.details.vacations = 0;
-        for (vacation of vacations) {
+        for (const vacation of vacations) {
           batchEmployee.details.vacations +=
             (vacation.duration * employee.salaryInfo.totalSalary) / 30;
           req.body.entries.vacations.push(vacation._id);
@@ -656,7 +656,7 @@ router.put("/:id", async (req, res) => {
   }
 
   if (type.name == "Missions") {
-    for (employee of employees) {
+    for (const employee of employees) {
       const batchEmployee = {};
       batchEmployee._id = employee._id;
       batchEmployee.name = employee.name;
@@ -668,7 +668,7 @@ router.put("/:id", async (req, res) => {
       });
       if (missions) {
         batchEmployee.details.missions = 0;
-        for (mission of missions) {
+        for (const mission of missions) {
           const missionEmployee = _.find(mission.employees, {
             _id: employee._id
           });
@@ -732,15 +732,15 @@ router.put("/:id", async (req, res) => {
   if (!state)
     return res.status(500).send("The closed state is missing from the server!");
 
-  for (overtime of req.body.entries.overtimes) {
+  for (const overtime of req.body.entries.overtimes) {
     await Overtime.findByIdAndUpdate(overtime._id, { state: closedState });
   }
 
-  for (deduction of req.body.entries.deductions) {
+  for (const deduction of req.body.entries.deductions) {
     await Deduction.findByIdAndUpdate(deduction._id, { state: closedState });
   }
 
-  for (installment of req.body.entries.installments) {
+  for (const installment of req.body.entries.installments) {
     const loan = await Loan.findOne({ "installments._id": installment._id });
     loan.installments.id(installment._id).state = installmentClosedState;
     if (loan.installments.filter(i => i.state.name == "Pending").length == 0)
@@ -748,13 +748,13 @@ router.put("/:id", async (req, res) => {
     await loan.save();
   }
 
-  for (vacation of req.body.entries.vacations) {
+  for (const vacation of req.body.entries.vacations) {
     await Vacation.findByIdAndUpdate(vacation._id, {
       state: vacationClosedState
     });
   }
 
-  for (mission of req.body.entries.missions) {
+  for (const mission of req.body.entries.missions) {
     await Mission.findByIdAndUpdate(mission._id, { state: missionClosedState });
   }
   //#endregion
@@ -814,21 +814,21 @@ router.delete("/:id", admin, validateObjectId, async (req, res) => {
       .status(500)
       .send("The pending loans installment state is missing from the server!");
 
-  for (overtime of batch.entries.overtimes) {
+  for (const overtime of batch.entries.overtimes) {
     await Overtime.findByIdAndUpdate(overtime._id, { state: approvedState });
   }
 
-  for (deduction of batch.entries.deductions) {
+  for (const deduction of batch.entries.deductions) {
     await Deduction.findByIdAndUpdate(deduction._id, { state: approvedState });
   }
 
-  for (vacation of batch.entries.vacations) {
+  for (const vacation of batch.entries.vacations) {
     await Vacation.findByIdAndUpdate(vacation._id, {
       state: vacationApprovedState
     });
   }
 
-  for (installment of batch.entries.installments) {
+  for (const installment of batch.entries.installments) {
     const loan = await Loan.findOne({ "installments._id": installment._id });
     loan.installments.id(installment._id).state = installmentPendingState;
     if (loan.state.name == "Closed")
@@ -836,7 +836,7 @@ router.delete("/:id", admin, validateObjectId, async (req, res) => {
     await loan.save();
   }
 
-  for (mission of batch.entries.missions) {
+  for (const mission of batch.entries.missions) {
     await Mission.findByIdAndUpdate(mission._id, {
       state: missionFinishedState
     });
