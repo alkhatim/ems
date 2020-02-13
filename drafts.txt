@@ -1,5 +1,6 @@
 TODO:
 
+add hasAttachments property to messages
 add sent outbox
 add transaction to routers
 use multer for file uploads
