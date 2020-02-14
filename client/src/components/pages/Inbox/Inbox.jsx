@@ -6,7 +6,7 @@ import {
   getMessage
 } from "../../../actions/inboxActions";
 import Message from "../../shared/Message";
-import MessageView from "../../shared/MessageView";
+import MessageView from "./MessageView";
 import Compose from "./Compose";
 import PageHeader from "../../shared/PageHeader";
 import Fab from "../../shared/Fab";
