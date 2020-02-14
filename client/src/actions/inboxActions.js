@@ -67,6 +67,7 @@ export const sendMessage = message => async dispatch => {
     dispatch({
       type: MESSAGE_SENT
     });
+    messages.success("Message Sent");
   } catch (error) {
     messages.error(error);
     dispatch({

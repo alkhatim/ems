@@ -6,7 +6,12 @@ const TextArea = props => {
 
   return (
     <div className="input-field">
-      <textarea name={name} id={name} className="materialize-textarea" />
+      <textarea
+        name={name}
+        id={name}
+        className="materialize-textarea"
+        {...props}
+      />
       <label htmlFor={name}>{label}</label>
     </div>
   );

@@ -6,7 +6,8 @@ import {
   LOGIN_FAILED,
   REGISTERED,
   REGISTER_FAILED,
-  LOGGED_OUT
+  LOGGED_OUT,
+  EMPTY_INBOX
 } from "./ActionTypes";
 import messages from "../services/messages";
 
@@ -24,6 +25,7 @@ export const login = (username, password) => async dispatch => {
         token
       }
     });
+    dispatch({ type: EMPTY_INBOX });
   } catch (error) {
     messages.error(error);
     localStorage.removeItem("jwt");

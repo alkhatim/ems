@@ -1,4 +1,5 @@
 import {
+  EMPTY_INBOX,
   INBOX_LOADED,
   INBOX_LOAD_FAILED,
   MESSAGE_READ,
@@ -17,6 +18,9 @@ export default function(state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
+    case EMPTY_INBOX:
+      return { ...state, inbox: [] };
+
     case INBOX_LOADED:
       return {
         ...state,
