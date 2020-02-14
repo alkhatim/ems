@@ -47,13 +47,11 @@ export default class Multicomplete extends Component {
   }
   render() {
     return (
-      <div className="row">
-        <div className="input-field">
-          <div
-            id="multicomplete"
-            className="chips chips-autocomplete chips-placeholder"
-          ></div>
-        </div>
+      <div className="input-field">
+        <div
+          id="multicomplete"
+          className="chips chips-autocomplete chips-placeholder"
+        ></div>
       </div>
     );
   }

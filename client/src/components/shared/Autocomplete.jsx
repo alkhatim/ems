@@ -49,18 +49,16 @@ export default class Autocomplete extends Component {
   }
   render() {
     return (
-      <div className="row">
-        <div className="input-field">
-          <input
-            type="text"
-            name="autocomplete"
-            id="autocomplete"
-            value={this.state.value}
-            onChange={this.handleChange}
-            className="autocomplete"
-          />
-          <label htmlFor="autocomplete">{this.label}</label>
-        </div>
+      <div className="input-field">
+        <input
+          type="text"
+          name="autocomplete"
+          id="autocomplete"
+          value={this.state.value}
+          onChange={this.handleChange}
+          className="autocomplete"
+        />
+        <label htmlFor="autocomplete">{this.label}</label>
       </div>
     );
   }

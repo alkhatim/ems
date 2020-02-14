@@ -19,18 +19,16 @@ const Dropdown = props => {
   }, [data, lookup]);
 
   return (
-    <div className="row">
-      <div className="input-field">
-        <select {...props}>
-          <option value=""></option>
-          {data.map(item => (
-            <option key={item._id} value={item._id}>
-              {item.name}
-            </option>
-          ))}
-        </select>
-        <label>{label}</label>
-      </div>
+    <div className="input-field">
+      <select {...props}>
+        <option value=""></option>
+        {data.map(item => (
+          <option key={item._id} value={item._id}>
+            {item.name}
+          </option>
+        ))}
+      </select>
+      <label>{label}</label>
     </div>
   );
 };
