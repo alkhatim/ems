@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import defaultPic from "../../img/defaultProfile.png";
+import defaultPic from "../../../img/defaultProfile.png";
 
 const MessageView = props => {
   const { message } = props;
