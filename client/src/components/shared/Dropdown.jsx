@@ -8,7 +8,7 @@ const Dropdown = props => {
 
   const [data, setData] = useState([]);
 
-  var dropdown = document.querySelectorAll("select");
+  const dropdown = document.querySelectorAll("select");
   M.FormSelect.init(dropdown, {});
 
   useEffect(() => {

@@ -18,7 +18,7 @@ export const Inbox = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    var modal = document.querySelectorAll(".modal");
+    const modal = document.querySelectorAll(".modal");
     M.Modal.init(modal, {});
     dispatch(loadInbox());
   }, [dispatch]);

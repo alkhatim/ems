@@ -11,9 +11,9 @@ export const Navbar = () => {
   const { user, isLoggedIn } = useSelector(store => store.authReducer);
 
   useEffect(() => {
-    var sidenav = document.querySelectorAll(".sidenav");
+    const sidenav = document.querySelectorAll(".sidenav");
     M.Sidenav.init(sidenav, {});
-    var profileDropdown = document.querySelectorAll(".dropdown-trigger");
+    const profileDropdown = document.querySelectorAll(".dropdown-trigger");
     M.Dropdown.init(profileDropdown, {
       coverTrigger: false,
       constrainWidth: false
