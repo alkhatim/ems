@@ -5,7 +5,9 @@ import {
   MESSAGE_READ,
   MESSAGE_READ_FAILED,
   MESSAGE_LOADED,
-  MESSAGE_LOAD_FAILED
+  MESSAGE_LOAD_FAILED,
+  MESSAGE_SENT,
+  MESSAGE_SEND_FAILED
 } from "./ActionTypes";
 import messages from "../services/messages";
 
@@ -55,6 +57,20 @@ export const readMessage = messageId => async dispatch => {
     messages.error(error);
     dispatch({
       type: MESSAGE_READ_FAILED
+    });
+  }
+};
+
+export const sendMessage = message => async dispatch => {
+  try {
+    await http.post("/messages", message);
+    dispatch({
+      type: MESSAGE_SENT
+    });
+  } catch (error) {
+    messages.error(error);
+    dispatch({
+      type: MESSAGE_SEND_FAILED
     });
   }
 };
