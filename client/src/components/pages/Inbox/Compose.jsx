@@ -30,8 +30,7 @@ const Compose = props => {
   };
 
   const handleAdd = id => {
-    to.push(id);
-    setMessage({ ...message, to });
+    setMessage({ ...message, to: to.concat(id) });
   };
 
   const handleRemove = id => {

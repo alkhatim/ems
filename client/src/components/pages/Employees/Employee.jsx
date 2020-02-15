@@ -1,8 +1,23 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import PageHeader from "./../../shared/PageHeader";
-import defaultPic from "../../../img/defaultProfile.png";
+import { loadEmployee } from "./../../../actions/employeeActions";
 
-const Employee = () => {
+const Employee = props => {
+  const { match } = props;
+
+  const employees = useSelector(store => store.employeeReducer.employees);
+
+  const [employee, setEmployee] = useState(null);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (match.params.id) {
+      dispatch(loadEmployee(match.params.id));
+    }
+  }, [dispatch, match]);
+
   return (
     <div className="row">
       <PageHeader

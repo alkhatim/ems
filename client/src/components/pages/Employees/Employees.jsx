@@ -1,6 +1,5 @@
 import React from "react";
 import PageHeader from "./../../shared/PageHeader";
-import defaultPic from "../../../img/defaultProfile.png";
 
 const Employees = () => {
   return (

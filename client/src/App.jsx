@@ -43,7 +43,7 @@ const App = () => {
             <ProtectedRoute exact path="/dashboard" component={Dashboard} />
             <ProtectedRoute exact path="/inbox" component={Inbox} />
             <ProtectedRoute exact path="/employees" component={Employees} />
-            <ProtectedRoute exact path="/employee" component={Employee} />
+            <ProtectedRoute exact path="/employee/:id?" component={Employee} />
             <Route exact path="/playground" component={Playground} />
             <Route exact path="/forbidden" component={Forbidden} />
             <Route component={NotFound} />
