@@ -79,14 +79,14 @@ const Compose = props => {
         />
       </div>
       <div className="modal-footer">
+        <button className="modal-close btn waves-effect red mr-1">
+          Cancel <i className="fa fa-times"></i>
+        </button>
         <button
-          className="modal-close btn waves-effect blue mr-1"
+          className="modal-close btn waves-effect blue darken-2 mr-1"
           onClick={handleSend}
         >
           Send <i className="fa fa-paper-plane-o"></i>
-        </button>
-        <button className="modal-close btn waves-effect red mr-1">
-          Cancel <i className="fa fa-times"></i>
         </button>
       </div>
     </div>
