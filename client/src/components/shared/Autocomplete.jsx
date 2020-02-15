@@ -7,6 +7,7 @@ import messages from "../../services/messages";
 export default class Autocomplete extends Component {
   label = this.props.label;
   lookup = this.props.lookup;
+  id = this.props.id;
   onAutocomplete = this.props.onAutocomplete;
   state = {
     data: {},
@@ -20,6 +21,7 @@ export default class Autocomplete extends Component {
     this.setState({
       value: e.target.value
     });
+    this.id = selected ? selected._id : "";
     this.onAutocomplete(selected ? selected._id : "");
   };
 
@@ -29,6 +31,7 @@ export default class Autocomplete extends Component {
     this.setState({
       value: value
     });
+    this.id = selected ? selected._id : "";
     this.onAutocomplete(selected ? selected._id : "");
   };
 
@@ -67,5 +70,6 @@ export default class Autocomplete extends Component {
 Autocomplete.propTypes = {
   label: PropTypes.string.isRequired,
   lookup: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
   onAutocomplete: PropTypes.func.isRequired
 };
