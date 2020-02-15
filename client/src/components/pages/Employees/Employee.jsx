@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import PageHeader from "./../../shared/PageHeader";
 import { loadEmployee } from "./../../../actions/employeeActions";
+import Fab from "./../../shared/Fab";
 
-const Employee = props => {
-  const { match } = props;
-
+const Employee = ({ match }) => {
   const employees = useSelector(store => store.employeeReducer.employees);
-
-  const [employee, setEmployee] = useState(null);
+  let employee =
+    match.params.id &&
+    employees.find(employee => (employee._id = match.params.id));
 
   const dispatch = useDispatch();
 
@@ -18,6 +18,10 @@ const Employee = props => {
     }
   }, [dispatch, match]);
 
+  const handleNew = () => {
+    employee = null;
+  };
+
   return (
     <div className="row">
       <PageHeader
@@ -26,6 +30,7 @@ const Employee = props => {
         icon="fa fa-address-card"
         url="/employee"
       />
+      <Fab color="blue darken-2" icon="fa fa-plus" onClick={handleNew} />
     </div>
   );
 };

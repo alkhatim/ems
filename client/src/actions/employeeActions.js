@@ -6,7 +6,6 @@ export const loadEmployee = employeeId => async dispatch => {
   try {
     const res = await http.get("/employees/" + employeeId);
     const employee = res.data;
-    console.log(employee);
     dispatch({
       type: EMPLOYEE_LOADED,
       payload: employee
