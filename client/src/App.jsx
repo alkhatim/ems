@@ -12,6 +12,8 @@ import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 import Dashboard from "./components/layouts/Dashboard";
 import Inbox from "./components/pages/Inbox/Inbox";
+import Employees from "./components/pages/Employees/Employees";
+import Employee from "./components/pages/Employees/Employee";
 import Playground from "./components/misc/Playground";
 import Forbidden from "./components/auth/Forbidden";
 import NotFound from "./components/misc/NotFound";
@@ -40,6 +42,8 @@ const App = () => {
             <PrivateRoute exact path="/register" component={Register} />
             <ProtectedRoute exact path="/dashboard" component={Dashboard} />
             <ProtectedRoute exact path="/inbox" component={Inbox} />
+            <ProtectedRoute exact path="/employees" component={Employees} />
+            <ProtectedRoute exact path="/employee" component={Employee} />
             <Route exact path="/playground" component={Playground} />
             <Route exact path="/forbidden" component={Forbidden} />
             <Route component={NotFound} />
