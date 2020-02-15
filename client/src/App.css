@@ -87,6 +87,10 @@ footer .col {
   border-bottom: none;
 }
 
+.url {
+  color: rgb(0, 0, 200);
+}
+
 /* error pages */
 
 .error-page {

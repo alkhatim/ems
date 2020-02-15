@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 import defaultPic from "../../../img/defaultProfile.png";
 
 const MessageView = props => {
@@ -60,6 +61,14 @@ const MessageView = props => {
       </div>
       <div className="divider"></div>
       <div className="row mt-4">{message.body}</div>
+      {message.url && (
+        <div className="row mt-2 bold-text">
+          <Link to={message.url} className="url">
+            URL: ..{message.url}
+          </Link>
+        </div>
+      )}
+
       {/* Add attachments here */}
     </div>
   );
