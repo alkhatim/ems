@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { loadInbox, readMessage } from "../../actions/inboxActions";
 import Message from "./../shared/Message";
@@ -44,7 +45,9 @@ export const Dashboard = () => {
             </span>
             &nbsp;unread messages
           </p>
-          <h4 className="teal-text">Inbox</h4>
+          <Link to="/inbox" className="teal-text fs-xxxxxl">
+            Inbox
+          </Link>
           <ul className="collection inbox-widget z-depth-1">
             {inbox.slice(0, 3).map(message => (
               <Message

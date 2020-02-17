@@ -31,15 +31,15 @@ const Message = props => {
               marginTop: "0.5rem"
             }}
           />
-          <span className="ml-h mt-h bold-text grey-text text-darken-2">
+          <span className="ml-h mt-h bold-text grey-text text-darken-3">
             {message.from.username}
           </span>
         </div>
         <div className="col l7 mt-h right">
-          <span className="bold-text fs-s grey-text text-darken-2 mr-h hide-on-med-and-down">
+          <span className="bold-text fs-s grey-text text-darken-3 mr-h hide-on-med-and-down">
             {time}
           </span>
-          <span className="bold-text fs-s grey-text text-darken-2 hide-on-med-and-down">
+          <span className="bold-text fs-s grey-text text-darken-3 hide-on-med-and-down">
             {date}
           </span>
           {!message.read && (
@@ -47,7 +47,7 @@ const Message = props => {
           )}
         </div>
       </div>
-      <p className="bold-text grey-text text-darken-2">{message.subject}</p>
+      <p className="bold-text grey-text text-darken-3">{message.subject}</p>
       <span className="truncate">{message.body}</span>
     </li>
   );

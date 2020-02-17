@@ -109,7 +109,7 @@ router.post("/", async (req, res) => {
 
 router.get("/", async (req, res) => {
   const employees = await Employee.find(req.query).select(
-    "-salaryInfo -serviceInfo -socialInsuranceInfo -vacationInfo"
+    "-salaryInfo -serviceInfo -socialInsuranceInfo -vacationInfo -photo"
   );
   res.status(200).send(employees);
 });
