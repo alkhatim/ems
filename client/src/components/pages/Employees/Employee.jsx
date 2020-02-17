@@ -1,26 +1,35 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import PageHeader from "./../../shared/PageHeader";
 import { loadEmployee } from "./../../../actions/employeeActions";
 import Fab from "./../../shared/Fab";
 import defaultPic from "../../../img/defaultProfile.png";
+import TextInput from "./../../shared/TextInput";
 
 const Employee = ({ match }) => {
   const employees = useSelector(store => store.employeeReducer.employees);
-  let employee =
-    match.params.id &&
-    employees.find(employee => (employee._id = match.params.id));
+
+  const [editMode, setEditMode] = useState(false);
+  const [employee, setEmployee] = useState(null);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (match.params.id) {
-      dispatch(loadEmployee(match.params.id));
+      if (employees)
+        setEmployee(
+          employees.find(employee => (employee._id = match.params.id))
+        );
+      else dispatch(loadEmployee(match.params.id));
     }
-  }, [dispatch, match]);
+  }, [dispatch, match, employees]);
 
   const handleNew = () => {
-    employee = null;
+    setEmployee(null);
+  };
+
+  const toggleEditMode = () => {
+    setEditMode(!editMode);
   };
 
   return (
@@ -40,9 +49,11 @@ const Employee = ({ match }) => {
               className="responsive-img"
               style={{
                 width: "150px",
-                height: "150px"
+                height: "150px",
+                marginRight: "5rem"
               }}
             />
+            <TextInput label="Name" name="name" />
           </div>
           <div className="col s2 valign-wrapper"></div>
           <div className="col s3"></div>
