@@ -9,16 +9,16 @@ import TextInput from "./../../shared/TextInput";
 const Employee = ({ match }) => {
   const employees = useSelector(store => store.employeeReducer.employees);
 
-  const [editMode, setEditMode] = useState(false);
+  const [editMode, setEditMode] = useState(true);
   const [employee, setEmployee] = useState(null);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (match.params.id) {
-      if (employees)
+      if (employees.find(employee => employee._id === match.params.id))
         setEmployee(
-          employees.find(employee => (employee._id = match.params.id))
+          employees.find(employee => employee._id === match.params.id)
         );
       else dispatch(loadEmployee(match.params.id));
     }
@@ -42,21 +42,21 @@ const Employee = ({ match }) => {
       />
       <div className="mx-4 mt-1">
         <div className="row">
-          <div className="col s7 valign-wrapper">
+          <div className="col s5 valign-wrapper">
             <img
               src={(employee && employee.photo) || defaultPic}
               alt=""
-              className="responsive-img"
-              style={{
-                width: "150px",
-                height: "150px",
-                marginRight: "5rem"
-              }}
+              className="responsive-img img-150 mr-3"
             />
-            <TextInput label="Name" name="name" />
+            <TextInput
+              label="Name"
+              name="name"
+              disabled={!editMode}
+              value={employee && employee.name}
+            />
           </div>
-          <div className="col s2 valign-wrapper"></div>
-          <div className="col s3"></div>
+          <div className="col s2"></div>
+          <div className="col s5"></div>
         </div>
       </div>
       <Fab color="blue darken-2" icon="fa fa-plus" onClick={handleNew} />
