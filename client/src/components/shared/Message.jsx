@@ -24,12 +24,7 @@ const Message = props => {
           <img
             src={(message.from && message.from.avatar) || defaultPic}
             alt=""
-            className="circle responsive-img"
-            style={{
-              width: "30px",
-              height: "30px",
-              marginTop: "0.5rem"
-            }}
+            className="circle responsive-img img-30 mt-h"
           />
           <span className="ml-h mt-h bold-text grey-text text-darken-3">
             {message.from.username}

@@ -39,6 +39,28 @@
   font-size: 2.4rem !important;
 }
 
+/* Image */
+
+.img-30 {
+  width: 30px;
+  height: 30px;
+}
+
+.img-40 {
+  width: 40px;
+  height: 40px;
+}
+
+.img-70 {
+  width: 70px;
+  height: 70px;
+}
+
+.img-150 {
+  width: 150px;
+  height: 150px;
+}
+
 /* Margin */
 
 .m-0 {

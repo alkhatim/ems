@@ -133,10 +133,8 @@ export const Register = () => {
                       src={avatar || defaultPic}
                       alt="Profile Avatar"
                       onClick={() => avatarInput.click()}
-                      className="circle responsive-img"
+                      className="circle responsive-img img-70"
                       style={{
-                        width: "70px",
-                        height: "70px",
                         cursor: "pointer"
                       }}
                     />

@@ -27,12 +27,7 @@ const MessageView = props => {
           <img
             src={(message.from && message.from.avatar) || defaultPic}
             alt=""
-            className="circle responsive-img"
-            style={{
-              width: "40px",
-              height: "40px",
-              marginTop: "0.5rem"
-            }}
+            className="circle responsive-img img-40 mt-h"
           />
           <span className="ml-h mt-h bold-text">{message.from.username}</span>
         </div>

@@ -57,11 +57,9 @@ export const Navbar = () => {
                 <img
                   src={(user && user.avatar) || defaultPic}
                   alt=""
-                  className="circle responsive-img dropdown-trigger"
+                  className="circle responsive-img dropdown-trigger img-40"
                   data-target="profile-dropdown"
                   style={{
-                    width: "40px",
-                    height: "40px",
                     marginTop: "0.75rem",
                     marginLeft: "0.4rem"
                   }}

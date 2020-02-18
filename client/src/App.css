@@ -113,3 +113,7 @@ footer .col {
 textarea {
   min-height: 10vh !important;
 }
+
+input[type="text"] {
+  min-width: 20rem;
+}
