@@ -28,6 +28,10 @@ const Employee = ({ match }) => {
     setEmployee(null);
   };
 
+  const handleChange = e => {
+    setEmployee({ ...employee, name: e.target.value });
+  };
+
   const toggleEditMode = () => {
     setEditMode(!editMode);
   };
@@ -53,6 +57,7 @@ const Employee = ({ match }) => {
               name="name"
               disabled={!editMode}
               value={employee && employee.name}
+              onChange={handleChange}
             />
           </div>
           <div className="col s2"></div>
