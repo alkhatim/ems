@@ -7,7 +7,7 @@ const TextInput = props => {
   return (
     <div className="input-field">
       {icon && <i className={"prefix " + icon} />}
-      <input name={name} id={name} type="text" {...props} />
+      <input name={name} id={name} type="text" placeholder={""} {...props} />
       <label htmlFor={name}>{label}</label>
     </div>
   );
