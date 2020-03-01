@@ -64,25 +64,33 @@ const Compose = props => {
             <DatePicker label="Deadline" onSelect={handleDateSelect} />
           </div>
         </div>
-        <TextInput
-          name="subject"
-          label="Subject"
-          value={subject}
-          onChange={handleChange}
-        />
-        <TextArea
-          name="body"
-          label="body"
-          value={body}
-          onChange={handleChange}
-        />
+        <div className="row">
+          <div className="col s12">
+            <TextInput
+              name="subject"
+              label="Subject"
+              value={subject}
+              onChange={handleChange}
+            />
+          </div>
+        </div>
+        <div className="row">
+          <div className="col s12">
+            <TextArea
+              name="body"
+              label="body"
+              value={body}
+              onChange={handleChange}
+            />
+          </div>
+        </div>
       </div>
-      <div className="modal-footer">
+      <div className="modal-footer mb-1">
         <button className="modal-close btn waves-effect red mr-1">
           Cancel <i className="fa fa-times"></i>
         </button>
         <button
-          className="modal-close btn waves-effect blue darken-2 mr-1"
+          className="modal-close btn waves-effect blue darken-2 mr-2"
           onClick={handleSend}
         >
           Send <i className="fa fa-paper-plane-o"></i>

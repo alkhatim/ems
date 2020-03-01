@@ -59,7 +59,7 @@ const MessageView = props => {
       {message.url && (
         <div className="row mt-2 bold-text">
           <Link to={message.url} className="url">
-            URL :&nbsp;&nbsp;..{message.url}
+            &nbsp;{message.url}
           </Link>
         </div>
       )}
