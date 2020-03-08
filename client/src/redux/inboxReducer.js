@@ -39,7 +39,7 @@ export default function(state = initialState, action) {
       return {
         ...state,
         inbox: state.inbox.map(message =>
-          message._id === payload._id ? payload : message
+          message._id === payload._id ? { ...message, read: true } : message
         )
       };
 
