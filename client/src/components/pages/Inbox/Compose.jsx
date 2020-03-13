@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
 import { sendMessage } from "../../../actions/inboxActions";
+import messages from "../../../services/messages";
 import PageHeader from "../../shared/PageHeader";
 import PropTypes from "prop-types";
 import TextInput from "./../../shared/TextInput";
@@ -9,8 +9,6 @@ import TextArea from "../../shared/TextArea";
 import Multicomplete from "./../../shared/Multicomplete";
 
 const Compose = props => {
-  const dispatch = useDispatch();
-
   const { id } = props;
   const [message, setMessage] = useState({
     to: [],
@@ -37,8 +35,13 @@ const Compose = props => {
     setMessage({ ...message, to: to.filter(item => item !== id) });
   };
 
-  const handleSend = () => {
-    dispatch(sendMessage(message));
+  const handleSend = async () => {
+    try {
+      await sendMessage(message);
+      messages.success("Message Sent");
+    } catch (error) {
+      messages.error(error);
+    }
   };
 
   return (

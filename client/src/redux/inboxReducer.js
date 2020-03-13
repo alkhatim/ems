@@ -5,9 +5,7 @@ import {
   MESSAGE_READ,
   MESSAGE_READ_FAILED,
   MESSAGE_LOADED,
-  MESSAGE_LOAD_FAILED,
-  MESSAGE_SENT,
-  MESSAGE_SEND_FAILED
+  MESSAGE_LOAD_FAILED
 } from "../actions/ActionTypes";
 
 const initialState = {
@@ -46,8 +44,6 @@ export default function(state = initialState, action) {
     case INBOX_LOAD_FAILED:
     case MESSAGE_READ_FAILED:
     case MESSAGE_LOAD_FAILED:
-    case MESSAGE_SENT:
-    case MESSAGE_SEND_FAILED:
       return state;
 
     default:
