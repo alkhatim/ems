@@ -6,26 +6,105 @@ import Fab from "./../../shared/Fab";
 import defaultPic from "../../../img/defaultProfile.png";
 import TextInput from "./../../shared/TextInput";
 
-const Employee = ({ match }) => {
+const Employee = props => {
   const employees = useSelector(store => store.employeeReducer.employees);
 
   const [editMode, setEditMode] = useState(true);
-  const [employee, setEmployee] = useState(null);
+  const [employee, setEmployee] = useState({
+    name: "",
+    gender: {},
+    nationality: {},
+    birthday: "",
+    address: "",
+    phone: "",
+    email: "",
+    bankAccount: "",
+    status: {},
+    jobInfo: {
+      job: {},
+      contract: {},
+      department: {},
+      location: {},
+      dateOfEmployment: ""
+    },
+    salaryInfo: {
+      basicSalary: "",
+      livingExpenseAllowance: "",
+      housingAllowance: "",
+      transportAllowance: "",
+      foodAllowance: "",
+      totalSalary: ""
+    },
+    socialInsuranceInfo: {
+      registered: false,
+      socialInsuranceNumber: "",
+      socialInsuranceSalary: ""
+    },
+    serviceInfo: {
+      endOfServiceDate: "",
+      endOfServiceReason: ""
+    },
+    vacationInfo: {
+      vacationDays: "",
+      vacationSchedule: []
+    },
+    photo: ""
+  });
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (match.params.id) {
-      if (employees.find(employee => employee._id === match.params.id))
+    if (props.match.params.id) {
+      if (employees.find(employee => employee._id === props.match.params.id))
         setEmployee(
-          employees.find(employee => employee._id === match.params.id)
+          employees.find(employee => employee._id === props.match.params.id)
         );
-      else dispatch(loadEmployee(match.params.id));
+      else dispatch(loadEmployee(props.match.params.id));
     }
-  }, [dispatch, match, employees]);
+  }, [dispatch, employees]);
 
   const handleNew = () => {
-    setEmployee(null);
+    setEmployee({
+      name: "",
+      gender: {},
+      nationality: {},
+      birthday: "",
+      address: "",
+      phone: "",
+      email: "",
+      bankAccount: "",
+      status: {},
+      jobInfo: {
+        job: {},
+        contract: {},
+        department: {},
+        location: {},
+        dateOfEmployment: ""
+      },
+      salaryInfo: {
+        basicSalary: "",
+        livingExpenseAllowance: "",
+        housingAllowance: "",
+        transportAllowance: "",
+        foodAllowance: "",
+        totalSalary: ""
+      },
+      socialInsuranceInfo: {
+        registered: false,
+        socialInsuranceNumber: "",
+        socialInsuranceSalary: ""
+      },
+      serviceInfo: {
+        endOfServiceDate: "",
+        endOfServiceReason: ""
+      },
+      vacationInfo: {
+        vacationDays: "",
+        vacationSchedule: []
+      },
+      photo: ""
+    });
+    props.history.push("/employee");
   };
 
   const handleChange = e => {
