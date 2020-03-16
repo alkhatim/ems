@@ -10,7 +10,7 @@ import MessageView from "./MessageView";
 import Compose from "./Compose";
 import PageHeader from "../../shared/PageHeader";
 import Fab from "../../shared/Fab";
-import M from "materialize-css/dist/js/materialize.min.js";
+import M from "materialize-css";
 
 export const Inbox = () => {
   const [selectedMessage, setSelectedMessage] = useState(null);

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import getLookup from "./../../services/lookups";
-import M from "materialize-css/dist/js/materialize.min.js";
+import M from "materialize-css";
 
 const Dropdown = props => {
   const { label, lookup } = props;

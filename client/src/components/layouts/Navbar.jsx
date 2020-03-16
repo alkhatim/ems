@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { logOut } from "../../actions/authActions";
 import defaultPic from "../../img/defaultProfile.png";
-import M from "materialize-css/dist/js/materialize.min.js";
+import M from "materialize-css";
 
 export const Navbar = () => {
   const dispatch = useDispatch();

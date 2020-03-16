@@ -5,6 +5,7 @@ import { loadEmployee } from "./../../../actions/employeeActions";
 import Fab from "./../../shared/Fab";
 import defaultPic from "../../../img/defaultProfile.png";
 import TextInput from "./../../shared/TextInput";
+import M from "materialize-css";
 
 const Employee = props => {
   const employees = useSelector(store => store.employeeReducer.employees);
@@ -54,6 +55,9 @@ const Employee = props => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    const tabs = document.querySelectorAll(".tabs");
+    M.Tabs.init(tabs, {});
+
     if (props.match.params.id) {
       if (employees.find(employee => employee._id === props.match.params.id))
         setEmployee(
@@ -156,8 +160,43 @@ const Employee = props => {
               onChange={handleChange}
             />
           </div>
-          <div className="col s2"></div>
-          <div className="col s5"></div>
+          <div className="col s1" style={{ marginTop: "1.5rem" }}>
+            <TextInput
+              label="Status"
+              name="status"
+              className={
+                employee.status.name === "Normal"
+                  ? "green-text text-accent-4"
+                  : "red-text"
+              }
+              disabled
+              value={employee.status && employee.status.name}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="col s6">
+            <div className="row"></div>
+            <div className="row"></div>
+          </div>
+        </div>
+        {/* Tabs */}
+        <div className="row mt-5">
+          <div className="col s12">
+            <ul className="tabs">
+              <li className="tab col s3">
+                <a href="#salary">Salary</a>
+              </li>
+              <li className="tab col s3">
+                <a href="#details">Details</a>
+              </li>
+              <li className="tab col s3">
+                <a href="#attachments">Attachments</a>
+              </li>
+              <li className="tab col s3">
+                <a href="#history">History</a>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
       <Fab color="blue darken-2" icon="fa fa-plus" onClick={handleNew} />
