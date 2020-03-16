@@ -5,6 +5,7 @@ import { loadEmployee } from "./../../../actions/employeeActions";
 import Fab from "./../../shared/Fab";
 import defaultPic from "../../../img/defaultProfile.png";
 import TextInput from "./../../shared/TextInput";
+import Dropdown from "./../../shared/Dropdown";
 import M from "materialize-css";
 
 const Employee = props => {
@@ -13,19 +14,19 @@ const Employee = props => {
   const [editMode, setEditMode] = useState(false);
   const [employee, setEmployee] = useState({
     name: "",
-    gender: {},
-    nationality: {},
+    gender: { name: "" },
+    nationality: { name: "" },
     birthday: "",
     address: "",
     phone: "",
     email: "",
     bankAccount: "",
-    status: {},
+    status: { name: "" },
     jobInfo: {
-      job: {},
-      contract: {},
-      department: {},
-      location: {},
+      job: { name: "" },
+      contract: { name: "" },
+      department: { name: "" },
+      location: { name: "" },
       dateOfEmployment: ""
     },
     salaryInfo: {
@@ -70,19 +71,19 @@ const Employee = props => {
   const handleNew = () => {
     setEmployee({
       name: "",
-      gender: {},
-      nationality: {},
+      gender: { name: "" },
+      nationality: { name: "" },
       birthday: "",
       address: "",
       phone: "",
       email: "",
       bankAccount: "",
-      status: {},
+      status: { name: "" },
       jobInfo: {
         job: {},
-        contract: {},
-        department: {},
-        location: {},
+        contract: { name: "" },
+        department: { name: "" },
+        location: { name: "" },
         dateOfEmployment: ""
       },
       salaryInfo: {
@@ -116,7 +117,6 @@ const Employee = props => {
   };
 
   const handletoggleEditMode = () => {
-    console.log("object");
     setEditMode(!editMode);
   };
 
@@ -146,7 +146,7 @@ const Employee = props => {
       />
       <div className="mx-4 mt-1">
         <div className="row">
-          <div className="col s5 valign-wrapper">
+          <div className="col s4 valign-wrapper">
             <img
               src={employee.photo || defaultPic}
               alt=""
@@ -160,7 +160,7 @@ const Employee = props => {
               onChange={handleChange}
             />
           </div>
-          <div className="col s1" style={{ marginTop: "1.5rem" }}>
+          <div className="col s4" style={{ marginTop: "2rem" }}>
             <TextInput
               label="Status"
               name="status"
@@ -170,17 +170,22 @@ const Employee = props => {
                   : "red-text"
               }
               disabled
-              value={employee.status && employee.status.name}
+              value={employee.status.name}
               onChange={handleChange}
             />
           </div>
-          <div className="col s6">
+          <div className="col s4">
+            <div className="row">
+              <Dropdown label="Job title" lookup="Job" />
+              <Dropdown label="Location" lookup="Location" />
+              <Dropdown label="Department" lookup="Department" />
+            </div>
             <div className="row"></div>
             <div className="row"></div>
           </div>
         </div>
         {/* Tabs */}
-        <div className="row mt-5">
+        <div className="row mt-1">
           <div className="col s12">
             <ul className="tabs">
               <li className="tab col s3">
@@ -196,6 +201,8 @@ const Employee = props => {
                 <a href="#history">History</a>
               </li>
             </ul>
+            {/* Tabs content */}
+            <div></div>
           </div>
         </div>
       </div>
