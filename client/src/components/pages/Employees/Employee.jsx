@@ -9,7 +9,7 @@ import TextInput from "./../../shared/TextInput";
 const Employee = props => {
   const employees = useSelector(store => store.employeeReducer.employees);
 
-  const [editMode, setEditMode] = useState(true);
+  const [editMode, setEditMode] = useState(false);
   const [employee, setEmployee] = useState({
     name: "",
     gender: {},
@@ -61,7 +61,7 @@ const Employee = props => {
         );
       else dispatch(loadEmployee(props.match.params.id));
     }
-  }, [dispatch, employees]);
+  }, [dispatch, props.match, employees]);
 
   const handleNew = () => {
     setEmployee({
@@ -111,9 +111,25 @@ const Employee = props => {
     setEmployee({ ...employee, name: e.target.value });
   };
 
-  const toggleEditMode = () => {
+  const handletoggleEditMode = () => {
+    console.log("object");
     setEditMode(!editMode);
   };
+
+  const handleSave = () => {};
+
+  const actions = [
+    {
+      label: "Edit",
+      icon: "blue-text text-darken-2 fa fa-edit fa-2x",
+      onClick: handletoggleEditMode
+    },
+    {
+      label: "Save",
+      icon: "blue-text text-darken-2 fa fa-save fa-2x",
+      onClick: handleSave
+    }
+  ];
 
   return (
     <div className="row">
@@ -121,13 +137,14 @@ const Employee = props => {
         title="Employee Info"
         color="blue-text text-darken-2"
         icon="fa fa-address-card"
-        url="/employee"
+        url={props.match.url}
+        actions={actions}
       />
       <div className="mx-4 mt-1">
         <div className="row">
           <div className="col s5 valign-wrapper">
             <img
-              src={(employee && employee.photo) || defaultPic}
+              src={employee.photo || defaultPic}
               alt=""
               className="responsive-img img-150 mr-3"
             />
@@ -135,7 +152,7 @@ const Employee = props => {
               label="Name"
               name="name"
               disabled={!editMode}
-              value={employee && employee.name}
+              value={employee.name}
               onChange={handleChange}
             />
           </div>
