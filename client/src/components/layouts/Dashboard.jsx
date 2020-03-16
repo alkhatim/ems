@@ -30,7 +30,10 @@ export const Dashboard = () => {
         {isLoading || (
           <h3>
             Welcome
-            <span className="teal-text"> {user.username}</span>
+            <Link to="/profile" className="teal-text">
+              {" "}
+              {user.username}
+            </Link>
           </h3>
         )}
       </div>

@@ -117,3 +117,7 @@ textarea {
 input[type="text"] {
   min-width: 20rem;
 }
+
+.action-button {
+  cursor: pointer;
+}
