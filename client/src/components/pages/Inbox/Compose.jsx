@@ -13,8 +13,7 @@ const Compose = props => {
   const [message, setMessage] = useState({
     to: [],
     subject: "",
-    body: "",
-    deadline: ""
+    body: ""
   });
 
   const { to, subject, body } = message;

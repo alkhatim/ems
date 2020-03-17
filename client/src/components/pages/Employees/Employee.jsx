@@ -160,7 +160,7 @@ const Employee = props => {
               onChange={handleChange}
             />
           </div>
-          <div className="col s4" style={{ marginTop: "2rem" }}>
+          <div className="col s3 mt-2">
             <TextInput
               label="Status"
               name="status"
@@ -174,7 +174,7 @@ const Employee = props => {
               onChange={handleChange}
             />
           </div>
-          <div className="col s4">
+          <div className="col s4 offset-s1">
             <div className="row">
               <Dropdown label="Job title" lookup="Job" />
               <Dropdown label="Location" lookup="Location" />
