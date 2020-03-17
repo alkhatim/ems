@@ -1,4 +1,9 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import {
+  MESSAGE_SENT,
+  MESSAGE_SEND_FAILED
+} from "../../../actions/ActionTypes";
 import { sendMessage } from "../../../actions/inboxActions";
 import messages from "../../../services/messages";
 import PageHeader from "../../shared/PageHeader";
@@ -17,6 +22,8 @@ const Compose = props => {
   });
 
   const { to, subject, body } = message;
+
+  const dispatch = useDispatch();
 
   const handleChange = e => {
     setMessage({ ...message, [e.target.name]: e.target.value });
@@ -37,8 +44,10 @@ const Compose = props => {
   const handleSend = async () => {
     try {
       await sendMessage(message);
+      dispatch({ type: MESSAGE_SENT });
       messages.success("Message Sent");
     } catch (error) {
+      dispatch({ type: MESSAGE_SEND_FAILED });
       messages.error(error);
     }
   };
