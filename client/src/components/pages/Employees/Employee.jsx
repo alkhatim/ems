@@ -14,19 +14,19 @@ const Employee = props => {
   const [editMode, setEditMode] = useState(false);
   const [employee, setEmployee] = useState({
     name: "",
-    gender: { name: "" },
-    nationality: { name: "" },
+    gender: { _id: "", name: "" },
+    nationality: { _id: "", name: "" },
     birthday: "",
     address: "",
     phone: "",
     email: "",
     bankAccount: "",
-    status: { name: "" },
+    status: { _id: "", name: "" },
     jobInfo: {
-      job: { name: "" },
-      contract: { name: "" },
-      department: { name: "" },
-      location: { name: "" },
+      job: { _id: "", name: "" },
+      contract: { _id: "", name: "" },
+      department: { _id: "", name: "" },
+      location: { _id: "", name: "" },
       dateOfEmployment: ""
     },
     salaryInfo: {
@@ -71,19 +71,19 @@ const Employee = props => {
   const handleNew = () => {
     setEmployee({
       name: "",
-      gender: { name: "" },
-      nationality: { name: "" },
+      gender: { _id: "", name: "" },
+      nationality: { _id: "", name: "" },
       birthday: "",
       address: "",
       phone: "",
       email: "",
       bankAccount: "",
-      status: { name: "" },
+      status: { _id: "", name: "" },
       jobInfo: {
         job: {},
-        contract: { name: "" },
-        department: { name: "" },
-        location: { name: "" },
+        contract: { _id: "", name: "" },
+        department: { _id: "", name: "" },
+        location: { _id: "", name: "" },
         dateOfEmployment: ""
       },
       salaryInfo: {
@@ -160,7 +160,7 @@ const Employee = props => {
               onChange={handleChange}
             />
           </div>
-          <div className="col s3 mt-2">
+          <div className="col s3 mt-2 px-1">
             <TextInput
               label="Status"
               name="status"
@@ -176,9 +176,24 @@ const Employee = props => {
           </div>
           <div className="col s4 offset-s1">
             <div className="row">
-              <Dropdown label="Job title" lookup="Job" />
-              <Dropdown label="Location" lookup="Location" />
-              <Dropdown label="Department" lookup="Department" />
+              <Dropdown
+                label="Job title"
+                lookup="Job"
+                disabled={editMode}
+                value={employee.jobInfo.job._id}
+              />
+              <Dropdown
+                label="Location"
+                lookup="Location"
+                disabled={editMode}
+                value={employee.jobInfo.location._id}
+              />
+              <Dropdown
+                label="Department"
+                lookup="Department"
+                disabled={editMode}
+                value={employee.jobInfo.department._id}
+              />
             </div>
             <div className="row"></div>
             <div className="row"></div>
