@@ -115,7 +115,7 @@ textarea {
 }
 
 input[type="text"] {
-  min-width: 20rem;
+  min-width: 15rem;
 }
 
 .action-button {
