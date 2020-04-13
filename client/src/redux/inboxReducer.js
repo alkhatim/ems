@@ -7,14 +7,14 @@ import {
   MESSAGE_LOADED,
   MESSAGE_LOAD_FAILED,
   MESSAGE_SENT,
-  MESSAGE_SEND_FAILED
-} from "../actions/ActionTypes";
+  MESSAGE_SEND_FAILED,
+} from "../actions/types";
 
 const initialState = {
-  inbox: []
+  inbox: [],
 };
 
-export default function(state = initialState, action) {
+export default function (state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
@@ -24,23 +24,23 @@ export default function(state = initialState, action) {
     case INBOX_LOADED:
       return {
         ...state,
-        inbox: payload
+        inbox: payload,
       };
 
     case MESSAGE_LOADED:
       return {
         ...state,
-        inbox: state.inbox.map(message =>
+        inbox: state.inbox.map((message) =>
           message._id === payload._id ? payload : message
-        )
+        ),
       };
 
     case MESSAGE_READ:
       return {
         ...state,
-        inbox: state.inbox.map(message =>
+        inbox: state.inbox.map((message) =>
           message._id === payload._id ? { ...message, read: true } : message
-        )
+        ),
       };
 
     case INBOX_LOAD_FAILED:

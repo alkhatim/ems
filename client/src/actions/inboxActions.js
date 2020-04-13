@@ -5,11 +5,11 @@ import {
   MESSAGE_READ,
   MESSAGE_READ_FAILED,
   MESSAGE_LOADED,
-  MESSAGE_LOAD_FAILED
-} from "./ActionTypes";
+  MESSAGE_LOAD_FAILED,
+} from "./types";
 import messages from "../services/messages";
 
-export const loadInbox = () => async dispatch => {
+export const loadInbox = () => async (dispatch) => {
   try {
     const res = await http.get("/messages/inbox");
     const inbox = res.data.messages;
@@ -20,33 +20,33 @@ export const loadInbox = () => async dispatch => {
     }
     dispatch({
       type: INBOX_LOADED,
-      payload: inbox
+      payload: inbox,
     });
   } catch (error) {
     messages.error(error);
     dispatch({
-      type: INBOX_LOAD_FAILED
+      type: INBOX_LOAD_FAILED,
     });
   }
 };
 
-export const getMessage = messageId => async dispatch => {
+export const getMessage = (messageId) => async (dispatch) => {
   try {
     const res = await http.get("/messages/" + messageId);
     const message = res.data;
     dispatch({
       type: MESSAGE_LOADED,
-      payload: message
+      payload: message,
     });
   } catch (error) {
     messages.error(error);
     dispatch({
-      type: MESSAGE_LOAD_FAILED
+      type: MESSAGE_LOAD_FAILED,
     });
   }
 };
 
-export const readMessage = messageId => async dispatch => {
+export const readMessage = (messageId) => async (dispatch) => {
   try {
     const res = await http.post("/messages/" + messageId);
     const message = res.data;
@@ -54,11 +54,11 @@ export const readMessage = messageId => async dispatch => {
   } catch (error) {
     messages.error(error);
     dispatch({
-      type: MESSAGE_READ_FAILED
+      type: MESSAGE_READ_FAILED,
     });
   }
 };
 
-export const sendMessage = async message => {
+export const sendMessage = async (message) => {
   return await http.post("/messages", message);
 };

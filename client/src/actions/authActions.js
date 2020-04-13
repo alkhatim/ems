@@ -7,11 +7,11 @@ import {
   REGISTERED,
   REGISTER_FAILED,
   LOGGED_OUT,
-  EMPTY_INBOX
-} from "./ActionTypes";
+  EMPTY_INBOX,
+} from "./types";
 import messages from "../services/messages";
 
-export const login = (username, password) => async dispatch => {
+export const login = (username, password) => async (dispatch) => {
   try {
     const res = await http.post("/logins", { username, password });
     const user = res.data;
@@ -22,8 +22,8 @@ export const login = (username, password) => async dispatch => {
       type: LOGGED_IN,
       payload: {
         user,
-        token
-      }
+        token,
+      },
     });
     dispatch({ type: EMPTY_INBOX });
   } catch (error) {
@@ -31,43 +31,40 @@ export const login = (username, password) => async dispatch => {
     localStorage.removeItem("jwt");
     http.setToken(null);
     dispatch({
-      type: LOGIN_FAILED
+      type: LOGIN_FAILED,
     });
   }
 };
 
-export const register = (
-  username,
-  password,
-  avatar,
-  isAdmin
-) => async dispatch => {
+export const register = (username, password, avatar, isAdmin) => async (
+  dispatch
+) => {
   try {
     const role = isAdmin ? "admin" : "user";
     await http.post("/users", {
       username,
       password,
       avatar,
-      role
+      role,
     });
     messages.success("User registered");
     dispatch({
-      type: REGISTERED
+      type: REGISTERED,
     });
   } catch (error) {
     messages.error(error);
     dispatch({
-      type: REGISTER_FAILED
+      type: REGISTER_FAILED,
     });
   }
 };
 
-export const loadUser = () => async dispatch => {
+export const loadUser = () => async (dispatch) => {
   const token = localStorage.getItem("jwt");
 
   if (!token)
     return dispatch({
-      type: USER_LOAD_FAILED
+      type: USER_LOAD_FAILED,
     });
 
   http.setToken(token);
@@ -79,8 +76,8 @@ export const loadUser = () => async dispatch => {
       type: USER_LOADED,
       payload: {
         token,
-        user
-      }
+        user,
+      },
     });
   } catch (error) {
     if (error.response.status === 400 || error.response.status === 401) {
@@ -88,15 +85,15 @@ export const loadUser = () => async dispatch => {
       localStorage.removeItem("jwt");
     }
     dispatch({
-      type: USER_LOAD_FAILED
+      type: USER_LOAD_FAILED,
     });
   }
 };
 
-export const logOut = () => async dispatch => {
+export const logOut = () => async (dispatch) => {
   localStorage.removeItem("jwt");
   http.setToken(null);
   dispatch({
-    type: LOGGED_OUT
+    type: LOGGED_OUT,
   });
 };

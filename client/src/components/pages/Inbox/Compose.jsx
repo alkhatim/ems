@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import {
-  MESSAGE_SENT,
-  MESSAGE_SEND_FAILED
-} from "../../../actions/ActionTypes";
+import { MESSAGE_SENT, MESSAGE_SEND_FAILED } from "../../../actions/types";
 import { sendMessage } from "../../../actions/inboxActions";
 import messages from "../../../services/messages";
 import PageHeader from "../../shared/PageHeader";
@@ -13,32 +10,32 @@ import DatePicker from "../../shared/DatePicker";
 import TextArea from "../../shared/TextArea";
 import Multicomplete from "./../../shared/Multicomplete";
 
-const Compose = props => {
+const Compose = (props) => {
   const { id } = props;
   const [message, setMessage] = useState({
     to: [],
     subject: "",
-    body: ""
+    body: "",
   });
 
   const { to, subject, body } = message;
 
   const dispatch = useDispatch();
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     setMessage({ ...message, [e.target.name]: e.target.value });
   };
 
-  const handleDateSelect = date => {
+  const handleDateSelect = (date) => {
     setMessage({ ...message, deadline: date });
   };
 
-  const handleAdd = id => {
+  const handleAdd = (id) => {
     setMessage({ ...message, to: to.concat(id) });
   };
 
-  const handleRemove = id => {
-    setMessage({ ...message, to: to.filter(item => item !== id) });
+  const handleRemove = (id) => {
+    setMessage({ ...message, to: to.filter((item) => item !== id) });
   };
 
   const handleSend = async () => {
@@ -60,7 +57,7 @@ const Compose = props => {
           icon="fa fa-inbox"
           color="blue-text text-darken-2"
           url="/inbox"
-          onClick={e => e.preventDefault()}
+          onClick={(e) => e.preventDefault()}
         />
         <div className="row">
           <div className="col s8">
@@ -112,7 +109,7 @@ const Compose = props => {
 };
 
 Compose.propTypes = {
-  id: PropTypes.string.isRequired
+  id: PropTypes.string.isRequired,
 };
 
 export default Compose;

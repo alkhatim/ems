@@ -5,17 +5,17 @@ import {
   REGISTERED,
   REGISTER_FAILED,
   USER_LOAD_FAILED,
-  LOGGED_OUT
-} from "../actions/ActionTypes";
+  LOGGED_OUT,
+} from "../actions/types";
 
 const initialState = {
   token: null,
   user: null,
   isLoggedIn: false,
-  isLoading: true
+  isLoading: true,
 };
 
-export default function(state = initialState, action) {
+export default function (state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
@@ -26,7 +26,7 @@ export default function(state = initialState, action) {
         token: payload.token,
         user: payload.user,
         isLoggedIn: true,
-        isLoading: false
+        isLoading: false,
       };
 
     case USER_LOAD_FAILED:
@@ -37,7 +37,7 @@ export default function(state = initialState, action) {
         token: null,
         user: null,
         isLoggedIn: false,
-        isLoading: false
+        isLoading: false,
       };
 
     case REGISTERED:
