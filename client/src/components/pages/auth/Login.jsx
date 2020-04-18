@@ -2,25 +2,25 @@ import React, { Fragment, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import Joi from "joi";
-import { login } from "../../actions/authActions";
-import FormInput from "../shared/FormInput";
-import Submit from "../shared/Submit";
+import { login } from "../../../actions/authActions";
+import FormInput from "../../shared/FormInput";
+import Submit from "../../shared/Submit";
 
-export const Login = props => {
+export const Login = (props) => {
   const [formData, setformData] = useState({
     username: "",
     password: "",
     errors: {
       username: "",
-      password: ""
-    }
+      password: "",
+    },
   });
 
   const { username, password, errors } = formData;
 
   const dispatch = useDispatch();
 
-  const isLoggedIn = useSelector(store => store.authReducer.isLoggedIn);
+  const isLoggedIn = useSelector((store) => store.authReducer.isLoggedIn);
 
   if (isLoggedIn) {
     return props.history.location.state ? (
@@ -30,36 +30,28 @@ export const Login = props => {
     );
   }
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     setformData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleBlur = e => {
+  const handleBlur = (e) => {
     validateProperty(e.target);
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) return;
     dispatch(login(username, password));
   };
 
   const formSchema = {
-    username: Joi.string()
-      .min(4)
-      .max(30)
-      .required()
-      .label("Username"),
-    password: Joi.string()
-      .min(6)
-      .max(26)
-      .required()
-      .label("Password")
+    username: Joi.string().min(4).max(30).required().label("Username"),
+    password: Joi.string().min(6).max(26).required().label("Password"),
   };
 
   const validateForm = () => {
     const { error } = Joi.validate({ username, password }, formSchema, {
-      abortEarly: false
+      abortEarly: false,
     });
     if (error) {
       const errors = {};
@@ -71,7 +63,7 @@ export const Login = props => {
     }
   };
 
-  const validateProperty = input => {
+  const validateProperty = (input) => {
     const { error } = Joi.validate(
       { [input.name]: input.value },
       { [input.name]: formSchema[input.name] }

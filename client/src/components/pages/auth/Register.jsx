@@ -1,11 +1,11 @@
 import React, { Fragment, useState } from "react";
 import { useDispatch } from "react-redux";
 import Joi from "joi";
-import { register } from "../../actions/authActions";
-import FormInput from "./../shared/FormInput";
-import Submit from "./../shared/Submit";
-import messages from "../../services/messages";
-import defaultPic from "../../img/defaultProfile.png";
+import { register } from "../../../actions/authActions";
+import FormInput from "../../shared/FormInput";
+import Submit from "../../shared/Submit";
+import messages from "../../../services/messages";
+import defaultPic from "../../../img/defaultProfile.png";
 
 export const Register = () => {
   const [formData, setformData] = useState({
@@ -17,8 +17,8 @@ export const Register = () => {
     errors: {
       username: "",
       password: "",
-      password2: ""
-    }
+      password2: "",
+    },
   });
 
   const { username, password, password2, avatar, isAdmin, errors } = formData;
@@ -27,18 +27,18 @@ export const Register = () => {
 
   const dispatch = useDispatch();
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     setformData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleCheck = e => {
+  const handleCheck = (e) => {
     setformData({
       ...formData,
-      [e.target.name]: e.target.checked ? true : false
+      [e.target.name]: e.target.checked ? true : false,
     });
   };
 
-  const handleUpload = e => {
+  const handleUpload = (e) => {
     const file = e.target.files[0];
     const reader = new FileReader();
     try {
@@ -51,34 +51,26 @@ export const Register = () => {
     }
   };
 
-  const handleBlur = e => {
+  const handleBlur = (e) => {
     validateProperty(e.target);
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) return;
     dispatch(register(username, password, avatar, isAdmin));
   };
 
   const formSchema = {
-    username: Joi.string()
-      .min(4)
-      .max(30)
-      .required()
-      .label("Username"),
-    password: Joi.string()
-      .min(6)
-      .max(26)
-      .required()
-      .label("Password"),
+    username: Joi.string().min(4).max(30).required().label("Username"),
+    password: Joi.string().min(6).max(26).required().label("Password"),
     password2: Joi.string()
       .valid(password)
       .error(() => {
         return {
-          message: "Passwords don't match"
+          message: "Passwords don't match",
         };
-      })
+      }),
   };
 
   const validateForm = () => {
@@ -86,7 +78,7 @@ export const Register = () => {
       { username, password, password2 },
       formSchema,
       {
-        abortEarly: false
+        abortEarly: false,
       }
     );
     if (error) {
@@ -99,7 +91,7 @@ export const Register = () => {
     }
   };
 
-  const validateProperty = input => {
+  const validateProperty = (input) => {
     const { error } = Joi.validate(
       { [input.name]: input.value },
       { [input.name]: formSchema[input.name] }
@@ -126,7 +118,7 @@ export const Register = () => {
                     <input
                       type="file"
                       onChange={handleUpload}
-                      ref={input => (avatarInput = input)}
+                      ref={(input) => (avatarInput = input)}
                       className="hide"
                     />
                     <img
@@ -135,7 +127,7 @@ export const Register = () => {
                       onClick={() => avatarInput.click()}
                       className="circle responsive-img img-70"
                       style={{
-                        cursor: "pointer"
+                        cursor: "pointer",
                       }}
                     />
                   </div>
