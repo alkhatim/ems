@@ -1,9 +1,9 @@
 import React, { Fragment, useState } from "react";
 import { useDispatch } from "react-redux";
-import Joi from "joi";
 import { register } from "../../../actions/authActions";
-import FormInput from "../../shared/FormInput";
-import Submit from "../../shared/Submit";
+import Joi from "joi";
+import FormInput from "../../controls/FormInput";
+import Submit from "../../controls/Submit";
 import messages from "../../../services/messages";
 import defaultPic from "../../../img/defaultProfile.png";
 

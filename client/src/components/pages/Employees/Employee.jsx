@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import PageHeader from "./../../shared/PageHeader";
+import PageHeader from "./../../controls/PageHeader";
 import { loadEmployee } from "./../../../actions/employeeActions";
-import Fab from "./../../shared/Fab";
+import Fab from "./../../controls/Fab";
 import defaultPic from "../../../img/defaultProfile.png";
-import TextInput from "./../../shared/TextInput";
-import Dropdown from "./../../shared/Dropdown";
+import TextInput from "./../../controls/TextInput";
+import Dropdown from "./../../controls/Dropdown";
 import M from "materialize-css";
 
-const Employee = props => {
-  const employees = useSelector(store => store.employeeReducer.employees);
+const Employee = (props) => {
+  const employees = useSelector((store) => store.employeeReducer.employees);
 
   const [editMode, setEditMode] = useState(false);
   const [employee, setEmployee] = useState({
@@ -27,7 +27,7 @@ const Employee = props => {
       contract: { _id: "", name: "" },
       department: { _id: "", name: "" },
       location: { _id: "", name: "" },
-      dateOfEmployment: ""
+      dateOfEmployment: "",
     },
     salaryInfo: {
       basicSalary: "",
@@ -35,22 +35,22 @@ const Employee = props => {
       housingAllowance: "",
       transportAllowance: "",
       foodAllowance: "",
-      totalSalary: ""
+      totalSalary: "",
     },
     socialInsuranceInfo: {
       registered: false,
       socialInsuranceNumber: "",
-      socialInsuranceSalary: ""
+      socialInsuranceSalary: "",
     },
     serviceInfo: {
       endOfServiceDate: "",
-      endOfServiceReason: ""
+      endOfServiceReason: "",
     },
     vacationInfo: {
       vacationDays: "",
-      vacationSchedule: []
+      vacationSchedule: [],
     },
-    photo: ""
+    photo: "",
   });
 
   const dispatch = useDispatch();
@@ -60,9 +60,9 @@ const Employee = props => {
     M.Tabs.init(tabs, {});
 
     if (props.match.params.id) {
-      if (employees.find(employee => employee._id === props.match.params.id))
+      if (employees.find((employee) => employee._id === props.match.params.id))
         setEmployee(
-          employees.find(employee => employee._id === props.match.params.id)
+          employees.find((employee) => employee._id === props.match.params.id)
         );
       else dispatch(loadEmployee(props.match.params.id));
     }
@@ -84,7 +84,7 @@ const Employee = props => {
         contract: { _id: "", name: "" },
         department: { _id: "", name: "" },
         location: { _id: "", name: "" },
-        dateOfEmployment: ""
+        dateOfEmployment: "",
       },
       salaryInfo: {
         basicSalary: "",
@@ -92,27 +92,27 @@ const Employee = props => {
         housingAllowance: "",
         transportAllowance: "",
         foodAllowance: "",
-        totalSalary: ""
+        totalSalary: "",
       },
       socialInsuranceInfo: {
         registered: false,
         socialInsuranceNumber: "",
-        socialInsuranceSalary: ""
+        socialInsuranceSalary: "",
       },
       serviceInfo: {
         endOfServiceDate: "",
-        endOfServiceReason: ""
+        endOfServiceReason: "",
       },
       vacationInfo: {
         vacationDays: "",
-        vacationSchedule: []
+        vacationSchedule: [],
       },
-      photo: ""
+      photo: "",
     });
     props.history.push("/employee");
   };
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     setEmployee({ ...employee, name: e.target.value });
   };
 
@@ -126,13 +126,13 @@ const Employee = props => {
     {
       label: "Edit",
       icon: "blue-text text-darken-2 fa fa-edit fa-2x",
-      onClick: handletoggleEditMode
+      onClick: handletoggleEditMode,
     },
     {
       label: "Save",
       icon: "blue-text text-darken-2 fa fa-save fa-2x",
-      onClick: handleSave
-    }
+      onClick: handleSave,
+    },
   ];
 
   return (

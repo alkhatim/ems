@@ -3,13 +3,13 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   loadInbox,
   readMessage,
-  getMessage
+  getMessage,
 } from "../../../actions/inboxActions";
-import Message from "../../shared/Message";
+import Message from "../../controls/Message";
 import MessageView from "./MessageView";
 import Compose from "./Compose";
-import PageHeader from "../../shared/PageHeader";
-import Fab from "../../shared/Fab";
+import PageHeader from "../../controls/PageHeader";
+import Fab from "../../controls/Fab";
 import M from "materialize-css";
 
 export const Inbox = () => {
@@ -23,9 +23,9 @@ export const Inbox = () => {
     dispatch(loadInbox());
   }, [dispatch]);
 
-  const { inbox } = useSelector(store => store.inboxReducer);
+  const { inbox } = useSelector((store) => store.inboxReducer);
 
-  const handleMessageSelect = message => {
+  const handleMessageSelect = (message) => {
     if (message.hasAttachments && !message.attachments)
       dispatch(getMessage(message._id));
     setSelectedMessage(message);
@@ -42,11 +42,11 @@ export const Inbox = () => {
       />
       <div className="col s12 l3 p-0">
         <ul className="collection inbox-container mt-0">
-          {inbox.map(message => (
+          {inbox.map((message) => (
             <Message
               message={message}
               key={message._id}
-              onMessageClick={message => handleMessageSelect(message)}
+              onMessageClick={(message) => handleMessageSelect(message)}
             />
           ))}
         </ul>

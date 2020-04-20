@@ -3,12 +3,12 @@ import { useDispatch } from "react-redux";
 import { MESSAGE_SENT, MESSAGE_SEND_FAILED } from "../../../actions/types";
 import { sendMessage } from "../../../actions/inboxActions";
 import messages from "../../../services/messages";
-import PageHeader from "../../shared/PageHeader";
+import PageHeader from "../../controls/PageHeader";
 import PropTypes from "prop-types";
-import TextInput from "./../../shared/TextInput";
-import DatePicker from "../../shared/DatePicker";
-import TextArea from "../../shared/TextArea";
-import Multicomplete from "./../../shared/Multicomplete";
+import TextInput from "./../../controls/TextInput";
+import DatePicker from "../../controls/DatePicker";
+import TextArea from "../../controls/TextArea";
+import Multicomplete from "./../../controls/Multicomplete";
 
 const Compose = (props) => {
   const { id } = props;

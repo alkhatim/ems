@@ -1,5 +1,5 @@
 import React from "react";
-import PageHeader from "./../../shared/PageHeader";
+import PageHeader from "./../../controls/PageHeader";
 
 const Employees = () => {
   return (

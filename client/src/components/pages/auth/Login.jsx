@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import Joi from "joi";
 import { login } from "../../../actions/authActions";
-import FormInput from "../../shared/FormInput";
-import Submit from "../../shared/Submit";
+import FormInput from "../../controls/FormInput";
+import Submit from "../../controls/Submit";
 
 export const Login = (props) => {
   const [formData, setformData] = useState({

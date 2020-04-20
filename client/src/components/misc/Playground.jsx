@@ -1,5 +1,5 @@
 import React from "react";
-import DataTable from "../shared/DataTable";
+import DataTable from "../controls/DataTable";
 
 export const Playground = () => {
   return (
