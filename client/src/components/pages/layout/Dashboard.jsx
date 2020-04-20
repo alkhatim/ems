@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { loadInbox, readMessage } from "../../../actions/inboxActions";
 import Message from "../../controls/Message";
-import DoughnutChart from "../../controls/DoughnutChart";
-import PieChart from "../../controls/PieChart";
-import LineChart from "../../controls/LineChart";
-import BarChart from "../../controls/BarChart";
+import DoughnutChart from "../../charts/DoughnutChart";
+import PieChart from "../../charts/PieChart";
+import LineChart from "../../charts/LineChart";
+import BarChart from "../../charts/BarChart";
 
 export const Dashboard = () => {
   const dispatch = useDispatch();
