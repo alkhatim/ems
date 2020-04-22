@@ -1,12 +1,5 @@
 import http from "../services/http";
-import {
-  INBOX_LOADED,
-  INBOX_LOAD_FAILED,
-  MESSAGE_READ,
-  MESSAGE_READ_FAILED,
-  MESSAGE_LOADED,
-  MESSAGE_LOAD_FAILED,
-} from "./types";
+import types from "./types";
 import messages from "../services/messages";
 
 export const loadInbox = () => async (dispatch) => {
@@ -19,13 +12,13 @@ export const loadInbox = () => async (dispatch) => {
       message.from.avatar = avatar;
     }
     dispatch({
-      type: INBOX_LOADED,
+      type: types.INBOX_LOADED,
       payload: inbox,
     });
   } catch (error) {
     messages.error(error);
     dispatch({
-      type: INBOX_LOAD_FAILED,
+      type: types.INBOX_LOAD_FAILED,
     });
   }
 };
@@ -35,13 +28,13 @@ export const getMessage = (messageId) => async (dispatch) => {
     const res = await http.get("/messages/" + messageId);
     const message = res.data;
     dispatch({
-      type: MESSAGE_LOADED,
+      type: types.MESSAGE_LOADED,
       payload: message,
     });
   } catch (error) {
     messages.error(error);
     dispatch({
-      type: MESSAGE_LOAD_FAILED,
+      type: types.MESSAGE_LOAD_FAILED,
     });
   }
 };
@@ -50,11 +43,11 @@ export const readMessage = (messageId) => async (dispatch) => {
   try {
     const res = await http.post("/messages/" + messageId);
     const message = res.data;
-    dispatch({ type: MESSAGE_READ, payload: message });
+    dispatch({ type: types.MESSAGE_READ, payload: message });
   } catch (error) {
     messages.error(error);
     dispatch({
-      type: MESSAGE_READ_FAILED,
+      type: types.MESSAGE_READ_FAILED,
     });
   }
 };

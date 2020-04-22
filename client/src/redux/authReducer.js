@@ -1,12 +1,4 @@
-import {
-  USER_LOADED,
-  LOGGED_IN,
-  LOGIN_FAILED,
-  REGISTERED,
-  REGISTER_FAILED,
-  USER_LOAD_FAILED,
-  LOGGED_OUT,
-} from "../actions/types";
+import types from "../actions/types";
 
 const initialState = {
   token: null,
@@ -19,8 +11,8 @@ export default function (state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
-    case USER_LOADED:
-    case LOGGED_IN:
+    case types.USER_LOADED:
+    case types.LOGGED_IN:
       return {
         ...state,
         token: payload.token,
@@ -29,9 +21,9 @@ export default function (state = initialState, action) {
         isLoading: false,
       };
 
-    case USER_LOAD_FAILED:
-    case LOGIN_FAILED:
-    case LOGGED_OUT:
+    case types.USER_LOAD_FAILED:
+    case types.LOGIN_FAILED:
+    case types.LOGGED_OUT:
       return {
         ...state,
         token: null,
@@ -40,8 +32,8 @@ export default function (state = initialState, action) {
         isLoading: false,
       };
 
-    case REGISTERED:
-    case REGISTER_FAILED:
+    case types.REGISTERED:
+    case types.REGISTER_FAILED:
       return state;
 
     default:

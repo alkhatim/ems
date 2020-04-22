@@ -1,5 +1,5 @@
 import http from "../services/http";
-import { EMPLOYEE_LOADED, EMPLOYEE_LOAD_FAILED } from "./types";
+import types from "./types";
 import messages from "../services/messages";
 
 export const loadEmployee = (employeeId) => async (dispatch) => {
@@ -7,13 +7,13 @@ export const loadEmployee = (employeeId) => async (dispatch) => {
     const res = await http.get("/employees/" + employeeId);
     const employee = res.data;
     dispatch({
-      type: EMPLOYEE_LOADED,
+      type: types.EMPLOYEE_LOADED,
       payload: employee,
     });
   } catch (error) {
     messages.error(error);
     dispatch({
-      type: EMPLOYEE_LOAD_FAILED,
+      type: types.EMPLOYEE_LOAD_FAILED,
     });
   }
 };

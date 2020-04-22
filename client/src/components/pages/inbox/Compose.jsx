@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { MESSAGE_SENT, MESSAGE_SEND_FAILED } from "../../../actions/types";
+import types from "../../../actions/types";
 import { sendMessage } from "../../../actions/inboxActions";
 import messages from "../../../services/messages";
 import PageHeader from "../../controls/PageHeader";
@@ -41,10 +41,10 @@ const Compose = (props) => {
   const handleSend = async () => {
     try {
       await sendMessage(message);
-      dispatch({ type: MESSAGE_SENT });
+      dispatch({ type: types.MESSAGE_SENT });
       messages.success("Message Sent");
     } catch (error) {
-      dispatch({ type: MESSAGE_SEND_FAILED });
+      dispatch({ type: types.MESSAGE_SEND_FAILED });
       messages.error(error);
     }
   };
