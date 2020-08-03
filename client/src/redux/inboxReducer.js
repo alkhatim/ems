@@ -1,14 +1,4 @@
-import {
-  EMPTY_INBOX,
-  INBOX_LOADED,
-  INBOX_LOAD_FAILED,
-  MESSAGE_READ,
-  MESSAGE_READ_FAILED,
-  MESSAGE_LOADED,
-  MESSAGE_LOAD_FAILED,
-  MESSAGE_SENT,
-  MESSAGE_SEND_FAILED,
-} from "../actions/types";
+import types from "../actions/types";
 
 const initialState = {
   inbox: [],
@@ -18,16 +8,16 @@ export default function (state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
-    case EMPTY_INBOX:
+    case types.EMPTY_INBOX:
       return { ...state, inbox: [] };
 
-    case INBOX_LOADED:
+    case types.INBOX_LOADED:
       return {
         ...state,
         inbox: payload,
       };
 
-    case MESSAGE_LOADED:
+    case types.MESSAGE_LOADED:
       return {
         ...state,
         inbox: state.inbox.map((message) =>
@@ -35,7 +25,7 @@ export default function (state = initialState, action) {
         ),
       };
 
-    case MESSAGE_READ:
+    case types.MESSAGE_READ:
       return {
         ...state,
         inbox: state.inbox.map((message) =>
@@ -43,11 +33,11 @@ export default function (state = initialState, action) {
         ),
       };
 
-    case INBOX_LOAD_FAILED:
-    case MESSAGE_READ_FAILED:
-    case MESSAGE_LOAD_FAILED:
-    case MESSAGE_SENT:
-    case MESSAGE_SEND_FAILED:
+    case types.INBOX_LOAD_FAILED:
+    case types.MESSAGE_READ_FAILED:
+    case types.MESSAGE_LOAD_FAILED:
+    case types.MESSAGE_SENT:
+    case types.MESSAGE_SEND_FAILED:
       return state;
 
     default:

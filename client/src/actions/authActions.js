@@ -1,14 +1,5 @@
 import http from "../services/http";
-import {
-  USER_LOADED,
-  USER_LOAD_FAILED,
-  LOGGED_IN,
-  LOGIN_FAILED,
-  REGISTERED,
-  REGISTER_FAILED,
-  LOGGED_OUT,
-  EMPTY_INBOX,
-} from "./types";
+import types from "./types";
 import messages from "../services/messages";
 
 export const login = (username, password) => async (dispatch) => {
@@ -19,19 +10,19 @@ export const login = (username, password) => async (dispatch) => {
     localStorage.setItem("jwt", token);
     http.setToken(token);
     dispatch({
-      type: LOGGED_IN,
+      type: types.LOGGED_IN,
       payload: {
         user,
         token,
       },
     });
-    dispatch({ type: EMPTY_INBOX });
+    dispatch({ type: types.EMPTY_INBOX });
   } catch (error) {
     messages.error(error);
     localStorage.removeItem("jwt");
     http.setToken(null);
     dispatch({
-      type: LOGIN_FAILED,
+      type: types.LOGIN_FAILED,
     });
   }
 };
@@ -49,12 +40,12 @@ export const register = (username, password, avatar, isAdmin) => async (
     });
     messages.success("User registered");
     dispatch({
-      type: REGISTERED,
+      type: types.REGISTERED,
     });
   } catch (error) {
     messages.error(error);
     dispatch({
-      type: REGISTER_FAILED,
+      type: types.REGISTER_FAILED,
     });
   }
 };
@@ -64,7 +55,7 @@ export const loadUser = () => async (dispatch) => {
 
   if (!token)
     return dispatch({
-      type: USER_LOAD_FAILED,
+      type: types.USER_LOAD_FAILED,
     });
 
   http.setToken(token);
@@ -73,7 +64,7 @@ export const loadUser = () => async (dispatch) => {
     const res = await http.get("/logins");
     const user = res.data;
     dispatch({
-      type: USER_LOADED,
+      type: types.USER_LOADED,
       payload: {
         token,
         user,
@@ -85,7 +76,7 @@ export const loadUser = () => async (dispatch) => {
       localStorage.removeItem("jwt");
     }
     dispatch({
-      type: USER_LOAD_FAILED,
+      type: types.USER_LOAD_FAILED,
     });
   }
 };
@@ -94,6 +85,6 @@ export const logOut = () => async (dispatch) => {
   localStorage.removeItem("jwt");
   http.setToken(null);
   dispatch({
-    type: LOGGED_OUT,
+    type: types.LOGGED_OUT,
   });
 };
