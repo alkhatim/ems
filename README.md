@@ -3,9 +3,9 @@
 
 > Javascript is shit - mohammed alkhatim
 
-...javascript
+'''javascript
 const main = async() => {
   const res = await fetch("google.com");
   console.log(res);
 }
-...
+'''
